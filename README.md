@@ -20,9 +20,55 @@ class OauthUtilsConfig
 
 Keep in mind that the basePackages value can be more fine-tuned if you don't want to pull in all the classes from this library.
 
-### Database Schema
+### Database Integration
 
 To support token refreshing, this library will store refresh tokens in a database table. This is done generically using Spring Data JPA. There is a file, `sql/schema.sql` that contains the definition of the `app_refresh_tokens` table. This table must be created in the database/schema that the application will be using.
+
+In order for your application to execute the JPA code, it needs to be explicitly configured. The default auto-scanning Spring Boot provides will not be enough, a JpaConfig class needs to be provided in order to properly manage the JPA code in this library:
+
+```
+@Configuration
+@EnableJpaRepositories(basePackages = [
+    "io.craigmiller160.oauth2.repository"
+])
+@EntityScan(basePackages = [
+    "io.craigmiller160.oauth2.entity"
+])
+class JpaConfig
+```
+
+One final thing about the above code example: If you use it as-is, it will break your application. This is because once you start explicitly configuring JPA scanning, it must be configured to scan all JPA classes. This means that any packages containing JPA code in the application consuming this library must be included in the above configuration.
+
+### Security Configuration
+
+The application's Spring Security configuration will need to be setup properly for this library. First the `/authcode/**` path must be without security so that authentication can be performed. Second, the JWT request filter must be added so that all other requests can be properly validated based on the Auth Server's access token.
+
+```
+@Configuration
+@EnableWebSecurity
+class WebSecurityConfig (
+        private val jwtFilterConfigurer: JwtValidationFilterConfigurer
+) : WebSecurityConfigurerAdapter() {
+
+    override fun configure(http: HttpSecurity?) {
+        http?.let {
+            http
+                    .requiresChannel().anyRequest().requiresSecure()
+                    .and()
+                    .authorizeRequests()
+                    .antMatchers("/authcode/**").permitAll()
+                    .anyRequest().fullyAuthenticated()
+                    .and()
+                    .apply(jwtFilterConfigurer)
+        }
+    }
+
+}
+```
+
+### TLS Certificate
+
+The TLS public key from the Auth Server will need to be added to a TrustStore in the consuming application.
 
 ### Logging
 
@@ -34,10 +80,6 @@ logging:
         io.craigmiller160.oauth2: INFO
 ```
 
-## Things to Document
+## How It Works
 
-1. How to get the repo/entity scan to work for refresh token
-1. Logging
-1. Schema
-1. How to get the classes here scanned. Add this to the other lib too.
-1. How to add the filter.
+TODO fill this out
