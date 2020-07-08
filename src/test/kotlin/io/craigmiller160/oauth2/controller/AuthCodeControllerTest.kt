@@ -16,10 +16,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @WebMvcTest
-@ContextConfiguration(classes = [
-    AuthCodeController::class,
-    TestSecurityConfig::class
-])
 class AuthCodeControllerTest {
 
     private val authCodeLoginUrl = "authCodeLoginUrl"

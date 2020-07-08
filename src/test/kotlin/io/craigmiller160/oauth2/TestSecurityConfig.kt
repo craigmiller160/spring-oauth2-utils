@@ -1,4 +1,4 @@
-package io.craigmiller160.oauth2.controller
+package io.craigmiller160.oauth2
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
