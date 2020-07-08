@@ -8,3 +8,4 @@ This is a collection of utility code to support Spring Boot applications that ne
 1. Logging
 1. Schema
 1. How to get the classes here scanned. Add this to the other lib too.
+1. How to add the filter.
