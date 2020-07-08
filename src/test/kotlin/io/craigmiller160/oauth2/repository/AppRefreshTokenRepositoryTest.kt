@@ -7,9 +7,20 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories
+import org.springframework.test.context.ContextConfiguration
 
 @DataJpaTest
+@ContextConfiguration(classes = [
+    AppRefreshTokenRepository::class
+])
+@EnableAutoConfiguration
+@EnableJpaRepositories(basePackages = ["io.craigmiller160.oauth2"])
+@EntityScan(basePackages = ["io.craigmiller160.oauth2"])
 class AppRefreshTokenRepositoryTest {
 
     @Autowired
