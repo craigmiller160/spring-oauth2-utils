@@ -1,9 +1,7 @@
 package io.craigmiller160.oauth2.controller
 
-import io.craigmiller160.oauth2.client.AuthServerClient
-import io.craigmiller160.oauth2.config.OAuthConfig
-import io.craigmiller160.oauth2.repository.AppRefreshTokenRepository
-import io.craigmiller160.oauth2.security.JwtValidationFilterConfigurer
+import com.nhaarman.mockito_kotlin.eq
+import com.nhaarman.mockito_kotlin.isA
 import io.craigmiller160.oauth2.service.AuthCodeService
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -17,89 +15,75 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
-// TODO fix these tests.
+@WebMvcTest
+@ContextConfiguration(classes = [
+    AuthCodeController::class,
+    TestSecurityConfig::class
+])
+class AuthCodeControllerTest {
 
-//@WebMvcTest
-//@ContextConfiguration(classes = [
-//    JwtValidationFilterConfigurer::class,
-//    AuthCodeController::class,
-//    WebSecurityConfig::class,
-//    AuthEntryPoint::class // TODO this is rough, requiring these imports in all unit tests...
-//])
-//class AuthCodeControllerTest {
-//
-//    private val authCodeLoginUrl = "authCodeLoginUrl"
-//
-//    @MockBean
-//    private lateinit var oAuthConfig: OAuthConfig
-//
-//    @MockBean
-//    private lateinit var appRefreshTokenRepo: AppRefreshTokenRepository
-//
-//    @MockBean
-//    private lateinit var authServerClient: AuthServerClient
-//
-//    @MockBean
-//    private lateinit var authCodeService: AuthCodeService
-//
-//    @Autowired
-//    private lateinit var mockMvc: MockMvc
-//
-//    @Autowired
-//    private lateinit var authCodeController: AuthCodeController
-//
-//    @Test
-//    fun test_login() {
-//        Mockito.`when`(authCodeService.prepareAuthCodeLogin(isA()))
-//                .thenReturn(authCodeLoginUrl)
-//
-//        mockMvc.perform(
-//                MockMvcRequestBuilders.get("/authcode/login")
-//                        .secure(true)
-//        )
-//                .andDo(MockMvcResultHandlers.print())
-//                .andExpect(MockMvcResultMatchers.status().is3xxRedirection)
-//                .andExpect(MockMvcResultMatchers.header().string("Location", authCodeLoginUrl))
-//    }
-//
-//    @Test
-//    fun test_code() {
-//        val code = "code"
-//        val state = "state"
-//        val postAuthRedirect = "postAuthRedirect"
-//
-//        val cookie = ResponseCookie
-//                .from("name", "value")
-//                .build()
-//
-//        Mockito.`when`(authCodeService.code(isA(), eq(code), eq(state)))
-//                .thenReturn(Pair(cookie, postAuthRedirect))
-//
-//        mockMvc.perform(
-//                MockMvcRequestBuilders.get("/authcode/code?code=$code&state=$state")
-//                        .secure(true)
-//        )
-//                .andDo(MockMvcResultHandlers.print())
-//                .andExpect(MockMvcResultMatchers.status().is3xxRedirection)
-//                .andExpect(MockMvcResultMatchers.header().string("Location", postAuthRedirect))
-//                .andExpect(MockMvcResultMatchers.header().string("Set-Cookie", cookie.toString()))
-//    }
-//
-//    @Test
-//    fun test_logout() {
-//        val cookie = ResponseCookie
-//                .from("name", "value")
-//                .build()
-//        Mockito.`when`(authCodeService.logout())
-//                .thenReturn(cookie)
-//
-//        mockMvc.perform(
-//                MockMvcRequestBuilders.get("/authcode/logout")
-//                        .secure(true)
-//        )
-//                .andDo(MockMvcResultHandlers.print())
-//                .andExpect(MockMvcResultMatchers.status().isOk)
-//                .andExpect(MockMvcResultMatchers.header().string("Set-Cookie", cookie.toString()))
-//    }
-//
-//}
+    private val authCodeLoginUrl = "authCodeLoginUrl"
+
+    @MockBean
+    private lateinit var authCodeService: AuthCodeService
+
+    @Autowired
+    private lateinit var mockMvc: MockMvc
+
+    @Autowired
+    private lateinit var authCodeController: AuthCodeController
+
+    @Test
+    fun test_login() {
+        Mockito.`when`(authCodeService.prepareAuthCodeLogin(isA()))
+                .thenReturn(authCodeLoginUrl)
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/authcode/login")
+        )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection)
+                .andExpect(MockMvcResultMatchers.header().string("Location", authCodeLoginUrl))
+    }
+
+    @Test
+    fun test_code() {
+        val code = "code"
+        val state = "state"
+        val postAuthRedirect = "postAuthRedirect"
+
+        val cookie = ResponseCookie
+                .from("name", "value")
+                .build()
+
+        Mockito.`when`(authCodeService.code(isA(), eq(code), eq(state)))
+                .thenReturn(Pair(cookie, postAuthRedirect))
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/authcode/code?code=$code&state=$state")
+                        .secure(true)
+        )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection)
+                .andExpect(MockMvcResultMatchers.header().string("Location", postAuthRedirect))
+                .andExpect(MockMvcResultMatchers.header().string("Set-Cookie", cookie.toString()))
+    }
+
+    @Test
+    fun test_logout() {
+        val cookie = ResponseCookie
+                .from("name", "value")
+                .build()
+        Mockito.`when`(authCodeService.logout())
+                .thenReturn(cookie)
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/authcode/logout")
+                        .secure(true)
+        )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andExpect(MockMvcResultMatchers.header().string("Set-Cookie", cookie.toString()))
+    }
+
+}
