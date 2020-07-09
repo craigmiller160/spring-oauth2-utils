@@ -82,4 +82,7 @@ logging:
 
 ## How It Works
 
-TODO fill this out
+1. Properties
+1. Auth Server DB entry
+1. APIs
+1. Move auth user to this lib
