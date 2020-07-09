@@ -16,12 +16,12 @@ data class OAuthConfig (
         var clientName: String = "",
         var clientKey: String = "",
         var clientSecret: String = "",
-        var acceptBearerToken: Boolean = false,
-        var acceptCookie: Boolean = false,
         var cookieName: String = "",
         var postAuthRedirect: String = "",
         var cookieMaxAgeSecs: Long = 0
 ) {
+
+    // TODO need validation that these properties are all set
 
     val jwkPath = "/jwk"
     val tokenPath = "/oauth/token"

@@ -106,18 +106,7 @@ oauth2:
     client-secret: 1566aadf-800f-4a9d-9828-6a77426a53b5
 ```
 
-### Bearer Token, Cookie, or Both
-
-There are two ways the APIs can validate an access token. The first is as a Bearer token in the Authorization header. The second is as a cookie. If both are turned on, the Bearer token will always be checked first. This is all enabled with a few properties.
-
-If you want the app to support authentication with an Access Tok
-
-```
-oauth2:
-    accept-bearer-token: true
-```
-
-If turned on, 
+ 
 
 
 1. Properties

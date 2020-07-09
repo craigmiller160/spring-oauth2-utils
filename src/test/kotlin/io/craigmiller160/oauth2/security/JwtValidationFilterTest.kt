@@ -49,8 +49,6 @@ class JwtValidationFilterTest {
         oAuthConfig = OAuthConfig(
                 clientKey = JwtUtils.CLIENT_KEY,
                 clientName = JwtUtils.CLIENT_NAME,
-                acceptBearerToken = true,
-                acceptCookie = true,
                 cookieName = cookieName
         )
         oAuthConfig.jwkSet = jwkSet

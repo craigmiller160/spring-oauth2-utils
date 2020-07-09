@@ -114,20 +114,9 @@ class JwtValidationFilter (
     }
 
     private fun getToken(req: HttpServletRequest): String {
-        var token: String? = null
-        if (oAuthConfig.acceptBearerToken) {
-            token = getBearerToken(req)
-        }
-
-        if (token == null && oAuthConfig.acceptCookie) {
-            token = getCookieToken(req)
-        }
-
-        if (token == null) {
-            throw InvalidTokenException("Token not found")
-        }
-
-        return token
+        return getBearerToken(req)
+                ?: getCookieToken(req)
+                ?: throw InvalidTokenException("Token not found")
     }
 
     private fun getCookieToken(req: HttpServletRequest): String? {
