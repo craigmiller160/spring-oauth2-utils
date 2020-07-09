@@ -82,6 +82,44 @@ logging:
 
 ## How It Works
 
+The following are instructions of how to properly utilize this library with the application to integrate it with the SSO Auth Server. Each step of the way will reference properties that must be included in the `application.yml` in order for each feature to work.
+
+### Auth Server Awareness
+
+Your application needs to know where the Auth Server is running. This is done through this property:
+
+```
+oauth2:
+    auth-server-host: https://localhost:7003
+```
+
+### Client/User DB Entries
+
+The client and all users need to be added to the database. This can be done through the Auth Management UI, or with direct database queries.
+
+After the client is setup in the Auth Server DB, client information needs to be added to the application via properties:
+
+```
+oauth2:
+    client-name: auth-management-service
+    client-key: a4cc4fef-564e-44c1-82af-45572f124c1a
+    client-secret: 1566aadf-800f-4a9d-9828-6a77426a53b5
+```
+
+### Bearer Token, Cookie, or Both
+
+There are two ways the APIs can validate an access token. The first is as a Bearer token in the Authorization header. The second is as a cookie. If both are turned on, the Bearer token will always be checked first. This is all enabled with a few properties.
+
+If you want the app to support authentication with an Access Tok
+
+```
+oauth2:
+    accept-bearer-token: true
+```
+
+If turned on, 
+
+
 1. Properties
 1. Auth Server DB entry
 1. APIs
