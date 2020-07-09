@@ -32,8 +32,8 @@ class JwtValidationFilter (
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
 
-    override fun doFilterInternal(req: HttpServletRequest, res: HttpServletResponse, chain: FilterChain) { // TODO refreshed token needs to be added to response as cookie
-        if (!req.requestURI.startsWith("/authcode")) {
+    override fun doFilterInternal(req: HttpServletRequest, res: HttpServletResponse, chain: FilterChain) {
+        if (!req.requestURI.startsWith("/authcode")) { // TODO need to make insecure endpoints configurable
             try {
                 val token = getToken(req)
                 val claims = validateToken(token, res)

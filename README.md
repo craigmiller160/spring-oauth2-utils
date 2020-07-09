@@ -106,7 +106,24 @@ oauth2:
     client-secret: 1566aadf-800f-4a9d-9828-6a77426a53b5
 ```
 
- 
+### Token Validation - Bearer vs Cookie
+
+The JWT token from the Auth Server can be delivered to secure APIs in two ways:
+
+1. Bearer Token - The access token is provided in the Authorization header of the HTTP request.
+1. Cookie - The access token is provided as a Cookie tied to the application's domain.
+
+If the JWT token is provided in both ways, the Bearer Token will take precedence.
+
+To configure the cookie, two properties need to be provided:
+
+```
+oauth2:
+    cookie-name: auth-management-token
+    cookie-max-age-secs: 86400
+```
+
+### Authentication
 
 
 1. Properties
