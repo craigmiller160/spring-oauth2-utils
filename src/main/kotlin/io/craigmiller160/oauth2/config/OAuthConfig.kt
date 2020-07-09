@@ -12,9 +12,6 @@ import javax.annotation.PostConstruct
 @ConfigurationProperties(prefix = "oauth2")
 data class OAuthConfig (
         var authServerHost: String = "",
-        var jwkPath: String = "",
-        var tokenPath: String = "",
-        var authCodeLoginPath: String = "",
         var authCodeRedirectUri: String = "",
         var clientName: String = "",
         var clientKey: String = "",
@@ -25,6 +22,10 @@ data class OAuthConfig (
         var postAuthRedirect: String = "",
         var cookieMaxAgeSecs: Long = 0
 ) {
+
+    val jwkPath = "/jwk"
+    val tokenPath = "/oauth/token"
+    val authCodeLoginPath = "/ui/login.html"
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
 

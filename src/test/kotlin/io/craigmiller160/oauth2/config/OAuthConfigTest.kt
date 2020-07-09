@@ -12,7 +12,7 @@ import org.mockito.Mockito.spy
 
 class OAuthConfigTest {
 
-    private val oAuthConfig = OAuthConfig(jwkPath = "/path")
+    private val oAuthConfig = OAuthConfig()
 
     @Test
     fun test_loadJWKSet_firstTrySuccess() {
