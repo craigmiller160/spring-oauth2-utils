@@ -38,7 +38,7 @@ class OAuthControllerTest {
                 .thenReturn(authCodeLoginUrl)
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/authcode/login")
+                MockMvcRequestBuilders.get("/oauth/authcode/login")
         )
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection)
@@ -59,7 +59,7 @@ class OAuthControllerTest {
                 .thenReturn(Pair(cookie, postAuthRedirect))
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/authcode/code?code=$code&state=$state")
+                MockMvcRequestBuilders.get("/oauth/authcode/code?code=$code&state=$state")
                         .secure(true)
         )
                 .andDo(MockMvcResultHandlers.print())
@@ -77,7 +77,7 @@ class OAuthControllerTest {
                 .thenReturn(cookie)
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/authcode/logout")
+                MockMvcRequestBuilders.get("/oauth/logout")
                         .secure(true)
         )
                 .andDo(MockMvcResultHandlers.print())
