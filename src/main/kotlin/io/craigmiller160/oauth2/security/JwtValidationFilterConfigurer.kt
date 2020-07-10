@@ -14,8 +14,11 @@ class JwtValidationFilterConfigurer (
         private val tokenRefreshService: TokenRefreshService
 ) : SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
 
+    private val filter = JwtValidationFilter(oAuthConfig, tokenRefreshService)
+    val defaultInsecurePathPatterns = filter.defaultInsecureUriPatterns.toTypedArray()
+
     override fun configure(http: HttpSecurity?) {
-        http?.addFilterBefore(JwtValidationFilter(oAuthConfig, tokenRefreshService), UsernamePasswordAuthenticationFilter::class.java)
+        http?.addFilterBefore(filter, UsernamePasswordAuthenticationFilter::class.java)
     }
 
 }

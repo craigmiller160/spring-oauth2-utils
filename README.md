@@ -41,7 +41,7 @@ One final thing about the above code example: If you use it as-is, it will break
 
 ### Security Configuration
 
-The application's Spring Security configuration will need to be setup properly for this library. First the `/authcode/**` path must be without security so that authentication can be performed. Second, the JWT request filter must be added so that all other requests can be properly validated based on the Auth Server's access token.
+The application's Spring Security configuration will need to be setup properly for this library. The main item for this is the `JwtValidationFilter`, which is provided by the `JwtFilterConfigurer`. Once it has been injected, it has a property called `defaultInsecurePathPatterns` which must be added to the antMatchers with permitAll so that the authentication endpoints can be accessed.
 
 ```
 @Configuration
@@ -56,7 +56,7 @@ class WebSecurityConfig (
                     .requiresChannel().anyRequest().requiresSecure()
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/authcode/**").permitAll()
+                    .antMatchers(*jwtFilterConfigurer.defaultInsecurePathPatterns).permitAll()
                     .anyRequest().fullyAuthenticated()
                     .and()
                     .apply(jwtFilterConfigurer)
