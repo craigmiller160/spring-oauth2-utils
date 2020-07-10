@@ -111,7 +111,6 @@ class OAuthControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andDo { result ->
-                    println(result.response.contentAsString) // TODO delete this
                     val payload = objectMapper.readValue(result.response.contentAsString, AuthUserDto::class.java)
                     assertEquals(authUser, payload)
                 }
