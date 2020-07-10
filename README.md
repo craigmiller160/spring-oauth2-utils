@@ -139,9 +139,15 @@ oauth2:
     post-auth-redirect: https://localhost:3000
 ```
 
+The first one tells the Auth Server how to redirect to the `/authcode/code` endpoint. The second one is where the user should be redirected to once the authentication is finished.
+
 ### Logout
 
-Logout has an endpoint as well:
+Logout has an endpoint as well: `/oauth/logout`. This will clear the cookie and delete the refresh token so no more authenticated calls will be possible.
+
+### Get User Details
+
+There is an endpoint to get details on the authenticated user. This is useful for adding those details to the UI in some way. It is `/oauth/user`.
 
 ### Adding Insecure Paths
 
@@ -151,10 +157,3 @@ By default, all requests to the application will be secure, other than the few t
 oauth2:
     insecure-paths: /path/**,/path2/**
 ```
-
-The first one tells the Auth Server how to redirect to the `/authcode/code` endpoint. The second one is where the user should be redirected to once the authentication is finished.
-
-1. Properties
-1. Auth Server DB entry
-1. APIs
-1. Move auth user to this lib
