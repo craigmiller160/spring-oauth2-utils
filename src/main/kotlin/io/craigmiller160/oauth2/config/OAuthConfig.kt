@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank
 @Validated
 @ConfigurationProperties(prefix = "oauth2")
 data class OAuthConfig (
-        @NotBlank var authServerHost: String = "",
+        @field:NotBlank(message = "Missing Property: oauth2.auth-server-host") var authServerHost: String = "",
         var authCodeRedirectUri: String = "",
         var clientName: String = "",
         var clientKey: String = "",
@@ -25,7 +25,7 @@ data class OAuthConfig (
 ) {
 
     // TODO need validation that these properties are all set
-    // TODO need to configure exludable paths
+    // TODO need to configure excludable paths
 
     val jwkPath = "/jwk"
     val tokenPath = "/oauth/token"
@@ -45,10 +45,11 @@ data class OAuthConfig (
 
     @PostConstruct
     fun tryToLoadJWKSet() {
-        if (jwkPath.isNotBlank()) { // TODO add this to unit tests
+        println("HOST: $authServerHost") // TODO delete this
+        if (jwkPath.isNotBlank()) { // TODO once validation is added, this check isn't necessary
             for (i in 0 until 5) {
                 try {
-                    jwkSet = loadJWKSet()
+//                    jwkSet = loadJWKSet() // TODO restore this
                     return
                 } catch (ex: Exception) {
                     log.error("Error loading JWKSet", ex)
