@@ -1,11 +1,15 @@
 package io.craigmiller160.oauth2.controller
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.isA
+import io.craigmiller160.oauth2.dto.AuthUserDto
 import io.craigmiller160.oauth2.service.AuthCodeService
 import io.craigmiller160.oauth2.service.OAuthService
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -28,6 +32,9 @@ class OAuthControllerTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
+
+    @Autowired
+    private lateinit var objectMapper: ObjectMapper
 
     @Autowired
     private lateinit var OAuthController: OAuthController
@@ -55,7 +62,7 @@ class OAuthControllerTest {
                 .from("name", "value")
                 .build()
 
-        Mockito.`when`(authCodeService.code(isA(), eq(code), eq(state)))
+        `when`(authCodeService.code(isA(), eq(code), eq(state)))
                 .thenReturn(Pair(cookie, postAuthRedirect))
 
         mockMvc.perform(
@@ -73,7 +80,7 @@ class OAuthControllerTest {
         val cookie = ResponseCookie
                 .from("name", "value")
                 .build()
-        Mockito.`when`(oAuthService.logout())
+        `when`(oAuthService.logout())
                 .thenReturn(cookie)
 
         mockMvc.perform(
@@ -87,7 +94,27 @@ class OAuthControllerTest {
 
     @Test
     fun test_getAuthenticatedUser() {
-        TODO("Finish this")
+        val authUser = AuthUserDto(
+                username = "User",
+                firstName = "First",
+                lastName = "Last",
+                roles = listOf("Something")
+        )
+
+        `when`(oAuthService.getAuthenticatedUser())
+                .thenReturn(authUser)
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/oauth/user")
+                        .secure(true)
+        )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk)
+                .andDo { result ->
+                    println(result.response.contentAsString) // TODO delete this
+                    val payload = objectMapper.readValue(result.response.contentAsString, AuthUserDto::class.java)
+                    assertEquals(authUser, payload)
+                }
     }
 
 }
