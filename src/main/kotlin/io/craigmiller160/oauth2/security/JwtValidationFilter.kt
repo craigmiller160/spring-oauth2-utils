@@ -32,7 +32,7 @@ class JwtValidationFilter (
 ) : OncePerRequestFilter() {
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
-    private val defaultInsecureUriPatterns = listOf("/authcode/**")
+    private val defaultInsecureUriPatterns = listOf("/authcode/login", "/authcode/code", "/authcode/logout")
 
     override fun doFilterInternal(req: HttpServletRequest, res: HttpServletResponse, chain: FilterChain) {
         if (isUriSecured(req.requestURI)) {
