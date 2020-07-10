@@ -45,20 +45,17 @@ data class OAuthConfig (
 
     @PostConstruct
     fun tryToLoadJWKSet() {
-        println("HOST: $authServerHost") // TODO delete this
-        if (jwkPath.isNotBlank()) { // TODO once validation is added, this check isn't necessary
-            for (i in 0 until 5) {
-                try {
-//                    jwkSet = loadJWKSet() // TODO restore this
-                    return
-                } catch (ex: Exception) {
-                    log.error("Error loading JWKSet", ex)
-                    Thread.sleep(getBaseWait() * (i + 1))
-                }
+        for (i in 0 until 5) {
+            try {
+                jwkSet = loadJWKSet()
+                return
+            } catch (ex: Exception) {
+                log.error("Error loading JWKSet", ex)
+                Thread.sleep(getBaseWait() * (i + 1))
             }
-
-            throw RuntimeException("Failed to load JWKSet")
         }
+
+        throw RuntimeException("Failed to load JWKSet")
     }
 
 }
