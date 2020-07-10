@@ -48,6 +48,11 @@ class OAuthServiceTest {
                 .removeByTokenId(authUser.tokenId)
     }
 
+    @Test
+    fun test_getAuthenticatedUser() {
+        TODO("Finish this")
+    }
+
     private fun validateCookie(cookie: ResponseCookie, token: String, exp: Long) {
         Assertions.assertEquals(cookieName, cookie.name)
         Assertions.assertEquals("/", cookie.path)

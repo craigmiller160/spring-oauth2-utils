@@ -85,4 +85,9 @@ class OAuthControllerTest {
                 .andExpect(MockMvcResultMatchers.header().string("Set-Cookie", cookie.toString()))
     }
 
+    @Test
+    fun test_getAuthenticatedUser() {
+        TODO("Finish this")
+    }
+
 }
