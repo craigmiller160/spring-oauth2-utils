@@ -5,13 +5,16 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
+import org.springframework.validation.annotation.Validated
 import java.net.URL
 import javax.annotation.PostConstruct
+import javax.validation.constraints.NotBlank
 
 @Configuration
+@Validated
 @ConfigurationProperties(prefix = "oauth2")
 data class OAuthConfig (
-        var authServerHost: String = "",
+        @NotBlank var authServerHost: String = "",
         var authCodeRedirectUri: String = "",
         var clientName: String = "",
         var clientKey: String = "",
@@ -22,6 +25,7 @@ data class OAuthConfig (
 ) {
 
     // TODO need validation that these properties are all set
+    // TODO need to configure exludable paths
 
     val jwkPath = "/jwk"
     val tokenPath = "/oauth/token"
