@@ -3,6 +3,7 @@ package io.craigmiller160.oauth2.controller
 import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.isA
 import io.craigmiller160.oauth2.service.AuthCodeService
+import io.craigmiller160.oauth2.service.OAuthService
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,6 +22,9 @@ class OAuthControllerTest {
 
     @MockBean
     private lateinit var authCodeService: AuthCodeService
+
+    @MockBean
+    private lateinit var oAuthService: OAuthService
 
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -69,7 +73,7 @@ class OAuthControllerTest {
         val cookie = ResponseCookie
                 .from("name", "value")
                 .build()
-        Mockito.`when`(authCodeService.logout())
+        Mockito.`when`(oAuthService.logout())
                 .thenReturn(cookie)
 
         mockMvc.perform(

@@ -141,23 +141,4 @@ class AuthCodeServiceTest {
         Assertions.assertEquals("State does not match expected value", ex.message)
     }
 
-    @Test
-    fun test_logout() {
-        Mockito.`when`(oAuthConfig.cookieName)
-                .thenReturn(cookieName)
-
-        val authentication = Mockito.mock(Authentication::class.java)
-        val authUser = JwtUtils.createAuthUser()
-        Mockito.`when`(authentication.principal)
-                .thenReturn(authUser)
-        SecurityContextHolder.getContext().authentication = authentication
-
-        val cookie = authCodeService.logout()
-
-        validateCookie(cookie, "", 0)
-
-        Mockito.verify(appRefreshTokenRepo, Mockito.times(1))
-                .removeByTokenId(authUser.tokenId)
-    }
-
 }
