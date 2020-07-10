@@ -12,9 +12,9 @@ import com.nimbusds.jwt.proc.DefaultJWTProcessor
 import io.craigmiller160.oauth2.config.OAuthConfig
 import io.craigmiller160.oauth2.exception.InvalidTokenException
 import io.craigmiller160.oauth2.service.TokenRefreshService
+import io.craigmiller160.oauth2.util.CookieCreator
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.http.ResponseCookie
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -85,7 +85,7 @@ class JwtValidationFilter (
                     return tokenRefreshService.refreshToken(token)
                             ?.let { tokenResponse ->
                                 val claims = validateToken(tokenResponse.accessToken, res, true)
-                                res.addHeader("Set-Cookie", createCookie(tokenResponse.accessToken, oAuthConfig.cookieMaxAgeSecs).toString())
+                                res.addHeader("Set-Cookie", CookieCreator.create(oAuthConfig.cookieName, tokenResponse.accessToken, oAuthConfig.cookieMaxAgeSecs).toString())
                                 claims
                             }
                             ?: throw InvalidTokenException("Token validation failed: ${ex.message}", ex)
@@ -96,18 +96,6 @@ class JwtValidationFilter (
                 else -> throw RuntimeException(ex)
             }
         }
-    }
-
-    // TODO add to utility class
-    private fun createCookie(token: String, maxAge: Long): ResponseCookie {
-        return ResponseCookie
-                .from(oAuthConfig.cookieName, token)
-                .path("/")
-                .secure(true)
-                .httpOnly(true)
-                .maxAge(maxAge)
-                .sameSite("strict")
-                .build()
     }
 
     private fun createAuthentication(claims: JWTClaimsSet): Authentication {
