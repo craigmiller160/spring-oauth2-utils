@@ -19,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.util.AntPathMatcher
 import org.springframework.web.filter.OncePerRequestFilter
 import java.text.ParseException
 import javax.servlet.FilterChain
@@ -31,9 +32,10 @@ class JwtValidationFilter (
 ) : OncePerRequestFilter() {
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
+    private val defaultInsecureUriPatterns = listOf("/authcode/**")
 
     override fun doFilterInternal(req: HttpServletRequest, res: HttpServletResponse, chain: FilterChain) {
-        if (!req.requestURI.startsWith("/authcode")) { // TODO need to make insecure endpoints configurable
+        if (isUriSecured(req.requestURI)) {
             try {
                 val token = getToken(req)
                 val claims = validateToken(token, res)
@@ -45,6 +47,12 @@ class JwtValidationFilter (
         }
 
         chain.doFilter(req, res)
+    }
+
+    private fun isUriSecured(requestUri: String): Boolean {
+        val antMatcher = AntPathMatcher()
+        return defaultInsecureUriPatterns
+                .firstOrNull { antMatcher.match(it, requestUri) } == null
     }
 
     private fun validateToken(token: String, res: HttpServletResponse, alreadyAttemptedRefresh: Boolean = false): JWTClaimsSet {
