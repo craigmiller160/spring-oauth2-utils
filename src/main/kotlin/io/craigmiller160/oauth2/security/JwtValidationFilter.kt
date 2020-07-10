@@ -42,7 +42,8 @@ class JwtValidationFilter (
                 val claims = validateToken(token, res)
                 SecurityContextHolder.getContext().authentication = createAuthentication(claims)
             } catch (ex: InvalidTokenException) {
-                log.error("Error authenticating token", ex)
+                log.error("Token Validation Failed: ${ex.message}")
+                log.trace("", ex)
                 SecurityContextHolder.clearContext()
             }
         }
@@ -78,7 +79,7 @@ class JwtValidationFilter (
             when(ex) {
                 is BadJOSEException -> {
                     if (alreadyAttemptedRefresh) {
-                        throw InvalidTokenException("Token validation failed", ex)
+                        throw InvalidTokenException("Token validation failed: ${ex.message}", ex)
                     }
 
                     return tokenRefreshService.refreshToken(token)
@@ -87,10 +88,10 @@ class JwtValidationFilter (
                                 res.addHeader("Set-Cookie", createCookie(tokenResponse.accessToken, oAuthConfig.cookieMaxAgeSecs).toString())
                                 claims
                             }
-                            ?: throw InvalidTokenException("Token validation failed", ex)
+                            ?: throw InvalidTokenException("Token validation failed: ${ex.message}", ex)
                 }
                 is ParseException, is JOSEException ->
-                    throw InvalidTokenException("Token validation failed", ex)
+                    throw InvalidTokenException("Token validation failed: ${ex.message}", ex)
                 is RuntimeException -> throw ex
                 else -> throw RuntimeException(ex)
             }
