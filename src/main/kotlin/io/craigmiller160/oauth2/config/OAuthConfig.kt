@@ -22,10 +22,9 @@ data class OAuthConfig (
         @field:NotBlank(message = "Missing Property: oauth2.client-secret") var clientSecret: String = "",
         @field:NotBlank(message = "Missing Property: oauth2.cookie-name") var cookieName: String = "",
         @field:NotBlank(message = "Missing Property: oauth2.post-auth-redirect") var postAuthRedirect: String = "",
-        @field:Min(message = "Must be greater than 0: oauth2.cookie-max-age-secs", value = 1) var cookieMaxAgeSecs: Long = 0
+        @field:Min(message = "Must be greater than 0: oauth2.cookie-max-age-secs", value = 1) var cookieMaxAgeSecs: Long = 0,
+        var insecurePaths: String = ""
 ) {
-
-    // TODO need to configure excludable paths
 
     val jwkPath = "/jwk"
     val tokenPath = "/oauth/token"
@@ -41,6 +40,11 @@ data class OAuthConfig (
 
     fun loadJWKSet(): JWKSet {
         return JWKSet.load(URL("$authServerHost$jwkPath"))
+    }
+
+    fun getInsecurePathList(): List<String> {
+        return insecurePaths.split(",")
+                .map { it.trim() }
     }
 
     @PostConstruct

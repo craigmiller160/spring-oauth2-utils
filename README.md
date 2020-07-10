@@ -139,6 +139,15 @@ oauth2:
     post-auth-redirect: https://localhost:3000
 ```
 
+### Adding Insecure Paths
+
+By default, all requests to the application will be secure, other than the few that need to be open to allow for initial authentication. If there is a need to add more paths to be insecure, the following property allows it. It accepts a comma-separated list of Ant Matching patterns:
+
+```
+oauth2:
+    insecure-paths: /path/**,/path2/**
+```
+
 The first one tells the Auth Server how to redirect to the `/authcode/code` endpoint. The second one is where the user should be redirected to once the authentication is finished.
 
 1. Properties
