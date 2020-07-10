@@ -33,6 +33,7 @@ class JwtValidationFilter (
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
     private val defaultInsecureUriPatterns = listOf("/authcode/login", "/authcode/code", "/authcode/logout")
+    private val insecurePathPatterns = oAuthConfig.getInsecurePathList()
 
     override fun doFilterInternal(req: HttpServletRequest, res: HttpServletResponse, chain: FilterChain) {
         if (isUriSecured(req.requestURI)) {
@@ -51,8 +52,8 @@ class JwtValidationFilter (
 
     private fun isUriSecured(requestUri: String): Boolean {
         val antMatcher = AntPathMatcher()
-        return defaultInsecureUriPatterns
-                .firstOrNull { antMatcher.match(it, requestUri) } == null
+        return defaultInsecureUriPatterns.firstOrNull { antMatcher.match(it, requestUri) } == null ||
+                insecurePathPatterns.firstOrNull { antMatcher.match(it, requestUri) } == null
     }
 
     private fun validateToken(token: String, res: HttpServletResponse, alreadyAttemptedRefresh: Boolean = false): JWTClaimsSet {
