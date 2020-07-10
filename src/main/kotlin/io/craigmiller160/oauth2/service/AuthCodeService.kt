@@ -6,6 +6,7 @@ import io.craigmiller160.oauth2.entity.AppRefreshToken
 import io.craigmiller160.oauth2.exception.BadAuthCodeStateException
 import io.craigmiller160.oauth2.repository.AppRefreshTokenRepository
 import io.craigmiller160.oauth2.security.AuthenticatedUser
+import io.craigmiller160.oauth2.util.CookieCreator
 import org.springframework.http.ResponseCookie
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
@@ -57,26 +58,8 @@ class AuthCodeService (
         val manageRefreshToken = AppRefreshToken(0, tokens.tokenId, tokens.refreshToken)
         appRefreshTokenRepo.removeByTokenId(tokens.tokenId)
         appRefreshTokenRepo.save(manageRefreshToken)
-        val cookie = createCookie(tokens.accessToken, oAuthConfig.cookieMaxAgeSecs)
+        val cookie = CookieCreator.create(oAuthConfig.cookieName, tokens.accessToken, oAuthConfig.cookieMaxAgeSecs)
         return Pair(cookie, oAuthConfig.postAuthRedirect)
-    }
-
-    fun logout(): ResponseCookie {
-        val authUser = SecurityContextHolder.getContext().authentication.principal as AuthenticatedUser
-        appRefreshTokenRepo.removeByTokenId(authUser.tokenId)
-        return createCookie("", 0)
-    }
-
-    // TODO add to utility class
-    private fun createCookie(token: String, maxAge: Long): ResponseCookie {
-        return ResponseCookie
-                .from(oAuthConfig.cookieName, token)
-                .path("/")
-                .secure(true)
-                .httpOnly(true)
-                .maxAge(maxAge)
-                .sameSite("strict")
-                .build()
     }
 
 }

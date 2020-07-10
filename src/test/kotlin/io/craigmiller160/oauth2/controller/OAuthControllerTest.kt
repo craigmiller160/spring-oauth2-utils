@@ -9,14 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.ResponseCookie
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @WebMvcTest
-class AuthCodeControllerTest {
+class OAuthControllerTest {
 
     private val authCodeLoginUrl = "authCodeLoginUrl"
 
@@ -27,7 +26,7 @@ class AuthCodeControllerTest {
     private lateinit var mockMvc: MockMvc
 
     @Autowired
-    private lateinit var authCodeController: AuthCodeController
+    private lateinit var OAuthController: OAuthController
 
     @Test
     fun test_login() {

@@ -129,15 +129,19 @@ A user can authenticate with any allowable grant type via the Auth Server, and t
 
 This is done through two API endpoints that are exposed by the application importing this library. As long as the classes from this library are scanned by the consuming application, these endpoints will exist;
 
-`/authcode/login` - This endpoint will create a well-formed redirect request to the Auth Server. The 302 response will contain the necessary parameters for the Auth Server to setup the correct authentication page.
+`/oauth2/authcode/login` - This endpoint will create a well-formed redirect request to the Auth Server. The 302 response will contain the necessary parameters for the Auth Server to setup the correct authentication page.
 
-`/authcode/code` - This is the endpoint that will be called after authentication. Assuming the user successfully authenticates, the Auth Server will redirect them to this endpoint, along with the Authorization Code. This library will then use that Authorization Code to request Access/Refresh tokens from the Auth Server, and store the Access Token in a cookie. Finally, it will redirect to  whatever page the user should land on post-authentication. This is all driven by the following properties:
+`/oauth2/authcode/code` - This is the endpoint that will be called after authentication. Assuming the user successfully authenticates, the Auth Server will redirect them to this endpoint, along with the Authorization Code. This library will then use that Authorization Code to request Access/Refresh tokens from the Auth Server, and store the Access Token in a cookie. Finally, it will redirect to  whatever page the user should land on post-authentication. This is all driven by the following properties:
 
 ```
 oauth2:
-    auth-code-redirect-uri: https://localhost:3000/api/authcode/code
+    auth-code-redirect-uri: https://localhost:3000/api/oauth/authcode/code
     post-auth-redirect: https://localhost:3000
 ```
+
+### Logout
+
+Logout has an endpoint as well:
 
 ### Adding Insecure Paths
 
