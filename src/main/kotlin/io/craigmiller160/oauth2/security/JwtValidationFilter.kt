@@ -82,13 +82,17 @@ class JwtValidationFilter (
                         throw InvalidTokenException("Token validation failed: ${ex.message}", ex)
                     }
 
-                    return tokenRefreshService.refreshToken(token)
-                            ?.let { tokenResponse ->
-                                val claims = validateToken(tokenResponse.accessToken, res, true)
-                                res.addHeader("Set-Cookie", CookieCreator.create(oAuthConfig.cookieName, tokenResponse.accessToken, oAuthConfig.cookieMaxAgeSecs).toString())
-                                claims
-                            }
-                            ?: throw InvalidTokenException("Token validation failed: ${ex.message}", ex)
+                    try {
+                        return tokenRefreshService.refreshToken(token)
+                                ?.let { tokenResponse ->
+                                    val claims = validateToken(tokenResponse.accessToken, res, true)
+                                    res.addHeader("Set-Cookie", CookieCreator.create(oAuthConfig.cookieName, tokenResponse.accessToken, oAuthConfig.cookieMaxAgeSecs).toString())
+                                    claims
+                                }
+                                ?: throw InvalidTokenException("Token validation failed: ${ex.message}", ex)
+                    } catch (ex: Exception) {
+                        throw InvalidTokenException("Token refresh error", ex)
+                    }
                 }
                 is ParseException, is JOSEException ->
                     throw InvalidTokenException("Token validation failed: ${ex.message}", ex)
