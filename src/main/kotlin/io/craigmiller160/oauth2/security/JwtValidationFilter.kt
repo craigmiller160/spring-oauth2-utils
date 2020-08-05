@@ -43,7 +43,7 @@ class JwtValidationFilter (
                 SecurityContextHolder.getContext().authentication = createAuthentication(claims)
             } catch (ex: InvalidTokenException) {
                 log.error("Token Validation Failed: ${ex.message}")
-                log.trace("", ex)
+                log.debug("", ex)
                 SecurityContextHolder.clearContext()
             }
         }
