@@ -11,16 +11,21 @@ import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.junit.jupiter.MockitoSettings
 import org.mockito.quality.Strictness
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import java.security.KeyPair
@@ -108,12 +113,36 @@ class JwtValidationFilterTest {
 
     @Test
     fun test_doFilterInternal_defaultInsecure() {
-        TODO("Finish this")
+        val mockContext = mock(SecurityContext::class.java)
+        SecurityContextHolder.setContext(mockContext)
+
+        `when`(req.requestURI)
+                .thenReturn("/oauth/authcode/login")
+
+        jwtValidationFilter.doFilter(req, res, chain)
+
+        verify(chain, times(1))
+                .doFilter(req, res)
+        verify(mockContext, times(0))
+                .authentication
+        assertEquals(mockContext, SecurityContextHolder.getContext())
     }
 
     @Test
     fun test_doFilterInternal_configInsecure() {
-        TODO("Finish this")
+        val mockContext = mock(SecurityContext::class.java)
+        SecurityContextHolder.setContext(mockContext)
+
+        `when`(req.requestURI)
+                .thenReturn("/other/path")
+
+        jwtValidationFilter.doFilter(req, res, chain)
+
+        verify(chain, times(1))
+                .doFilter(req, res)
+        verify(mockContext, times(0))
+                .authentication
+        assertEquals(mockContext, SecurityContextHolder.getContext())
     }
 
     @Test
