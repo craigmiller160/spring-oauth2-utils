@@ -5,6 +5,10 @@ import io.craigmiller160.oauth2.config.OAuthConfig
 import io.craigmiller160.oauth2.dto.TokenResponse
 import io.craigmiller160.oauth2.service.TokenRefreshService
 import io.craigmiller160.oauth2.testutils.JwtUtils
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.containsInAnyOrder
+import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -12,7 +16,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.junit.jupiter.MockitoSettings
+import org.mockito.quality.Strictness
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
@@ -23,6 +30,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @ExtendWith(MockitoExtension::class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class JwtValidationFilterTest {
 
     private lateinit var oAuthConfig: OAuthConfig
@@ -49,7 +57,8 @@ class JwtValidationFilterTest {
         oAuthConfig = OAuthConfig(
                 clientKey = JwtUtils.CLIENT_KEY,
                 clientName = JwtUtils.CLIENT_NAME,
-                cookieName = cookieName
+                cookieName = cookieName,
+                insecurePaths = "/other/path"
         )
         oAuthConfig.jwkSet = jwkSet
 
@@ -57,7 +66,7 @@ class JwtValidationFilterTest {
         token = JwtUtils.signAndSerializeJwt(jwt, keyPair.private)
 
         jwtValidationFilter = JwtValidationFilter(oAuthConfig, tokenRefreshService)
-        Mockito.`when`(req.requestURI)
+        `when`(req.requestURI)
                 .thenReturn("/something")
     }
 
@@ -68,7 +77,17 @@ class JwtValidationFilterTest {
 
     @Test
     fun test_getInsecurePathPatterns() {
-        TODO("Finish this")
+        val insecure = "/other/path"
+
+        val result = jwtValidationFilter.getInsecurePathPatterns()
+        assertThat(result, allOf(
+                hasSize(3),
+                containsInAnyOrder(
+                        "/oauth/authcode/**",
+                        "/oauth/logout",
+                        "/other/path"
+                )
+        ))
     }
 
     @Test
