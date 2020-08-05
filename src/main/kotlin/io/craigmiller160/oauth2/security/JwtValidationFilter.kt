@@ -41,6 +41,7 @@ class JwtValidationFilter (
 
     override fun doFilterInternal(req: HttpServletRequest, res: HttpServletResponse, chain: FilterChain) {
         if (isUriSecured(req.requestURI)) {
+            log.debug("Authenticating access for secured URI: ${req.requestURI}")
             try {
                 val token = getToken(req)
                 val claims = validateToken(token, res)
@@ -50,6 +51,8 @@ class JwtValidationFilter (
                 log.debug("", ex)
                 SecurityContextHolder.clearContext()
             }
+        } else {
+            log.debug("Skipping authentication for insecure URI: ${req.requestURI}")
         }
 
         chain.doFilter(req, res)
