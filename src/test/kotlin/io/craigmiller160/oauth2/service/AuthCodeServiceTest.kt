@@ -22,6 +22,7 @@ import org.springframework.http.ResponseCookie
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import java.time.Duration
+import java.time.LocalDateTime
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
@@ -101,6 +102,8 @@ class AuthCodeServiceTest {
         val state = "ABC"
         Mockito.`when`(session.getAttribute(AuthCodeService.STATE_ATTR))
                 .thenReturn(state)
+        Mockito.`when`(session.getAttribute(AuthCodeService.STATE_EXP_ATTR))
+                .thenReturn(LocalDateTime.now().plusDays(1))
 
         val response = TokenResponse("access", "refresh", "id")
         Mockito.`when`(authServerClient.authenticateAuthCode(authCode))
@@ -139,6 +142,22 @@ class AuthCodeServiceTest {
 
         val ex = assertThrows<BadAuthCodeStateException> { authCodeService.code(req, authCode, state) }
         Assertions.assertEquals("State does not match expected value", ex.message)
+    }
+
+    @Test
+    fun test_code_stateExp() {
+        Mockito.`when`(req.session)
+                .thenReturn(session)
+        val authCode = "DEF"
+        val state = "ABC"
+
+        Mockito.`when`(session.getAttribute(AuthCodeService.STATE_ATTR))
+                .thenReturn(state)
+        Mockito.`when`(session.getAttribute(AuthCodeService.STATE_EXP_ATTR))
+                .thenReturn(LocalDateTime.now().minusDays(1))
+
+        val ex = assertThrows<BadAuthCodeStateException> { authCodeService.code(req, authCode, state) }
+        Assertions.assertEquals("Auth code state has expired", ex.message)
     }
 
 }

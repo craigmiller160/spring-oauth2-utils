@@ -157,3 +157,11 @@ By default, all requests to the application will be secure, other than the few t
 oauth2:
     insecure-paths: /path/**,/path2/**
 ```
+### Auth Code Expiration
+
+If there is too long of a delay between the initial request to the OAuth2 Server for an auth code and the response, the application will reject it. This defaults to 10 minutes. The number of minutes to wait can be configured with the following property:
+
+```
+oauth2:
+    auth-code-wait-mins: 10
+```
