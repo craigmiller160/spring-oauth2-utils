@@ -14,6 +14,7 @@ import java.math.BigInteger
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.security.SecureRandom
+import java.time.LocalDateTime
 import javax.servlet.http.HttpServletRequest
 
 @Service
@@ -25,6 +26,7 @@ class AuthCodeService (
 
     companion object {
         const val STATE_ATTR = "state"
+        const val STATE_EXP_ATTR = "stateExp"
     }
 
     private fun generateAuthCodeState(): String {
@@ -36,6 +38,7 @@ class AuthCodeService (
     fun prepareAuthCodeLogin(req: HttpServletRequest): String {
         val state = generateAuthCodeState()
         req.session.setAttribute(STATE_ATTR, state)
+        req.session.setAttribute(STATE_EXP_ATTR, LocalDateTime.now().plusMinutes(10))
 
         val host = oAuthConfig.authServerHost
         val loginPath = oAuthConfig.authCodeLoginPath
@@ -48,8 +51,12 @@ class AuthCodeService (
 
     fun code(req: HttpServletRequest, code: String, state: String): Pair<ResponseCookie,String> {
         val expectedState = req.session.getAttribute(STATE_ATTR) as String?
+        val stateExp = req.session.getAttribute(STATE_EXP_ATTR) as LocalDateTime?
         if (expectedState != state) {
             throw BadAuthCodeStateException("State does not match expected value")
+        }
+        if (stateExp == null || LocalDateTime.now() > stateExp) {
+            throw BadAuthCodeStateException("Auth code state has expired")
         }
 
         req.session.removeAttribute(STATE_ATTR)
