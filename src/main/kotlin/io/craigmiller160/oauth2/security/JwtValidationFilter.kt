@@ -91,7 +91,10 @@ class JwtValidationFilter (
                                 }
                                 ?: throw InvalidTokenException("Token validation failed: ${ex.message}", ex)
                     } catch (ex: Exception) {
-                        throw InvalidTokenException("Token refresh error", ex)
+                        when (ex) {
+                            is InvalidTokenException -> throw ex
+                            else -> throw InvalidTokenException("Token refresh error", ex)
+                        }
                     }
                 }
                 is ParseException, is JOSEException ->
