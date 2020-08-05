@@ -30,7 +30,7 @@ class TokenRefreshService (
                         appRefreshTokenRepo.save(AppRefreshToken(0, tokenResponse.tokenId, tokenResponse.refreshToken))
                         tokenResponse
                     } catch (ex: Exception) {
-                        log.error("Error refreshing token", ex)
+                        log.debug("Error refreshing token", ex)
                         null
                     }
                 }
