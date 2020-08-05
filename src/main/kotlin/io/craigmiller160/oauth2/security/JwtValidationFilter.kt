@@ -35,6 +35,10 @@ class JwtValidationFilter (
     val defaultInsecureUriPatterns = listOf("/oauth/authcode/**", "/oauth/logout")
     private val insecurePathPatterns = oAuthConfig.getInsecurePathList()
 
+    fun getInsecurePathPatterns(): List<String> {
+        return defaultInsecureUriPatterns + insecurePathPatterns
+    }
+
     override fun doFilterInternal(req: HttpServletRequest, res: HttpServletResponse, chain: FilterChain) {
         if (isUriSecured(req.requestURI)) {
             try {
@@ -53,7 +57,7 @@ class JwtValidationFilter (
 
     private fun isUriSecured(requestUri: String): Boolean {
         val antMatcher = AntPathMatcher()
-        return defaultInsecureUriPatterns.firstOrNull { antMatcher.match(it, requestUri) } == null ||
+        return defaultInsecureUriPatterns.firstOrNull { antMatcher.match(it, requestUri) } == null &&
                 insecurePathPatterns.firstOrNull { antMatcher.match(it, requestUri) } == null
     }
 

@@ -67,6 +67,11 @@ class JwtValidationFilterTest {
     }
 
     @Test
+    fun test_getInsecurePathPatterns() {
+        TODO("Finish this")
+    }
+
+    @Test
     fun test_doFilterInternal_validBearerToken() {
         Mockito.`when`(req.getHeader("Authorization"))
                 .thenReturn("Bearer $token")
@@ -80,6 +85,16 @@ class JwtValidationFilterTest {
         Assertions.assertEquals(SimpleGrantedAuthority(JwtUtils.ROLE_2), authentication.authorities.toList()[1])
         Mockito.verify(chain, Mockito.times(1))
                 .doFilter(req, res)
+    }
+
+    @Test
+    fun test_doFilterInternal_defaultInsecure() {
+        TODO("Finish this")
+    }
+
+    @Test
+    fun test_doFilterInternal_configInsecure() {
+        TODO("Finish this")
     }
 
     @Test
