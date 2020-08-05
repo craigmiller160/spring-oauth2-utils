@@ -45,6 +45,7 @@ data class OAuthConfig (
     fun getInsecurePathList(): List<String> {
         return insecurePaths.split(",")
                 .map { it.trim() }
+                .filter { it.isNotBlank() }
     }
 
     @PostConstruct
