@@ -38,7 +38,7 @@ class AuthCodeService (
     fun prepareAuthCodeLogin(req: HttpServletRequest): String {
         val state = generateAuthCodeState()
         req.session.setAttribute(STATE_ATTR, state)
-        req.session.setAttribute(STATE_EXP_ATTR, LocalDateTime.now().plusMinutes(10))
+        req.session.setAttribute(STATE_EXP_ATTR, LocalDateTime.now().plusMinutes(oAuthConfig.authCodeWaitMins))
 
         val host = oAuthConfig.authServerHost
         val loginPath = oAuthConfig.authCodeLoginPath
