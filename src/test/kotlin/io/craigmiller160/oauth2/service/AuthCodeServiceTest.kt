@@ -88,6 +88,11 @@ class AuthCodeServiceTest {
     }
 
     @Test
+    fun prepareAuthCodeLogin_useOrigin() {
+        TODO("Finish this")
+    }
+
+    @Test
     fun test_code() {
         Mockito.`when`(req.session)
                 .thenReturn(session)

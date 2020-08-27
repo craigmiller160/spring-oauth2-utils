@@ -3,12 +3,11 @@ package io.craigmiller160.oauth2.service
 import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.config.OAuthConfig
 import io.craigmiller160.oauth2.entity.AppRefreshToken
+import io.craigmiller160.oauth2.exception.BadAuthCodeRequestException
 import io.craigmiller160.oauth2.exception.BadAuthCodeStateException
 import io.craigmiller160.oauth2.repository.AppRefreshTokenRepository
-import io.craigmiller160.oauth2.security.AuthenticatedUser
 import io.craigmiller160.oauth2.util.CookieCreator
 import org.springframework.http.ResponseCookie
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.math.BigInteger
 import java.net.URLEncoder
@@ -40,11 +39,20 @@ class AuthCodeService (
         req.session.setAttribute(STATE_ATTR, state)
         req.session.setAttribute(STATE_EXP_ATTR, LocalDateTime.now().plusMinutes(oAuthConfig.authCodeWaitMins))
 
-        val host = oAuthConfig.authServerHost
         val loginPath = oAuthConfig.authCodeLoginPath
-        val redirectUri = URLEncoder.encode(oAuthConfig.authCodeRedirectUri, StandardCharsets.UTF_8)
         val clientKey = URLEncoder.encode(oAuthConfig.clientKey, StandardCharsets.UTF_8)
         val encodedState = URLEncoder.encode(state, StandardCharsets.UTF_8)
+        val (host, redirectUri) = if (oAuthConfig.useOriginForRedirect) {
+            val origin = req.getHeader("Origin")
+                    ?: throw BadAuthCodeRequestException("Missing origin header on request")
+            val originRedirectUri = URLEncoder.encode("$origin${oAuthConfig.authCodeRedirectUri}", StandardCharsets.UTF_8)
+
+            // TODO origin alone isn't good enough for the auth server host...
+
+            Pair(origin, originRedirectUri)
+        } else {
+            Pair(oAuthConfig.authServerHost, URLEncoder.encode(oAuthConfig.authCodeRedirectUri, StandardCharsets.UTF_8))
+        }
 
         return "$host$loginPath?response_type=code&client_id=$clientKey&redirect_uri=$redirectUri&state=$encodedState"
     }
