@@ -42,7 +42,7 @@ data class OAuthConfig (
     }
 
     fun loadJWKSet(): JWKSet {
-        return JWKSet.load(URL("$authServerHost$jwkPath"))
+        return JWKSet.load(URL("$internalAuthServerHost$jwkPath"))
     }
 
     fun getInsecurePathList(): List<String> {
