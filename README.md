@@ -141,6 +141,23 @@ oauth2:
 
 The first one tells the Auth Server how to redirect to the `/authcode/code` endpoint. The second one is where the user should be redirected to once the authentication is finished.
 
+### Authentication Using Origin
+
+Due to the limitations of running this in my house without a custom DNS server, there is a need to support a variety of IP addresses. Localhost, LAN, and Public IPs all need to be supported. To get around this, here is the recommended approach.
+
+First, rely on the UI app to do the redirects. The UI can proxy everything using the kubernetes service names, thus removing IPs from the equation. The problem then only becomes making sure all the redirects can point to the UI no matter what IP is being used.
+
+To do this, a special property has been provided that makes all the redirects rely on the "origin" HTTP header for the hostname. The origin should be set by the UI app automatically on every request, thus allowing the redirects to be performed with the various IP addresses. When using the "origin" header, all the other URI properties are simply URI paths that get appended to that origin:
+
+```
+oauth2:
+    use-origin-for-redirect: true
+    auth-code-redirect-uri: /api/oauth/authcode/code
+    post-auth-redirect: /
+```
+
+Lastly, keep in mind that the Auth Server will validate the Redirect URIs, so make sure the database is set with the URIs from every possible origin host.
+
 ### Logout
 
 Logout has an endpoint as well: `/oauth/logout`. This will clear the cookie and delete the refresh token so no more authenticated calls will be possible.
