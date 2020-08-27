@@ -141,7 +141,7 @@ oauth2:
 
 The first one tells the Auth Server how to redirect to the `/authcode/code` endpoint. The second one is where the user should be redirected to once the authentication is finished.
 
-### Authentication Using Origin
+### Authentication Without DNS Hostnames
 
 Due to the limitations of running this in my house without a custom DNS server, there is a need to support a variety of IP addresses. Localhost, LAN, and Public IPs all need to be supported. To get around this, here is the recommended approach.
 
@@ -156,7 +156,15 @@ oauth2:
     post-auth-redirect: /
 ```
 
-Lastly, keep in mind that the Auth Server will validate the Redirect URIs, so make sure the database is set with the URIs from every possible origin host.
+Also, keep in mind that the Auth Server will validate the Redirect URIs, so make sure the database is set with the URIs from every possible origin host.
+
+Lastly, one more property is needed: the internal auth server hostname. When the application starts up, it needs to be able to immediately query the auth server to load the JWK, so it needs the kubernetes service hostname. However, when doing the authentication request, it needs to have the request be proxied by the UI app. Therefore, the base auth server host property should be a URI appended to the request origin that will proxy to the actual auth server. The internal property should be the kubernetes hostname that can be called directly by the backend app to load the JWK.
+
+```
+oauth2:
+    auth-server-host: /oauth2
+    internal-auth-server-host: https://sso-oauth2-server
+```
 
 ### Logout
 
