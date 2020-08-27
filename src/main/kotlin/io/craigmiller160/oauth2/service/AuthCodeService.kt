@@ -47,9 +47,7 @@ class AuthCodeService (
                     ?: throw BadAuthCodeRequestException("Missing origin header on request")
             val originRedirectUri = URLEncoder.encode("$origin${oAuthConfig.authCodeRedirectUri}", StandardCharsets.UTF_8)
 
-            // TODO origin alone isn't good enough for the auth server host...
-
-            Pair(origin, originRedirectUri)
+            Pair("$origin${oAuthConfig.internalAuthServerHost}", originRedirectUri)
         } else {
             Pair(oAuthConfig.authServerHost, URLEncoder.encode(oAuthConfig.authCodeRedirectUri, StandardCharsets.UTF_8))
         }

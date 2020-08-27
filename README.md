@@ -166,6 +166,8 @@ oauth2:
     internal-auth-server-host: https://sso-oauth2-server
 ```
 
+If not set, `internal-auth-server-host` will default to the value of `auth-server-host`.
+
 ### Logout
 
 Logout has an endpoint as well: `/oauth/logout`. This will clear the cookie and delete the refresh token so no more authenticated calls will be possible.

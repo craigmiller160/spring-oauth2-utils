@@ -24,6 +24,7 @@ data class OAuthConfig (
         @field:NotBlank(message = "Missing Property: oauth2.post-auth-redirect") var postAuthRedirect: String = "",
         @field:Min(message = "Must be greater than 0: oauth2.cookie-max-age-secs", value = 1) var cookieMaxAgeSecs: Long = 0,
         var useOriginForRedirect: Boolean = false,
+        var internalAuthServerHost: String = authServerHost,
         var insecurePaths: String = "",
         var authCodeWaitMins: Long = 10
 ) {
