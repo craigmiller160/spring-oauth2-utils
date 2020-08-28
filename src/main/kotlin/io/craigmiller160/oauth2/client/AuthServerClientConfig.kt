@@ -18,8 +18,8 @@ class AuthServerClientConfig (
     @Bean
     fun authRestTemplateBuilder(): RestTemplateBuilder {
         return RestTemplateBuilder()
-                .requestFactory { BufferingClientHttpRequestFactory(SimpleClientHttpRequestFactory()) }
-                .interceptors(listOf(RequestResponseLoggingInterceptor()))
+//                .requestFactory { BufferingClientHttpRequestFactory(SimpleClientHttpRequestFactory()) }
+//                .interceptors(listOf(RequestResponseLoggingInterceptor()))
                 .messageConverters(FormHttpMessageConverter(), MappingJackson2HttpMessageConverter())
     }
 
