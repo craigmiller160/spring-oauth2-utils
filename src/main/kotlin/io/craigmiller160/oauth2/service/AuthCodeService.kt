@@ -42,15 +42,11 @@ class AuthCodeService (
         val loginPath = oAuthConfig.authCodeLoginPath
         val clientKey = URLEncoder.encode(oAuthConfig.clientKey, StandardCharsets.UTF_8)
         val encodedState = URLEncoder.encode(state, StandardCharsets.UTF_8)
-        val (host, redirectUri) = if (oAuthConfig.useOriginForRedirect) {
-            val origin = req.getHeader("Origin")
-                    ?: throw BadAuthCodeRequestException("Missing origin header on request")
-            val originRedirectUri = URLEncoder.encode("$origin${oAuthConfig.authCodeRedirectUri}", StandardCharsets.UTF_8)
 
-            Pair("$origin${oAuthConfig.internalAuthServerHost}", originRedirectUri)
-        } else {
-            Pair(oAuthConfig.authServerHost, URLEncoder.encode(oAuthConfig.authCodeRedirectUri, StandardCharsets.UTF_8))
-        }
+        val origin = req.getHeader("Origin")
+                ?: throw BadAuthCodeRequestException("Missing origin header on request")
+        val redirectUri = URLEncoder.encode("$origin${oAuthConfig.authCodeRedirectUri}", StandardCharsets.UTF_8)
+        val host = "$origin${oAuthConfig.authServerHost}"
 
         return "$host$loginPath?response_type=code&client_id=$clientKey&redirect_uri=$redirectUri&state=$encodedState"
     }

@@ -23,7 +23,6 @@ data class OAuthConfig (
         @field:NotBlank(message = "Missing Property: oauth2.cookie-name") var cookieName: String = "",
         @field:NotBlank(message = "Missing Property: oauth2.post-auth-redirect") var postAuthRedirect: String = "",
         @field:Min(message = "Must be greater than 0: oauth2.cookie-max-age-secs", value = 1) var cookieMaxAgeSecs: Long = 0,
-        var useOriginForRedirect: Boolean = false, // TODO maybe don't rely 100% on origin header?
         var internalAuthServerHost: String = "",
         var insecurePaths: String = "",
         var authCodeWaitMins: Long = 10
