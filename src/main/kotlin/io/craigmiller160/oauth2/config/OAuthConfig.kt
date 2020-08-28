@@ -23,7 +23,7 @@ data class OAuthConfig (
         @field:NotBlank(message = "Missing Property: oauth2.cookie-name") var cookieName: String = "",
         @field:NotBlank(message = "Missing Property: oauth2.post-auth-redirect") var postAuthRedirect: String = "",
         @field:Min(message = "Must be greater than 0: oauth2.cookie-max-age-secs", value = 1) var cookieMaxAgeSecs: Long = 0,
-        var internalAuthServerHost: String = "",
+        @field:NotBlank(message = "Missing Property: oauth2.auth-login-base-uri") var authLoginBaseUri: String = "",
         var insecurePaths: String = "",
         var authCodeWaitMins: Long = 10
 ) {
@@ -41,7 +41,7 @@ data class OAuthConfig (
     }
 
     fun loadJWKSet(): JWKSet {
-        return JWKSet.load(URL("$internalAuthServerHost$jwkPath"))
+        return JWKSet.load(URL("$authServerHost$jwkPath"))
     }
 
     fun getInsecurePathList(): List<String> {
@@ -52,10 +52,6 @@ data class OAuthConfig (
 
     @PostConstruct
     fun tryToLoadJWKSet() {
-        if (internalAuthServerHost.isEmpty()) {
-            internalAuthServerHost = authServerHost
-        }
-
         for (i in 0 until 5) {
             try {
                 jwkSet = loadJWKSet()
