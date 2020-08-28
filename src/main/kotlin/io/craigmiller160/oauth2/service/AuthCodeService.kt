@@ -26,6 +26,7 @@ class AuthCodeService (
     companion object {
         const val STATE_ATTR = "state"
         const val STATE_EXP_ATTR = "stateExp"
+        const val ORIGIN = "origin"
     }
 
     private fun generateAuthCodeState(): String {
@@ -35,16 +36,18 @@ class AuthCodeService (
     }
 
     fun prepareAuthCodeLogin(req: HttpServletRequest): String { // TODO remember docs and tests overhaul
+        val origin = req.getHeader("Origin")
+                ?: throw BadAuthCodeRequestException("Missing origin header on request")
+
         val state = generateAuthCodeState()
         req.session.setAttribute(STATE_ATTR, state)
         req.session.setAttribute(STATE_EXP_ATTR, LocalDateTime.now().plusMinutes(oAuthConfig.authCodeWaitMins))
+        req.session.setAttribute(ORIGIN, origin)
 
         val loginPath = oAuthConfig.authCodeLoginPath
         val clientKey = URLEncoder.encode(oAuthConfig.clientKey, StandardCharsets.UTF_8)
         val encodedState = URLEncoder.encode(state, StandardCharsets.UTF_8)
 
-        val origin = req.getHeader("Origin")
-                ?: throw BadAuthCodeRequestException("Missing origin header on request")
         val redirectUri = URLEncoder.encode("$origin${oAuthConfig.authCodeRedirectUri}", StandardCharsets.UTF_8)
         val host = "$origin${oAuthConfig.authLoginBaseUri}"
 
@@ -61,10 +64,12 @@ class AuthCodeService (
             throw BadAuthCodeStateException("Auth code state has expired")
         }
 
-        req.session.removeAttribute(STATE_ATTR)
+        val origin = req.session.getAttribute(ORIGIN) as String?
+                ?: throw BadAuthCodeRequestException("Missing origin attribute in session")
 
-        val origin = req.getHeader("Origin")
-                ?: throw BadAuthCodeRequestException("Missing origin header on request")
+        req.session.removeAttribute(STATE_ATTR) // TODO add this all to tests
+        req.session.removeAttribute(STATE_EXP_ATTR)
+        req.session.removeAttribute(ORIGIN)
 
         val tokens = authServerClient.authenticateAuthCode(origin, code)
         val manageRefreshToken = AppRefreshToken(0, tokens.tokenId, tokens.refreshToken)
