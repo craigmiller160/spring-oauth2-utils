@@ -1,5 +1,6 @@
 package io.craigmiller160.oauth2.controller
 
+import io.craigmiller160.oauth2.dto.AuthCodeLoginDto
 import io.craigmiller160.oauth2.dto.AuthUserDto
 import io.craigmiller160.oauth2.service.AuthCodeService
 import io.craigmiller160.oauth2.service.OAuthService
@@ -18,11 +19,11 @@ class OAuthController (
         private val oAuthService: OAuthService
 ) {
 
+    // TODO need to completely overhaul documentation for this
     @PostMapping("/authcode/login")
-    fun login(req: HttpServletRequest, res: HttpServletResponse) {
+    fun login(req: HttpServletRequest): AuthCodeLoginDto {
         val authCodeLoginUrl = authCodeService.prepareAuthCodeLogin(req)
-        res.status = 302
-        res.addHeader("Location", authCodeLoginUrl)
+        return AuthCodeLoginDto(authCodeLoginUrl)
     }
 
     @GetMapping("/authcode/code")
