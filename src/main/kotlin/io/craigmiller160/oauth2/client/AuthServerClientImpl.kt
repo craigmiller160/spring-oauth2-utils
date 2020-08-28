@@ -2,6 +2,8 @@ package io.craigmiller160.oauth2.client
 
 import io.craigmiller160.oauth2.config.OAuthConfig
 import io.craigmiller160.oauth2.dto.TokenResponse
+import io.craigmiller160.oauth2.exception.BadAuthCodeRequestException
+import io.craigmiller160.oauth2.exception.BadAuthenticationException
 import io.craigmiller160.oauth2.exception.InvalidResponseBodyException
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -49,8 +51,13 @@ class AuthServerClientImpl (
         headers.setBasicAuth(clientKey, clientSecret)
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
 
-        val response = restTemplate.exchange(url, HttpMethod.POST, HttpEntity<MultiValueMap<String,String>>(body, headers), TokenResponse::class.java)
-        return response.body ?: throw InvalidResponseBodyException()
+        try {
+            val response = restTemplate.exchange(url, HttpMethod.POST, HttpEntity<MultiValueMap<String,String>>(body, headers), TokenResponse::class.java)
+            return response.body ?: throw InvalidResponseBodyException()
+        } catch (ex: Exception) {
+            println(ex.javaClass.name) // TODO delete this
+            throw BadAuthenticationException("Error while requesting authentication token", ex)
+        }
     }
 
 }
