@@ -34,7 +34,7 @@ class AuthCodeService (
         return bigInt.toString(32)
     }
 
-    fun prepareAuthCodeLogin(req: HttpServletRequest): String {
+    fun prepareAuthCodeLogin(req: HttpServletRequest): String { // TODO remember docs and tests overhaul
         val state = generateAuthCodeState()
         req.session.setAttribute(STATE_ATTR, state)
         req.session.setAttribute(STATE_EXP_ATTR, LocalDateTime.now().plusMinutes(oAuthConfig.authCodeWaitMins))
