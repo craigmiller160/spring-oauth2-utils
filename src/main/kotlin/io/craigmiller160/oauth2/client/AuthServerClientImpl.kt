@@ -2,7 +2,6 @@ package io.craigmiller160.oauth2.client
 
 import io.craigmiller160.oauth2.config.OAuthConfig
 import io.craigmiller160.oauth2.dto.TokenResponse
-import io.craigmiller160.oauth2.exception.BadAuthCodeRequestException
 import io.craigmiller160.oauth2.exception.BadAuthenticationException
 import io.craigmiller160.oauth2.exception.InvalidResponseBodyException
 import org.springframework.http.HttpEntity
@@ -18,9 +17,11 @@ class AuthServerClientImpl (
         private val oAuthConfig: OAuthConfig
 ) : AuthServerClient {
 
-    override fun authenticateAuthCode(code: String): TokenResponse {
+    override fun authenticateAuthCode(origin: String, code: String): TokenResponse {
         val clientKey = oAuthConfig.clientKey
-        val redirectUri = oAuthConfig.authCodeRedirectUri
+        val redirectUri = "$origin${oAuthConfig.authCodeRedirectUri}"
+
+        println("RedirectUri: $redirectUri") // TODO delete this
 
         val request = LinkedMultiValueMap<String,String>()
         request.add("grant_type", "authorization_code")

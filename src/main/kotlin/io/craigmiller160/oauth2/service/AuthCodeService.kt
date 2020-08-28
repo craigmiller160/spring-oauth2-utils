@@ -63,7 +63,10 @@ class AuthCodeService (
 
         req.session.removeAttribute(STATE_ATTR)
 
-        val tokens = authServerClient.authenticateAuthCode(code)
+        val origin = req.getHeader("Origin")
+                ?: throw BadAuthCodeRequestException("Missing origin header on request")
+
+        val tokens = authServerClient.authenticateAuthCode(origin, code)
         val manageRefreshToken = AppRefreshToken(0, tokens.tokenId, tokens.refreshToken)
         appRefreshTokenRepo.removeByTokenId(tokens.tokenId)
         appRefreshTokenRepo.save(manageRefreshToken)

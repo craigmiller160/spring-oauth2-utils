@@ -111,7 +111,7 @@ class AuthCodeServiceTest {
                 .thenReturn(LocalDateTime.now().plusDays(1))
 
         val response = TokenResponse("access", "refresh", "id")
-        Mockito.`when`(authServerClient.authenticateAuthCode(authCode))
+        Mockito.`when`(authServerClient.authenticateAuthCode("", authCode)) // TODO fix this
                 .thenReturn(response)
 
         val (cookie, redirect) = authCodeService.code(req, authCode, state)

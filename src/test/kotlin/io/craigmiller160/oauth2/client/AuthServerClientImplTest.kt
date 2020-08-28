@@ -71,7 +71,7 @@ class AuthServerClientImplTest {
         ))
                 .thenReturn(ResponseEntity.ok(response))
 
-        val result = authServerClient.authenticateAuthCode(authCode)
+        val result = authServerClient.authenticateAuthCode("", authCode) // TODO fix this
         assertEquals(response, result)
 
         assertEquals(1, entityCaptor.allValues.size)
