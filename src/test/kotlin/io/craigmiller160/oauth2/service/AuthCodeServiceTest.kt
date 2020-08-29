@@ -5,11 +5,15 @@ import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.config.OAuthConfig
 import io.craigmiller160.oauth2.dto.TokenResponse
 import io.craigmiller160.oauth2.entity.AppRefreshToken
+import io.craigmiller160.oauth2.exception.BadAuthCodeRequestException
 import io.craigmiller160.oauth2.exception.BadAuthCodeStateException
 import io.craigmiller160.oauth2.repository.AppRefreshTokenRepository
 import io.craigmiller160.oauth2.testutils.JwtUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -91,11 +95,11 @@ class AuthCodeServiceTest {
         verify(session, times(1))
                 .setAttribute(AuthCodeService.ORIGIN, origin)
 
-        Assertions.assertNotNull(captor.value)
+        assertNotNull(captor.value)
         val state = captor.value
 
         val expected = "$origin$path?response_type=code&client_id=$clientKey&redirect_uri=$origin$redirectUri&state=$state"
-        Assertions.assertEquals(expected, result)
+        assertEquals(expected, result)
     }
 
     @Test
@@ -115,13 +119,15 @@ class AuthCodeServiceTest {
                 .thenReturn(state)
         `when`(session.getAttribute(AuthCodeService.STATE_EXP_ATTR))
                 .thenReturn(LocalDateTime.now().plusDays(1))
+        `when`(session.getAttribute(AuthCodeService.ORIGIN))
+                .thenReturn(origin)
 
         val response = TokenResponse("access", "refresh", "id")
-        `when`(authServerClient.authenticateAuthCode("", authCode)) // TODO fix this
+        `when`(authServerClient.authenticateAuthCode(origin, authCode))
                 .thenReturn(response)
 
         val (cookie, redirect) = authCodeService.code(req, authCode, state)
-        Assertions.assertEquals(postAuthRedirect, redirect)
+        assertEquals(postAuthRedirect, redirect)
         validateCookie(cookie, response.accessToken, cookieExpSecs)
 
         val manageRefreshToken = AppRefreshToken(0, response.tokenId, response.refreshToken)
@@ -135,13 +141,13 @@ class AuthCodeServiceTest {
     }
 
     private fun validateCookie(cookie: ResponseCookie, token: String, exp: Long) {
-        Assertions.assertEquals(cookieName, cookie.name)
-        Assertions.assertEquals("/", cookie.path)
-        Assertions.assertTrue(cookie.isSecure)
-        Assertions.assertTrue(cookie.isHttpOnly)
-        Assertions.assertEquals("strict", cookie.sameSite)
-        Assertions.assertEquals(token, cookie.value)
-        Assertions.assertEquals(Duration.ofSeconds(exp), cookie.maxAge)
+        assertEquals(cookieName, cookie.name)
+        assertEquals("/", cookie.path)
+        assertTrue(cookie.isSecure)
+        assertTrue(cookie.isHttpOnly)
+        assertEquals("strict", cookie.sameSite)
+        assertEquals(token, cookie.value)
+        assertEquals(Duration.ofSeconds(exp), cookie.maxAge)
     }
 
     @Test
@@ -152,7 +158,7 @@ class AuthCodeServiceTest {
         val state = "ABC"
 
         val ex = assertThrows<BadAuthCodeStateException> { authCodeService.code(req, authCode, state) }
-        Assertions.assertEquals("State does not match expected value", ex.message)
+        assertEquals("State does not match expected value", ex.message)
     }
 
     @Test
@@ -168,7 +174,23 @@ class AuthCodeServiceTest {
                 .thenReturn(LocalDateTime.now().minusDays(1))
 
         val ex = assertThrows<BadAuthCodeStateException> { authCodeService.code(req, authCode, state) }
-        Assertions.assertEquals("Auth code state has expired", ex.message)
+        assertEquals("Auth code state has expired", ex.message)
+    }
+
+    @Test
+    fun test_code_noOrigin() {
+        `when`(req.session)
+                .thenReturn(session)
+        val authCode = "DEF"
+        val state = "ABC"
+
+        `when`(session.getAttribute(AuthCodeService.STATE_ATTR))
+                .thenReturn(state)
+        `when`(session.getAttribute(AuthCodeService.STATE_EXP_ATTR))
+                .thenReturn(LocalDateTime.now().plusDays(1))
+
+        val ex = assertThrows<BadAuthCodeRequestException> { authCodeService.code(req, authCode, state) }
+        assertEquals("Missing origin attribute in session", ex.message)
     }
 
 }
