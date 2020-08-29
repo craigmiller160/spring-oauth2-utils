@@ -24,13 +24,14 @@ class RequestResponseLoggingInterceptor : ClientHttpRequestInterceptor {
         val uri = request.uri
         val method = request.method
         val bodyString = String(body, StandardCharsets.UTF_8)
-        log.debug("Request: $method $uri $bodyString")
+        log.debug("RestTemplate Request: $method $uri $bodyString")
     }
 
     private fun logResponse(response: ClientHttpResponse) {
         val status = response.statusCode
-        val body = StreamUtils.copyToString(response.body, StandardCharsets.UTF_8)
-        log.debug("Response $status $body")
+//        val body = StreamUtils.copyToString(response.body, StandardCharsets.UTF_8)
+//        log.debug("Response $status $body")
+        log.debug("RestTemplate Response $status")
     }
 }
 

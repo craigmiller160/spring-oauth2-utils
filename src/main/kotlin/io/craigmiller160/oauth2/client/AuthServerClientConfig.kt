@@ -19,7 +19,7 @@ class AuthServerClientConfig (
     fun authRestTemplateBuilder(): RestTemplateBuilder {
         return RestTemplateBuilder()
 //                .requestFactory { BufferingClientHttpRequestFactory(SimpleClientHttpRequestFactory()) }
-//                .interceptors(listOf(RequestResponseLoggingInterceptor()))
+                .interceptors(listOf(RequestResponseLoggingInterceptor()))
                 .messageConverters(FormHttpMessageConverter(), MappingJackson2HttpMessageConverter())
     }
 
