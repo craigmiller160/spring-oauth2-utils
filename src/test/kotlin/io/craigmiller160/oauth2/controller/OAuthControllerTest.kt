@@ -3,6 +3,7 @@ package io.craigmiller160.oauth2.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.isA
+import io.craigmiller160.oauth2.TestSecurityConfig
 import io.craigmiller160.oauth2.dto.AuthUserDto
 import io.craigmiller160.oauth2.service.AuthCodeService
 import io.craigmiller160.oauth2.service.OAuthService
@@ -11,15 +12,18 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.ResponseCookie
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @WebMvcTest
+@AutoConfigureMockMvc
 class OAuthControllerTest {
 
     private val authCodeLoginUrl = "authCodeLoginUrl"
@@ -37,7 +41,7 @@ class OAuthControllerTest {
     private lateinit var objectMapper: ObjectMapper
 
     @Autowired
-    private lateinit var OAuthController: OAuthController
+    private lateinit var oAuthController: OAuthController
 
     @Test
     fun test_login() {
@@ -45,7 +49,7 @@ class OAuthControllerTest {
                 .thenReturn(authCodeLoginUrl)
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/oauth/authcode/login")
+                MockMvcRequestBuilders.post("/oauth/authcode/login")
         )
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection)

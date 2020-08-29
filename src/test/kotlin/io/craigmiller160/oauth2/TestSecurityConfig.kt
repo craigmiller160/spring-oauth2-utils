@@ -9,7 +9,8 @@ class TestSecurityConfig : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity?) {
         http?.let {
-            it.authorizeRequests().anyRequest().permitAll()
+            it.csrf().disable()
+                    .authorizeRequests().anyRequest().permitAll()
         }
     }
 
