@@ -30,7 +30,7 @@ data class OAuthConfig (
 
     val jwkPath = "/jwk"
     val tokenPath = "/oauth/token"
-    val authCodeLoginPath = "/ui/login.html"
+    val authCodeLoginPath = "/ui/login" // TODO update tests
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
 
