@@ -56,8 +56,10 @@ class AuthServerClientImpl (
             val response = restTemplate.exchange(url, HttpMethod.POST, HttpEntity<MultiValueMap<String,String>>(body, headers), TokenResponse::class.java)
             return response.body ?: throw InvalidResponseBodyException()
         } catch (ex: Exception) {
-            println(ex.javaClass.name) // TODO delete this
-            throw BadAuthenticationException("Error while requesting authentication token", ex)
+            when(ex) {
+                is InvalidResponseBodyException -> throw ex
+                else -> throw BadAuthenticationException("Error while requesting authentication token", ex)
+            }
         }
     }
 
