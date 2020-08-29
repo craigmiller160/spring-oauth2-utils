@@ -8,7 +8,9 @@ An application that uses this library will do the following:
 
 1. When it starts, it will download the JWK from the OAuth2 Auth Server. This will allow it to validate the JWTs issued by that server.
 1. All secured requests will validate the presence of a JWT issued by the OAuth2 Auth Server. The token details will be exposed via the SecurityContext.
-1. API endpoints will exist to allow the Authorization Code Flow, so a client application can be redirected to and from the OAuth2 Auth Server so the client can log in there. 
+1. API endpoints will exist to allow the Authorization Code Flow, so a client application can be redirected to and from the OAuth2 Auth Server so the client can log in there.
+1. Access tokens will be checked from either a cookie (for auth code flow) or the Authorization header.
+1. Refresh tokens provided by the initial authentication (auth code flow only) will be automatically used when the access token expires. 
 
 ## PSA: Multiple Hostname Strategy
 
