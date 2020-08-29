@@ -3,11 +3,15 @@ package io.craigmiller160.oauth2.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.isA
+import io.craigmiller160.apitestprocessor.ApiTestProcessor
+import io.craigmiller160.apitestprocessor.config.AuthType
 import io.craigmiller160.oauth2.TestSecurityConfig
+import io.craigmiller160.oauth2.dto.AuthCodeLoginDto
 import io.craigmiller160.oauth2.dto.AuthUserDto
 import io.craigmiller160.oauth2.service.AuthCodeService
 import io.craigmiller160.oauth2.service.OAuthService
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
@@ -15,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseCookie
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
@@ -35,25 +40,35 @@ class OAuthControllerTest {
     private lateinit var oAuthService: OAuthService
 
     @Autowired
-    private lateinit var mockMvc: MockMvc
+    private lateinit var provMockMvc: MockMvc
 
     @Autowired
-    private lateinit var objectMapper: ObjectMapper
+    private lateinit var provObjMapper: ObjectMapper
 
-    @Autowired
-    private lateinit var oAuthController: OAuthController
+    private lateinit var apiProcessor: ApiTestProcessor
+
+    @BeforeEach
+    fun setup() {
+        apiProcessor = ApiTestProcessor {
+            mockMvc = provMockMvc
+            objectMapper = provObjMapper
+            isSecure = true
+        }
+    }
 
     @Test
     fun test_login() {
-        Mockito.`when`(authCodeService.prepareAuthCodeLogin(isA()))
+        `when`(authCodeService.prepareAuthCodeLogin(isA()))
                 .thenReturn(authCodeLoginUrl)
 
-        mockMvc.perform(
-                MockMvcRequestBuilders.post("/oauth/authcode/login")
-        )
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection)
-                .andExpect(MockMvcResultMatchers.header().string("Location", authCodeLoginUrl))
+        val result = apiProcessor.call {
+            request {
+                path = "/oauth/authcode/login"
+                method = HttpMethod.POST
+            }
+        }.convert(AuthCodeLoginDto::class.java)
+
+        TODO("Finish this")
     }
 
     @Test
@@ -69,14 +84,20 @@ class OAuthControllerTest {
         `when`(authCodeService.code(isA(), eq(code), eq(state)))
                 .thenReturn(Pair(cookie, postAuthRedirect))
 
-        mockMvc.perform(
-                MockMvcRequestBuilders.get("/oauth/authcode/code?code=$code&state=$state")
-                        .secure(true)
-        )
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection)
-                .andExpect(MockMvcResultMatchers.header().string("Location", postAuthRedirect))
-                .andExpect(MockMvcResultMatchers.header().string("Set-Cookie", cookie.toString()))
+        val result = apiProcessor.call {
+            request {
+                path = "/oauth/authcode/code?code=$code&state=$state"
+            }
+            response {
+                status = 302
+            }
+        }
+
+        val locationValue = result.response.getHeaderValue("Location")
+        assertEquals(postAuthRedirect, locationValue)
+
+        val cookieValue = result.response.getHeaderValue("Set-Cookie")
+        assertEquals(cookie.toString(), cookieValue)
     }
 
     @Test
@@ -87,13 +108,14 @@ class OAuthControllerTest {
         `when`(oAuthService.logout())
                 .thenReturn(cookie)
 
-        mockMvc.perform(
-                MockMvcRequestBuilders.get("/oauth/logout")
-                        .secure(true)
-        )
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andExpect(MockMvcResultMatchers.header().string("Set-Cookie", cookie.toString()))
+        val result = apiProcessor.call {
+            request {
+                path = "/oauth/logout"
+            }
+        }
+
+        val cookieValue = result.response.getHeaderValue("Set-Cookie")
+        assertEquals(cookie.toString(), cookieValue)
     }
 
     @Test
@@ -108,16 +130,13 @@ class OAuthControllerTest {
         `when`(oAuthService.getAuthenticatedUser())
                 .thenReturn(authUser)
 
-        mockMvc.perform(
-                MockMvcRequestBuilders.get("/oauth/user")
-                        .secure(true)
-        )
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andDo { result ->
-                    val payload = objectMapper.readValue(result.response.contentAsString, AuthUserDto::class.java)
-                    assertEquals(authUser, payload)
-                }
+        val result = apiProcessor.call {
+            request {
+                path = "/oauth/user"
+            }
+        }.convert(AuthUserDto::class.java)
+
+        assertEquals(authUser, result)
     }
 
 }

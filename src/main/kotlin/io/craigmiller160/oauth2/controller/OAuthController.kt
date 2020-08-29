@@ -22,7 +22,6 @@ class OAuthController (
     // TODO need to completely overhaul documentation for this
     @PostMapping("/authcode/login")
     fun login(req: HttpServletRequest): AuthCodeLoginDto {
-        println("WORKING") // TODO delete this
         val authCodeLoginUrl = authCodeService.prepareAuthCodeLogin(req)
         return AuthCodeLoginDto(authCodeLoginUrl)
     }
