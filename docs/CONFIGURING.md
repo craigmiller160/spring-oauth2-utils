@@ -80,3 +80,21 @@ Once authentication is fully successful, it's time to redirect back to the appli
 oauth2:
     post-auth-redirect: "/"
 ```
+
+## Insecure Paths
+
+Not all paths may need to be secured for authenticated users only. There are several paths, such as the ones for the auth code flow, that are insecure by default. However, if more paths need to be excluded from the authentication, they can easily be added by a comma-separated list of glob patterns with this property:
+
+```
+oauth2:
+    insecure-paths: /path/**,/path2/**
+```
+
+## Auth Code Wait Time
+
+After the user first attempts to login, there needs to be a limit on how long the application will wait for a successful login. By default this is 10 minutes, however it can be customized with this property:
+
+```
+oauth2:
+    auth-code-wait-mins: 10
+``` 

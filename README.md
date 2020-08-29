@@ -22,7 +22,7 @@ The core of it is there is no custom DNS at the time of writing this readme. Tha
 
 ### The Solution
 
-Solving this problem was done two few ways.
+Solving this problem was done in two ways.
 
 First, the only time that a backend application calls the OAuth2 Auth Server directly is to download the JWK. Therefore, the hostname for the auth server set via configuration would contain the k8s hostname, and that's it.
 
@@ -36,7 +36,7 @@ More explicit details will be shown in the configuration guide.
 
 1. <a href="/docs/INTEGRATING.md">How to Integrate This Library</a>
 1. <a href="/docs/CONFIGURING.md">How to Configure This Library</a>
-
+1. <a href="/docs/USING.md">How to Use Authentication</a>
 
 
 
