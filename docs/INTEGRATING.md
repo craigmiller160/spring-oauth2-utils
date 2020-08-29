@@ -51,7 +51,7 @@ class JpaConfig
 
 ## Security Configuration
 
-Lastly, the security filter that checks for the JWT must be integrated into the Spring Security configuration. Not only is the filter provided, but the ability to configure insecure patterns is also configured. Some patterns are insecure by default, such as the ones to allow auth code authentication, so it is very important that the insecure patterns are set along with adding the filter itself.
+The security filter that checks for the JWT must be integrated into the Spring Security configuration. Not only is the filter provided, but the ability to configure insecure patterns is also configured. Some patterns are insecure by default, such as the ones to allow auth code authentication, so it is very important that the insecure patterns are set along with adding the filter itself.
 
 ```
 @Configuration
@@ -75,3 +75,9 @@ class WebSecurityConfig (
 
 }
 ```
+
+## Setup Client/Users
+
+The application using this library is considered to be a "client" in OAuth2 terminology. It must be registered with the Auth Server, and the client key/secret assigned to it should be recorded, especially because the secret is not visible in its raw form after being hashed and saved in the database.
+
+All the users associated with this application also need to be registered with the Auth Server. Existing users can easily have this application added to them.

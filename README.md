@@ -35,7 +35,7 @@ More explicit details will be shown in the configuration guide.
 ## Documentation
 
 1. <a href="/docs/INTEGRATING.md">How to Integrate This Library</a>
-
+1. <a href="/docs/CONFIGURING.md">How to Configure This Library</a>
 
 
 
@@ -45,59 +45,6 @@ TODO must include nginx documentation
 
 
 
-
-### Logging
-
-Some of the features here have log output. To make sure that output is visible, add the following to the `application.yml` of the project consuming this library. Be sure to set the level to what you want.
-                                           
-```
-logging:
-    level:
-        io.craigmiller160.oauth2: INFO
-```
-
-## How It Works
-
-The following are instructions of how to properly utilize this library with the application to integrate it with the SSO Auth Server. Each step of the way will reference properties that must be included in the `application.yml` in order for each feature to work.
-
-### Auth Server Awareness
-
-Your application needs to know where the Auth Server is running. This is done through this property:
-
-```
-oauth2:
-    auth-server-host: https://localhost:7003
-```
-
-### Client/User DB Entries
-
-The client and all users need to be added to the database. This can be done through the Auth Management UI, or with direct database queries.
-
-After the client is setup in the Auth Server DB, client information needs to be added to the application via properties:
-
-```
-oauth2:
-    client-name: auth-management-service
-    client-key: a4cc4fef-564e-44c1-82af-45572f124c1a
-    client-secret: 1566aadf-800f-4a9d-9828-6a77426a53b5
-```
-
-### Token Validation - Bearer vs Cookie
-
-The JWT token from the Auth Server can be delivered to secure APIs in two ways:
-
-1. Bearer Token - The access token is provided in the Authorization header of the HTTP request.
-1. Cookie - The access token is provided as a Cookie tied to the application's domain.
-
-If the JWT token is provided in both ways, the Bearer Token will take precedence.
-
-To configure the cookie, two properties need to be provided:
-
-```
-oauth2:
-    cookie-name: auth-management-token
-    cookie-max-age-secs: 86400
-```
 
 ### Authentication
 
