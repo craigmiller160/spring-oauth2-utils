@@ -71,7 +71,7 @@ class AuthServerClientImplTest {
         ))
                 .thenReturn(ResponseEntity.ok(response))
 
-        val result = authServerClient.authenticateAuthCode(authCode)
+        val result = authServerClient.authenticateAuthCode(host, authCode)
         assertEquals(response, result)
 
         assertEquals(1, entityCaptor.allValues.size)
@@ -84,7 +84,7 @@ class AuthServerClientImplTest {
         assertTrue(body is MultiValueMap<*, *>)
         val map = body as MultiValueMap<String, String>
         assertEquals("authorization_code", map["grant_type"]?.get(0))
-        assertEquals(redirectUri, map["redirect_uri"]?.get(0))
+        assertEquals("$host$redirectUri", map["redirect_uri"]?.get(0))
         assertEquals(key, map["client_id"]?.get(0))
         assertEquals(authCode, map["code"]?.get(0))
     }

@@ -1,14 +1,19 @@
 package io.craigmiller160.oauth2.service
 
+import com.nhaarman.mockito_kotlin.isA
 import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.config.OAuthConfig
 import io.craigmiller160.oauth2.dto.TokenResponse
 import io.craigmiller160.oauth2.entity.AppRefreshToken
+import io.craigmiller160.oauth2.exception.BadAuthCodeRequestException
 import io.craigmiller160.oauth2.exception.BadAuthCodeStateException
 import io.craigmiller160.oauth2.repository.AppRefreshTokenRepository
 import io.craigmiller160.oauth2.testutils.JwtUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -17,6 +22,9 @@ import org.mockito.ArgumentMatchers.eq
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.http.ResponseCookie
 import org.springframework.security.core.Authentication
@@ -36,6 +44,7 @@ class AuthCodeServiceTest {
     private val cookieExpSecs = 30L
     private val cookieName = "cookie"
     private val postAuthRedirect = "postAuthRedirect"
+    private val origin = "TheOrigin"
 
     @Mock
     private lateinit var oAuthConfig: OAuthConfig
@@ -62,102 +71,130 @@ class AuthCodeServiceTest {
 
     @Test
     fun test_prepareAuthCodeLogin() {
-        Mockito.`when`(req.session)
+        `when`(req.session)
                 .thenReturn(session)
-        Mockito.`when`(oAuthConfig.authServerHost)
-                .thenReturn(host)
-        Mockito.`when`(oAuthConfig.authCodeLoginPath)
+        `when`(req.getHeader("Origin"))
+                .thenReturn(origin)
+        `when`(oAuthConfig.authCodeLoginPath)
                 .thenReturn(path)
-        Mockito.`when`(oAuthConfig.authCodeRedirectUri)
+        `when`(oAuthConfig.authCodeRedirectUri)
                 .thenReturn(redirectUri)
-        Mockito.`when`(oAuthConfig.clientKey)
+        `when`(oAuthConfig.clientKey)
                 .thenReturn(clientKey)
+        `when`(oAuthConfig.authLoginBaseUri)
+                .thenReturn("")
 
         val result = authCodeService.prepareAuthCodeLogin(req)
 
         val captor = ArgumentCaptor.forClass(String::class.java)
 
-        Mockito.verify(session, Mockito.times(1))
+        verify(session, times(1))
                 .setAttribute(eq(AuthCodeService.STATE_ATTR), captor.capture())
+        verify(session, times(1))
+                .setAttribute(eq(AuthCodeService.STATE_EXP_ATTR), isA())
+        verify(session, times(1))
+                .setAttribute(AuthCodeService.ORIGIN, origin)
 
-        Assertions.assertNotNull(captor.value)
+        assertNotNull(captor.value)
         val state = captor.value
 
-        val expected = "$host$path?response_type=code&client_id=$clientKey&redirect_uri=$redirectUri&state=$state"
-        Assertions.assertEquals(expected, result)
+        val expected = "$origin$path?response_type=code&client_id=$clientKey&redirect_uri=$origin$redirectUri&state=$state"
+        assertEquals(expected, result)
     }
 
     @Test
     fun test_code() {
-        Mockito.`when`(req.session)
+        `when`(req.session)
                 .thenReturn(session)
-        Mockito.`when`(oAuthConfig.cookieMaxAgeSecs)
+        `when`(oAuthConfig.cookieMaxAgeSecs)
                 .thenReturn(cookieExpSecs)
-        Mockito.`when`(oAuthConfig.cookieName)
+        `when`(oAuthConfig.cookieName)
                 .thenReturn(cookieName)
-        Mockito.`when`(oAuthConfig.postAuthRedirect)
+        `when`(oAuthConfig.postAuthRedirect)
                 .thenReturn(postAuthRedirect)
 
         val authCode = "DEF"
         val state = "ABC"
-        Mockito.`when`(session.getAttribute(AuthCodeService.STATE_ATTR))
+        `when`(session.getAttribute(AuthCodeService.STATE_ATTR))
                 .thenReturn(state)
-        Mockito.`when`(session.getAttribute(AuthCodeService.STATE_EXP_ATTR))
+        `when`(session.getAttribute(AuthCodeService.STATE_EXP_ATTR))
                 .thenReturn(LocalDateTime.now().plusDays(1))
+        `when`(session.getAttribute(AuthCodeService.ORIGIN))
+                .thenReturn(origin)
 
         val response = TokenResponse("access", "refresh", "id")
-        Mockito.`when`(authServerClient.authenticateAuthCode(authCode))
+        `when`(authServerClient.authenticateAuthCode(origin, authCode))
                 .thenReturn(response)
 
         val (cookie, redirect) = authCodeService.code(req, authCode, state)
-        Assertions.assertEquals(postAuthRedirect, redirect)
+        assertEquals(postAuthRedirect, redirect)
         validateCookie(cookie, response.accessToken, cookieExpSecs)
 
         val manageRefreshToken = AppRefreshToken(0, response.tokenId, response.refreshToken)
-        Mockito.verify(appRefreshTokenRepo, Mockito.times(1))
+        verify(appRefreshTokenRepo, Mockito.times(1))
                 .save(manageRefreshToken)
 
-        Mockito.verify(session, Mockito.times(1))
+        verify(session, times(1))
                 .removeAttribute(AuthCodeService.STATE_ATTR)
-        Mockito.verify(appRefreshTokenRepo, Mockito.times(1))
+        verify(session, times(1))
+                .removeAttribute(AuthCodeService.STATE_EXP_ATTR)
+        verify(session, times(1))
+                .removeAttribute(AuthCodeService.ORIGIN)
+        verify(appRefreshTokenRepo, Mockito.times(1))
                 .removeByTokenId(response.tokenId)
     }
 
     private fun validateCookie(cookie: ResponseCookie, token: String, exp: Long) {
-        Assertions.assertEquals(cookieName, cookie.name)
-        Assertions.assertEquals("/", cookie.path)
-        Assertions.assertTrue(cookie.isSecure)
-        Assertions.assertTrue(cookie.isHttpOnly)
-        Assertions.assertEquals("strict", cookie.sameSite)
-        Assertions.assertEquals(token, cookie.value)
-        Assertions.assertEquals(Duration.ofSeconds(exp), cookie.maxAge)
+        assertEquals(cookieName, cookie.name)
+        assertEquals("/", cookie.path)
+        assertTrue(cookie.isSecure)
+        assertTrue(cookie.isHttpOnly)
+        assertEquals("strict", cookie.sameSite)
+        assertEquals(token, cookie.value)
+        assertEquals(Duration.ofSeconds(exp), cookie.maxAge)
     }
 
     @Test
     fun test_code_badState() {
-        Mockito.`when`(req.session)
+        `when`(req.session)
                 .thenReturn(session)
         val authCode = "DEF"
         val state = "ABC"
 
         val ex = assertThrows<BadAuthCodeStateException> { authCodeService.code(req, authCode, state) }
-        Assertions.assertEquals("State does not match expected value", ex.message)
+        assertEquals("State does not match expected value", ex.message)
     }
 
     @Test
     fun test_code_stateExp() {
-        Mockito.`when`(req.session)
+        `when`(req.session)
                 .thenReturn(session)
         val authCode = "DEF"
         val state = "ABC"
 
-        Mockito.`when`(session.getAttribute(AuthCodeService.STATE_ATTR))
+        `when`(session.getAttribute(AuthCodeService.STATE_ATTR))
                 .thenReturn(state)
-        Mockito.`when`(session.getAttribute(AuthCodeService.STATE_EXP_ATTR))
+        `when`(session.getAttribute(AuthCodeService.STATE_EXP_ATTR))
                 .thenReturn(LocalDateTime.now().minusDays(1))
 
         val ex = assertThrows<BadAuthCodeStateException> { authCodeService.code(req, authCode, state) }
-        Assertions.assertEquals("Auth code state has expired", ex.message)
+        assertEquals("Auth code state has expired", ex.message)
+    }
+
+    @Test
+    fun test_code_noOrigin() {
+        `when`(req.session)
+                .thenReturn(session)
+        val authCode = "DEF"
+        val state = "ABC"
+
+        `when`(session.getAttribute(AuthCodeService.STATE_ATTR))
+                .thenReturn(state)
+        `when`(session.getAttribute(AuthCodeService.STATE_EXP_ATTR))
+                .thenReturn(LocalDateTime.now().plusDays(1))
+
+        val ex = assertThrows<BadAuthCodeRequestException> { authCodeService.code(req, authCode, state) }
+        assertEquals("Missing origin attribute in session", ex.message)
     }
 
 }

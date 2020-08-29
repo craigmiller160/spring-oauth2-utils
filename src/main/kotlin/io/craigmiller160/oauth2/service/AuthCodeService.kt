@@ -3,12 +3,11 @@ package io.craigmiller160.oauth2.service
 import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.config.OAuthConfig
 import io.craigmiller160.oauth2.entity.AppRefreshToken
+import io.craigmiller160.oauth2.exception.BadAuthCodeRequestException
 import io.craigmiller160.oauth2.exception.BadAuthCodeStateException
 import io.craigmiller160.oauth2.repository.AppRefreshTokenRepository
-import io.craigmiller160.oauth2.security.AuthenticatedUser
 import io.craigmiller160.oauth2.util.CookieCreator
 import org.springframework.http.ResponseCookie
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.math.BigInteger
 import java.net.URLEncoder
@@ -27,6 +26,7 @@ class AuthCodeService (
     companion object {
         const val STATE_ATTR = "state"
         const val STATE_EXP_ATTR = "stateExp"
+        const val ORIGIN = "origin"
     }
 
     private fun generateAuthCodeState(): String {
@@ -36,15 +36,20 @@ class AuthCodeService (
     }
 
     fun prepareAuthCodeLogin(req: HttpServletRequest): String {
+        val origin = req.getHeader("Origin")
+                ?: throw BadAuthCodeRequestException("Missing origin header on request")
+
         val state = generateAuthCodeState()
         req.session.setAttribute(STATE_ATTR, state)
         req.session.setAttribute(STATE_EXP_ATTR, LocalDateTime.now().plusMinutes(oAuthConfig.authCodeWaitMins))
+        req.session.setAttribute(ORIGIN, origin)
 
-        val host = oAuthConfig.authServerHost
         val loginPath = oAuthConfig.authCodeLoginPath
-        val redirectUri = URLEncoder.encode(oAuthConfig.authCodeRedirectUri, StandardCharsets.UTF_8)
         val clientKey = URLEncoder.encode(oAuthConfig.clientKey, StandardCharsets.UTF_8)
         val encodedState = URLEncoder.encode(state, StandardCharsets.UTF_8)
+
+        val redirectUri = URLEncoder.encode("$origin${oAuthConfig.authCodeRedirectUri}", StandardCharsets.UTF_8)
+        val host = "$origin${oAuthConfig.authLoginBaseUri}"
 
         return "$host$loginPath?response_type=code&client_id=$clientKey&redirect_uri=$redirectUri&state=$encodedState"
     }
@@ -59,9 +64,14 @@ class AuthCodeService (
             throw BadAuthCodeStateException("Auth code state has expired")
         }
 
-        req.session.removeAttribute(STATE_ATTR)
+        val origin = req.session.getAttribute(ORIGIN) as String?
+                ?: throw BadAuthCodeRequestException("Missing origin attribute in session")
 
-        val tokens = authServerClient.authenticateAuthCode(code)
+        req.session.removeAttribute(STATE_ATTR)
+        req.session.removeAttribute(STATE_EXP_ATTR)
+        req.session.removeAttribute(ORIGIN)
+
+        val tokens = authServerClient.authenticateAuthCode(origin, code)
         val manageRefreshToken = AppRefreshToken(0, tokens.tokenId, tokens.refreshToken)
         appRefreshTokenRepo.removeByTokenId(tokens.tokenId)
         appRefreshTokenRepo.save(manageRefreshToken)

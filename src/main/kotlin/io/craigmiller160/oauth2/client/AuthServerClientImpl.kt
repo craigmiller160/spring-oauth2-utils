@@ -2,6 +2,7 @@ package io.craigmiller160.oauth2.client
 
 import io.craigmiller160.oauth2.config.OAuthConfig
 import io.craigmiller160.oauth2.dto.TokenResponse
+import io.craigmiller160.oauth2.exception.BadAuthenticationException
 import io.craigmiller160.oauth2.exception.InvalidResponseBodyException
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -16,9 +17,9 @@ class AuthServerClientImpl (
         private val oAuthConfig: OAuthConfig
 ) : AuthServerClient {
 
-    override fun authenticateAuthCode(code: String): TokenResponse {
+    override fun authenticateAuthCode(origin: String, code: String): TokenResponse {
         val clientKey = oAuthConfig.clientKey
-        val redirectUri = oAuthConfig.authCodeRedirectUri
+        val redirectUri = "$origin${oAuthConfig.authCodeRedirectUri}"
 
         val request = LinkedMultiValueMap<String,String>()
         request.add("grant_type", "authorization_code")
@@ -49,8 +50,15 @@ class AuthServerClientImpl (
         headers.setBasicAuth(clientKey, clientSecret)
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
 
-        val response = restTemplate.exchange(url, HttpMethod.POST, HttpEntity<MultiValueMap<String,String>>(body, headers), TokenResponse::class.java)
-        return response.body ?: throw InvalidResponseBodyException()
+        try {
+            val response = restTemplate.exchange(url, HttpMethod.POST, HttpEntity<MultiValueMap<String,String>>(body, headers), TokenResponse::class.java)
+            return response.body ?: throw InvalidResponseBodyException()
+        } catch (ex: Exception) {
+            when(ex) {
+                is InvalidResponseBodyException -> throw ex
+                else -> throw BadAuthenticationException("Error while requesting authentication token", ex)
+            }
+        }
     }
 
 }

@@ -1,9 +1,11 @@
 package io.craigmiller160.oauth2.controller
 
+import io.craigmiller160.oauth2.dto.AuthCodeLoginDto
 import io.craigmiller160.oauth2.dto.AuthUserDto
 import io.craigmiller160.oauth2.service.AuthCodeService
 import io.craigmiller160.oauth2.service.OAuthService
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -17,11 +19,10 @@ class OAuthController (
         private val oAuthService: OAuthService
 ) {
 
-    @GetMapping("/authcode/login")
-    fun login(req: HttpServletRequest, res: HttpServletResponse) {
+    @PostMapping("/authcode/login")
+    fun login(req: HttpServletRequest): AuthCodeLoginDto {
         val authCodeLoginUrl = authCodeService.prepareAuthCodeLogin(req)
-        res.status = 302
-        res.addHeader("Location", authCodeLoginUrl)
+        return AuthCodeLoginDto(authCodeLoginUrl)
     }
 
     @GetMapping("/authcode/code")
