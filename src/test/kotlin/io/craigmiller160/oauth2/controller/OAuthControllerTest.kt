@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.isA
 import io.craigmiller160.apitestprocessor.ApiTestProcessor
-import io.craigmiller160.apitestprocessor.config.AuthType
-import io.craigmiller160.oauth2.TestSecurityConfig
 import io.craigmiller160.oauth2.dto.AuthCodeLoginDto
 import io.craigmiller160.oauth2.dto.AuthUserDto
 import io.craigmiller160.oauth2.service.AuthCodeService
@@ -13,7 +11,6 @@ import io.craigmiller160.oauth2.service.OAuthService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -21,11 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseCookie
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @WebMvcTest
 @AutoConfigureMockMvc
@@ -68,7 +61,7 @@ class OAuthControllerTest {
             }
         }.convert(AuthCodeLoginDto::class.java)
 
-        TODO("Finish this")
+        assertEquals(authCodeLoginUrl, result.url)
     }
 
     @Test
