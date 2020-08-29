@@ -38,3 +38,10 @@ GET /oauth/logout
 
 Logout will clear the token cookie so the user can no longer stay logged in.
 
+## Get User Details
+
+```
+GET /oauth/user
+```
+
+This endpoint will return details on the currently authenticated user. This includes the user's basic information and any access roles they currently have.
