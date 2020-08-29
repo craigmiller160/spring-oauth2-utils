@@ -21,8 +21,6 @@ class AuthServerClientImpl (
         val clientKey = oAuthConfig.clientKey
         val redirectUri = "$origin${oAuthConfig.authCodeRedirectUri}"
 
-        println("RedirectUri: $redirectUri") // TODO delete this
-
         val request = LinkedMultiValueMap<String,String>()
         request.add("grant_type", "authorization_code")
         request.add("client_id", clientKey)

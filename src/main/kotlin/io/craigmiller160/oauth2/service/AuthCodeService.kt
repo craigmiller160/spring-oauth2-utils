@@ -35,7 +35,7 @@ class AuthCodeService (
         return bigInt.toString(32)
     }
 
-    fun prepareAuthCodeLogin(req: HttpServletRequest): String { // TODO remember docs and tests overhaul
+    fun prepareAuthCodeLogin(req: HttpServletRequest): String {
         val origin = req.getHeader("Origin")
                 ?: throw BadAuthCodeRequestException("Missing origin header on request")
 
@@ -67,7 +67,7 @@ class AuthCodeService (
         val origin = req.session.getAttribute(ORIGIN) as String?
                 ?: throw BadAuthCodeRequestException("Missing origin attribute in session")
 
-        req.session.removeAttribute(STATE_ATTR) // TODO add this all to tests
+        req.session.removeAttribute(STATE_ATTR)
         req.session.removeAttribute(STATE_EXP_ATTR)
         req.session.removeAttribute(ORIGIN)
 

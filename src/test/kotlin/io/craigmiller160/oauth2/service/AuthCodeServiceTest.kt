@@ -134,8 +134,12 @@ class AuthCodeServiceTest {
         verify(appRefreshTokenRepo, Mockito.times(1))
                 .save(manageRefreshToken)
 
-        verify(session, Mockito.times(1))
+        verify(session, times(1))
                 .removeAttribute(AuthCodeService.STATE_ATTR)
+        verify(session, times(1))
+                .removeAttribute(AuthCodeService.STATE_EXP_ATTR)
+        verify(session, times(1))
+                .removeAttribute(AuthCodeService.ORIGIN)
         verify(appRefreshTokenRepo, Mockito.times(1))
                 .removeByTokenId(response.tokenId)
     }

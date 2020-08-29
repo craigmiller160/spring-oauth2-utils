@@ -19,7 +19,6 @@ class OAuthController (
         private val oAuthService: OAuthService
 ) {
 
-    // TODO need to completely overhaul documentation for this
     @PostMapping("/authcode/login")
     fun login(req: HttpServletRequest): AuthCodeLoginDto {
         val authCodeLoginUrl = authCodeService.prepareAuthCodeLogin(req)
