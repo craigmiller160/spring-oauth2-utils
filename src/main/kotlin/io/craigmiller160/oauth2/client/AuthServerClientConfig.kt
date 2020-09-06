@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class AuthServerClientConfig (
+        @Suppress("SpringJavaInjectionPointsAutowiringInspection")
         private val oAuthConfig: OAuthConfig
 ) {
 
@@ -19,6 +20,7 @@ class AuthServerClientConfig (
     }
 
     @Bean
+    @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     fun authServerClient(restTemplateBuilder: RestTemplateBuilder): AuthServerClient {
         return AuthServerClientImpl(restTemplateBuilder.build(), oAuthConfig)
     }
