@@ -11,8 +11,6 @@ class AuthServerClientConfig (
         private val oAuthConfig: OAuthConfig
 ) {
 
-    // TODO update rest template docs
-
     @Bean
     fun formRestTemplateCustomizer(): RestTemplateCustomizer {
         return RestTemplateCustomizer { template ->
