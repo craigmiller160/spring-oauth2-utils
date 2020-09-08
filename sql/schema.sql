@@ -1,8 +1,10 @@
 -- Should be run against the database/schema used by the app
 
+CREATE SEQUENCE app_refresh_tokens_id_seq START 1;
+
 CREATE TABLE app_refresh_tokens (
-    id BIGSERIAL NOT NULL,
+    id BIGINT NOT NULL DEFAULT nextval('app_refresh_tokens_id_seq'::regclass),
     token_id VARCHAR(255) NOT NULL UNIQUE,
     refresh_token TEXT NOT NULL,
-    PRIMARY KEY (id)
+    CONSTRAINT app_refresh_tokens_id_pk PRIMARY KEY (id)
 );
