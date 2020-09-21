@@ -45,3 +45,7 @@ GET /oauth/user
 ```
 
 This endpoint will return details on the currently authenticated user. This includes the user's basic information and any access roles they currently have.
+
+## Important Note About Prefixes
+
+If an app defines a path prefix, then it would be prepended to all the URIs defined here.
