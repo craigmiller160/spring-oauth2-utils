@@ -34,14 +34,14 @@ import javax.validation.constraints.NotBlank
 @ConfigurationProperties(prefix = "oauth2")
 data class OAuthConfig (
         @field:NotBlank(message = "Missing Property: oauth2.auth-server-host") var authServerHost: String = "",
-        @field:NotBlank(message = "Missing Property: oauth2.auth-code-redirect-uri") var authCodeRedirectUri: String = "",
+        var authCodeRedirectUri: String = "",
         @field:NotBlank(message = "Missing Property: oauth2.client-name") var clientName: String = "",
         @field:NotBlank(message = "Missing Property: oauth2.client-key") var clientKey: String = "",
         @field:NotBlank(message = "Missing Property: oauth2.client-secret") var clientSecret: String = "",
-        @field:NotBlank(message = "Missing Property: oauth2.cookie-name") var cookieName: String = "",
-        @field:NotBlank(message = "Missing Property: oauth2.post-auth-redirect") var postAuthRedirect: String = "",
-        @field:Min(message = "Must be greater than 0: oauth2.cookie-max-age-secs", value = 1) var cookieMaxAgeSecs: Long = 0,
-        @field:NotBlank(message = "Missing Property: oauth2.auth-login-base-uri") var authLoginBaseUri: String = "",
+        var cookieName: String = "",
+        var postAuthRedirect: String = "",
+        var cookieMaxAgeSecs: Long = 0,
+        var authLoginBaseUri: String = "",
         var insecurePaths: String = "",
         var authCodeWaitMins: Long = 10
 ) {
