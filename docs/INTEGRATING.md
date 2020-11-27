@@ -84,10 +84,10 @@ The JPA & System TimeZones need to be set to UTC. This is to ensure that everyth
 spring:
   jpa:
     properties:
-      hibernate:
-        jdbc:
-          time_zone: UTC
+      hibernate.jdbc.time_zone: UTC
 ```
+
+NOTE: The property must be added EXACTLY as displayed above. IntelliJ may try to format it, do not let it.
 
 ## Setup Client/Users
 
