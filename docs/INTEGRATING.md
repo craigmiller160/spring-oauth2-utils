@@ -76,6 +76,19 @@ class WebSecurityConfig (
 }
 ```
 
+## TimeZone Configuration
+
+The JPA & System TimeZones need to be set to UTC. This is to ensure that everything works smoothly when transitioning between local workstation (which is US/Eastern) and Kubernetes (which is UTC). Just by using this library, the system timezone will be set to UTC. However, the application must set the Hibernate timezone to UTC as well:
+
+```
+spring:
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+```
+
 ## Setup Client/Users
 
 The application using this library is considered to be a "client" in OAuth2 terminology. It must be registered with the Auth Server, and the client key/secret assigned to it should be recorded, especially because the secret is not visible in its raw form after being hashed and saved in the database.
