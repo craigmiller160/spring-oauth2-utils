@@ -31,7 +31,8 @@ import java.math.BigInteger
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.security.SecureRandom
-import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import javax.servlet.http.HttpServletRequest
 
 @Service
@@ -59,7 +60,7 @@ class AuthCodeService (
 
         val state = generateAuthCodeState()
         req.session.setAttribute(STATE_ATTR, state)
-        req.session.setAttribute(STATE_EXP_ATTR, LocalDateTime.now().plusMinutes(oAuthConfig.authCodeWaitMins))
+        req.session.setAttribute(STATE_EXP_ATTR, ZonedDateTime.now(ZoneId.of("UTC")).plusMinutes(oAuthConfig.authCodeWaitMins))
         req.session.setAttribute(ORIGIN, origin)
 
         val loginPath = oAuthConfig.authCodeLoginPath
@@ -74,11 +75,11 @@ class AuthCodeService (
 
     fun code(req: HttpServletRequest, code: String, state: String): Pair<ResponseCookie,String> {
         val expectedState = req.session.getAttribute(STATE_ATTR) as String?
-        val stateExp = req.session.getAttribute(STATE_EXP_ATTR) as LocalDateTime?
+        val stateExp = req.session.getAttribute(STATE_EXP_ATTR) as ZonedDateTime?
         if (expectedState != state) {
             throw BadAuthCodeStateException("State does not match expected value")
         }
-        if (stateExp == null || LocalDateTime.now() > stateExp) {
+        if (stateExp == null || ZonedDateTime.now(ZoneId.of("UTC")) > stateExp) {
             throw BadAuthCodeStateException("Auth code state has expired")
         }
 

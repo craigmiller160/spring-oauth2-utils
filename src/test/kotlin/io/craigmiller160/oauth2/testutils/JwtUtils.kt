@@ -32,8 +32,8 @@ import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.security.PrivateKey
 import java.security.interfaces.RSAPublicKey
-import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.util.Date
 
 object JwtUtils {
@@ -75,8 +75,8 @@ object JwtUtils {
         val header = JWSHeader.Builder(JWSAlgorithm.RS256)
                 .build()
 
-        val exp = LocalDateTime.now().plusMinutes(expMinutes)
-        val expDate = Date.from(exp.atZone(ZoneId.systemDefault()).toInstant())
+        val exp = ZonedDateTime.now(ZoneId.of("UTC")).plusMinutes(expMinutes)
+        val expDate = Date.from(exp.toInstant())
 
         val claims = JWTClaimsSet.Builder()
                 .jwtID(TOKEN_ID)

@@ -48,7 +48,8 @@ import org.springframework.http.ResponseCookie
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import java.time.Duration
-import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
@@ -136,7 +137,7 @@ class AuthCodeServiceTest {
         `when`(session.getAttribute(AuthCodeService.STATE_ATTR))
                 .thenReturn(state)
         `when`(session.getAttribute(AuthCodeService.STATE_EXP_ATTR))
-                .thenReturn(LocalDateTime.now().plusDays(1))
+                .thenReturn(ZonedDateTime.now(ZoneId.of("UTC")).plusDays(1))
         `when`(session.getAttribute(AuthCodeService.ORIGIN))
                 .thenReturn(origin)
 
@@ -193,7 +194,7 @@ class AuthCodeServiceTest {
         `when`(session.getAttribute(AuthCodeService.STATE_ATTR))
                 .thenReturn(state)
         `when`(session.getAttribute(AuthCodeService.STATE_EXP_ATTR))
-                .thenReturn(LocalDateTime.now().minusDays(1))
+                .thenReturn(ZonedDateTime.now(ZoneId.of("UTC")).minusDays(1))
 
         val ex = assertThrows<BadAuthCodeStateException> { authCodeService.code(req, authCode, state) }
         assertEquals("Auth code state has expired", ex.message)
@@ -209,7 +210,7 @@ class AuthCodeServiceTest {
         `when`(session.getAttribute(AuthCodeService.STATE_ATTR))
                 .thenReturn(state)
         `when`(session.getAttribute(AuthCodeService.STATE_EXP_ATTR))
-                .thenReturn(LocalDateTime.now().plusDays(1))
+                .thenReturn(ZonedDateTime.now(ZoneId.of("UTC")).plusDays(1))
 
         val ex = assertThrows<BadAuthCodeRequestException> { authCodeService.code(req, authCode, state) }
         assertEquals("Missing origin attribute in session", ex.message)
