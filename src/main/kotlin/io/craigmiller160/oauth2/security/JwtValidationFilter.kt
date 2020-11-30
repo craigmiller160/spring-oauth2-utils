@@ -49,6 +49,10 @@ class JwtValidationFilter (
         private val tokenRefreshService: TokenRefreshService
 ) : OncePerRequestFilter() {
 
+    companion object {
+        private const val BEARER_PREFIX = "Bearer "
+    }
+
     private val log: Logger = LoggerFactory.getLogger(javaClass)
     private val defaultInsecureUriPatterns = listOf("/oauth/authcode/**", "/oauth/logout")
     private val insecurePathPatterns = oAuthConfig.getInsecurePathList()
@@ -154,14 +158,13 @@ class JwtValidationFilter (
     }
 
     private fun getBearerToken(req: HttpServletRequest): String? {
-        val token = req.getHeader("Authorization")
-        return token?.let {
-            if (!it.startsWith("Bearer ")) {
-                throw InvalidTokenException("Not bearer token")
-            }
-            it.replace("Bearer ", "")
-        }
-
+        return req.getHeader("Authorization")
+                ?.let {
+                    if (!it.startsWith(BEARER_PREFIX)) {
+                        throw InvalidTokenException("Not bearer token")
+                    }
+                    it.replace(BEARER_PREFIX, "")
+                }
     }
 
 
