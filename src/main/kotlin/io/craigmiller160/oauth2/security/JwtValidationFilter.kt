@@ -112,6 +112,7 @@ class JwtValidationFilter (
                     }
 
                     try {
+                        // This will only work for Auth Code flow, because only then will a refresh token be in the DB
                         return tokenRefreshService.refreshToken(token)
                                 ?.let { tokenResponse ->
                                     val claims = validateToken(tokenResponse.accessToken, res, true)
@@ -122,7 +123,7 @@ class JwtValidationFilter (
                     } catch (ex: Exception) {
                         when (ex) {
                             is InvalidTokenException -> throw ex
-                            else -> throw InvalidTokenException("Token refresh error", ex)
+                            else -> throw InvalidTokenException("Token refresh error: ${ex.message}", ex)
                         }
                     }
                 }
