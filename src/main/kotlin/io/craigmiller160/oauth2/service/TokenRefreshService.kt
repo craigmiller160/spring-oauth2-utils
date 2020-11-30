@@ -37,8 +37,8 @@ class TokenRefreshService (
     private val log: Logger = LoggerFactory.getLogger(javaClass)
 
     @Transactional
-    fun refreshToken(token: String): TokenResponse? {
-        val jwt = SignedJWT.parse(token)
+    fun refreshToken(accessToken: String): TokenResponse? {
+        val jwt = SignedJWT.parse(accessToken)
         val claims = jwt.jwtClaimsSet
         return appRefreshTokenRepo.findByTokenId(claims.jwtid)
                 ?.let { refreshToken ->
