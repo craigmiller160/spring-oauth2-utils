@@ -70,9 +70,11 @@ data class OAuthConfig (
 
     @PostConstruct
     fun tryToLoadJWKSet() {
+        log.info("Loading JWKSet")
         for (i in 0 until 5) {
             try {
                 jwkSet = loadJWKSet()
+                log.debug("Successfully loaded JWKSet")
                 return
             } catch (ex: Exception) {
                 log.error("Error loading JWKSet", ex)
