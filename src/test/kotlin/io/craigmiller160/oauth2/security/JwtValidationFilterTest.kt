@@ -172,7 +172,7 @@ class JwtValidationFilterTest {
     }
 
     @Test
-    fun test_doFilterInternal_cookie() {
+    fun test_doFilterInternal_validCookie() {
         val cookie = Cookie(cookieName, token)
         Mockito.`when`(req.cookies)
                 .thenReturn(arrayOf(cookie))
