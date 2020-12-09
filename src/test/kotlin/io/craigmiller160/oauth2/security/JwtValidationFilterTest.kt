@@ -104,10 +104,9 @@ class JwtValidationFilterTest {
 
         val result = jwtValidationFilter.getInsecurePathPatterns()
         assertThat(result, allOf(
-                hasSize(3),
+                hasSize(2),
                 containsInAnyOrder(
                         "/oauth/authcode/**",
-                        "/oauth/logout",
                         "/other/path"
                 )
         ))
