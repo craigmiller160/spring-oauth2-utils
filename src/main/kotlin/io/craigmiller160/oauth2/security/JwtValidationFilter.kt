@@ -54,7 +54,7 @@ class JwtValidationFilter (
     }
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
-    private val defaultInsecureUriPatterns = listOf("/oauth/authcode/**", "/oauth/logout")
+    private val defaultInsecureUriPatterns = listOf("/oauth/authcode/**")
     private val insecurePathPatterns = oAuthConfig.getInsecurePathList()
 
     fun getInsecurePathPatterns(): List<String> {
