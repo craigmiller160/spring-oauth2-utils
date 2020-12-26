@@ -53,6 +53,10 @@ class JpaConfig
 
 The security filter that checks for the JWT must be integrated into the Spring Security configuration. Not only is the filter provided, but the ability to configure insecure patterns is also configured. Some patterns are insecure by default, such as the ones to allow auth code authentication, so it is very important that the insecure patterns are set along with adding the filter itself.
 
+Lastly, the session policy must be set properly. Even though this is intended to be used for REST APIs, the CSRF protection requres an active session.
+
+PS. Even though CSRF protection is provided, Spring Security's CSRF protection needs to be disabled. CSRF protection is implemented using the embedded Tomcat intead.
+
 ```
 @Configuration
 @EnableWebSecurity
@@ -63,6 +67,7 @@ class WebSecurityConfig (
     override fun configure(http: HttpSecurity?) {
         http?.let {
             http
+                    .csrf().disable()
                     .requiresChannel().anyRequest().requiresSecure()
                     .and()
                     .authorizeRequests()
@@ -70,10 +75,23 @@ class WebSecurityConfig (
                     .anyRequest().fullyAuthenticated()
                     .and()
                     .apply(jwtFilterConfigurer)
+                    .and()
+                    .sessionManagement()
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
         }
     }
 
 }
+```
+
+## Session Configuration
+
+The session requred for CSRF protection has a different timeout handling than the access/refresh tokens. Since access expiration is handled in the token, not the session, we don't want the session to ever expire. This needs to be done by adding this to the `application.yml`:
+
+```
+server:
+    session:
+        timeout: -1
 ```
 
 ## TimeZone Configuration
