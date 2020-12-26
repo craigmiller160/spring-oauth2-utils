@@ -81,6 +81,16 @@ class WebSecurityConfig (
 }
 ```
 
+## Session Configuration
+
+The session requred for CSRF protection has a different timeout handling than the access/refresh tokens. Since access expiration is handled in the token, not the session, we don't want the session to ever expire. This needs to be done by adding this to the `application.yml`:
+
+```
+server:
+    session:
+        timeout: -1
+```
+
 ## TimeZone Configuration
 
 The JPA & System TimeZones need to be set to UTC. This is to ensure that everything works smoothly when transitioning between local workstation (which is US/Eastern) and Kubernetes (which is UTC). Just by using this library, the system timezone will be set to UTC. However, the application must set the Hibernate timezone to UTC as well:
