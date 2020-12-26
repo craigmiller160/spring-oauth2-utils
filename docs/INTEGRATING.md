@@ -55,6 +55,8 @@ The security filter that checks for the JWT must be integrated into the Spring S
 
 Lastly, the session policy must be set properly. Even though this is intended to be used for REST APIs, the CSRF protection requres an active session.
 
+PS. Even though CSRF protection is provided, Spring Security's CSRF protection needs to be disabled. CSRF protection is implemented using the embedded Tomcat intead.
+
 ```
 @Configuration
 @EnableWebSecurity
@@ -65,6 +67,7 @@ class WebSecurityConfig (
     override fun configure(http: HttpSecurity?) {
         http?.let {
             http
+                    .csrf().disable()
                     .requiresChannel().anyRequest().requiresSecure()
                     .and()
                     .authorizeRequests()
