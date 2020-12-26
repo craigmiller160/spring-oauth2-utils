@@ -53,6 +53,8 @@ class JpaConfig
 
 The security filter that checks for the JWT must be integrated into the Spring Security configuration. Not only is the filter provided, but the ability to configure insecure patterns is also configured. Some patterns are insecure by default, such as the ones to allow auth code authentication, so it is very important that the insecure patterns are set along with adding the filter itself.
 
+Lastly, the session policy must be set properly. Even though this is intended to be used for REST APIs, the CSRF protection requres an active session.
+
 ```
 @Configuration
 @EnableWebSecurity
@@ -70,6 +72,9 @@ class WebSecurityConfig (
                     .anyRequest().fullyAuthenticated()
                     .and()
                     .apply(jwtFilterConfigurer)
+                    .and()
+                    .sessionManagement()
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
         }
     }
 
