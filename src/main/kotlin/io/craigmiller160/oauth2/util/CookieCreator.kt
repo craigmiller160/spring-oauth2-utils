@@ -22,10 +22,10 @@ import org.springframework.http.ResponseCookie
 
 object CookieCreator {
 
-    fun create(name: String, token: String, maxAge: Long): ResponseCookie {
+    fun create(name: String, path: String, token: String, maxAge: Long): ResponseCookie {
         return ResponseCookie
                 .from(name, token)
-                .path("/")
+                .path(path)
                 .secure(true)
                 .httpOnly(true)
                 .maxAge(maxAge)

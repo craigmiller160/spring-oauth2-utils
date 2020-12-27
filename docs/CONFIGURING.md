@@ -36,11 +36,12 @@ oauth2:
 
 ## Token Cookie
 
-When using the auth code flow, the access token will be stored in a cookie. The name and max age of this cookie needs to be set up here. Keep in mind that all access will have an expiration for the token itself, and every time it is refreshed a new cookie will be issued with a fresh expiration. However, it is good for security purposes to have an expiration on the cookie.
+When using the auth code flow, the access token will be stored in a cookie. The name, path, and max age of this cookie needs to be set up here. Keep in mind that all access will have an expiration for the token itself, and every time it is refreshed a new cookie will be issued with a fresh expiration. However, it is good for security purposes to have an expiration on the cookie.
 
 ```
 oauth2:
     cookie-name: auth-management-token
+    cookie-path: /prod-path-prefix
     cookie-max-age-secs: 86400
 ```
 

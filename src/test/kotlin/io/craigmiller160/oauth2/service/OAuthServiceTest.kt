@@ -44,6 +44,7 @@ import java.time.Duration
 class OAuthServiceTest {
 
     private val cookieName = "cookieName"
+    private val cookiePath = "/path"
 
     @Mock
     private lateinit var oAuthConfig: OAuthConfig
@@ -63,6 +64,8 @@ class OAuthServiceTest {
     fun test_logout() {
         `when`(oAuthConfig.cookieName)
                 .thenReturn(cookieName)
+        `when`(oAuthConfig.getOrDefaultCookiePath())
+            .thenReturn(cookiePath)
 
         val authentication = Mockito.mock(Authentication::class.java)
         val authUser = JwtUtils.createAuthUser()
@@ -105,7 +108,7 @@ class OAuthServiceTest {
 
     private fun validateCookie(cookie: ResponseCookie, token: String, exp: Long) {
         Assertions.assertEquals(cookieName, cookie.name)
-        Assertions.assertEquals("/", cookie.path)
+        Assertions.assertEquals(cookiePath, cookie.path)
         Assertions.assertTrue(cookie.isSecure)
         Assertions.assertTrue(cookie.isHttpOnly)
         Assertions.assertEquals("strict", cookie.sameSite)
