@@ -131,6 +131,8 @@ class AuthCodeServiceTest {
                 .thenReturn(cookieName)
         `when`(oAuthConfig.postAuthRedirect)
                 .thenReturn(postAuthRedirect)
+        `when`(oAuthConfig.getOrDefaultCookiePath())
+            .thenReturn(path)
 
         val authCode = "DEF"
         val state = "ABC"
@@ -165,7 +167,7 @@ class AuthCodeServiceTest {
 
     private fun validateCookie(cookie: ResponseCookie, token: String, exp: Long) {
         assertEquals(cookieName, cookie.name)
-        assertEquals("/", cookie.path)
+        assertEquals(path, cookie.path)
         assertTrue(cookie.isSecure)
         assertTrue(cookie.isHttpOnly)
         assertEquals("strict", cookie.sameSite)
