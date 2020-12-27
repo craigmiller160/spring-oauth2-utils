@@ -116,7 +116,7 @@ class JwtValidationFilter (
                         return tokenRefreshService.refreshToken(token)
                                 ?.let { tokenResponse ->
                                     val claims = validateToken(tokenResponse.accessToken, res, true)
-                                    res.addHeader("Set-Cookie", CookieCreator.create(oAuthConfig.cookieName, tokenResponse.accessToken, oAuthConfig.cookieMaxAgeSecs).toString())
+                                    res.addHeader("Set-Cookie", CookieCreator.create(oAuthConfig.cookieName, oAuthConfig.getOrDefaultCookiePath(), tokenResponse.accessToken, oAuthConfig.cookieMaxAgeSecs).toString())
                                     claims
                                 }
                                 ?: throw InvalidTokenException("Token validation failed: ${ex.message}", ex)

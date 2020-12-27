@@ -41,6 +41,7 @@ data class OAuthConfig (
         var cookieName: String = "",
         var postAuthRedirect: String = "",
         var cookieMaxAgeSecs: Long = 0,
+        var cookiePath: String = "",
         var authLoginBaseUri: String = "",
         var insecurePaths: String = "",
         var authCodeWaitMins: Long = 10
@@ -53,6 +54,13 @@ data class OAuthConfig (
     private val log: Logger = LoggerFactory.getLogger(javaClass)
 
     lateinit var jwkSet: JWKSet
+
+    fun getOrDefaultCookiePath(): String {
+        if (cookiePath.isNotBlank()) {
+            return cookiePath
+        }
+        return "/"
+    }
 
     fun getBaseWait(): Long {
         return 1000

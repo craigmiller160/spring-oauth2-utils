@@ -36,7 +36,7 @@ class OAuthService (
     fun logout(): ResponseCookie {
         val authUser = SecurityContextHolder.getContext().authentication.principal as AuthenticatedUser
         appRefreshTokenRepo.removeByTokenId(authUser.tokenId)
-        return CookieCreator.create(oAuthConfig.cookieName, "", 0)
+        return CookieCreator.create(oAuthConfig.cookieName, oAuthConfig.getOrDefaultCookiePath(), "", 0)
     }
 
     fun getAuthenticatedUser(): AuthUserDto {

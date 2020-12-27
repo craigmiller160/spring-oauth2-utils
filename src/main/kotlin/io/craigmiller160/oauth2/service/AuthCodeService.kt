@@ -94,7 +94,7 @@ class AuthCodeService (
         val manageRefreshToken = AppRefreshToken(0, tokens.tokenId, tokens.refreshToken)
         appRefreshTokenRepo.removeByTokenId(tokens.tokenId)
         appRefreshTokenRepo.save(manageRefreshToken)
-        val cookie = CookieCreator.create(oAuthConfig.cookieName, tokens.accessToken, oAuthConfig.cookieMaxAgeSecs)
+        val cookie = CookieCreator.create(oAuthConfig.cookieName, oAuthConfig.getOrDefaultCookiePath(), tokens.accessToken, oAuthConfig.cookieMaxAgeSecs)
         return Pair(cookie, oAuthConfig.postAuthRedirect)
     }
 
