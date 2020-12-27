@@ -86,12 +86,18 @@ class WebSecurityConfig (
 
 ## Session Configuration
 
-The session requred for CSRF protection has a different timeout handling than the access/refresh tokens. Since access expiration is handled in the token, not the session, we don't want the session to ever expire. This needs to be done by adding this to the `application.yml`:
+The session requred for CSRF protection has a different timeout handling than the access/refresh tokens. Since access expiration is handled in the token, not the session, we don't want the session to ever expire.
+
+Also, we need to rename the session cookie. This is both because the default value (JSESSIONID) reveals that it's a Java server, and because unique cookie names are needed to distinguish between the different apps running on the same ingress in prod.
 
 ```
 server:
     session:
         timeout: -1
+    servlet:
+        session:
+            cookie:
+                name: MY-APP-SESSIONID
 ```
 
 ## TimeZone Configuration
