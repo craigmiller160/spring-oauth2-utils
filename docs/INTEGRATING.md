@@ -88,7 +88,7 @@ class WebSecurityConfig (
 
 The session requred for CSRF protection has a different timeout handling than the access/refresh tokens. Since access expiration is handled in the token, not the session, we don't want the session to ever expire.
 
-Also, we need to rename the session cookie. This is both because the default value (JSESSIONID) reveals that it's a Java server, and because unique cookie names are needed to distinguish between the different apps running on the same ingress in prod.
+Also, we need to rename the session cookie. This is both because the default value (JSESSIONID) reveals that it's a Java server, and because unique cookie names are needed to distinguish between the different apps running on the same ingress in prod. In addition, the cookie needs to be restricted with a path prefix, so it'll only be sent to the app it needs to go to in prod.
 
 ```
 server:
@@ -98,6 +98,7 @@ server:
         session:
             cookie:
                 name: MY-APP-SESSIONID
+                path: /prod-path-prefix
 ```
 
 ## TimeZone Configuration
