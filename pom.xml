@@ -11,15 +11,28 @@
     </parent>
     <groupId>io.craigmiller160</groupId>
     <artifactId>oauth2-utils</artifactId>
-    <version>1.7.1</version>
+    <version>1.7.2</version>
 
     <properties>
-        <api.test.processor.version>1.0.0</api.test.processor.version>
+        <api.test.processor.version>1.2.1</api.test.processor.version>
         <java.version>11</java.version>
         <kotlin.version>1.4.21</kotlin.version>
         <nimbus.jose.version>9.2</nimbus.jose.version>
         <mockito.kotlin.version>1.6.0</mockito.kotlin.version>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>Releases</name>
+            <url>http://craigpc:30003/repository/maven-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>Snapshot</name>
+            <url>http://craigpc:30003/repository/maven-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
