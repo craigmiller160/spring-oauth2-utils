@@ -14,7 +14,7 @@
     <version>1.8.0-SNAPSHOT</version>
 
     <properties>
-        <api.test.processor.version>1.2.1</api.test.processor.version>
+        <api.test.processor.version>1.2.2</api.test.processor.version>
         <java.version>11</java.version>
         <kotlin.version>1.4.21</kotlin.version>
         <nimbus.jose.version>9.2</nimbus.jose.version>
@@ -25,12 +25,12 @@
         <repository>
             <id>nexus</id>
             <name>Releases</name>
-            <url>http://craigpc:30003/repository/maven-releases</url>
+            <url>https://craigmiller160.ddns.net:30003/repository/maven-releases</url>
         </repository>
         <snapshotRepository>
             <id>nexus</id>
             <name>Snapshot</name>
-            <url>http://craigpc:30003/repository/maven-snapshots</url>
+            <url>https://craigmiller160.ddns.net:30003/repository/maven-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
