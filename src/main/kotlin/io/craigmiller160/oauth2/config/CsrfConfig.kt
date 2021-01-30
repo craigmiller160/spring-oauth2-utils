@@ -19,6 +19,7 @@
 package io.craigmiller160.oauth2.config
 
 import org.apache.catalina.filters.RestCsrfPreventionFilter
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -27,6 +28,7 @@ import org.springframework.context.annotation.Configuration
 class CsrfConfig {
 
     @Bean
+    @ConditionalOnProperty(value = ["oauth2.disable-csrf"], havingValue = "false", matchIfMissing = true)
     fun restCsrfPreventionFilter(): FilterRegistrationBean<RestCsrfPreventionFilter> {
         val filter = RestCsrfPreventionFilter()
         filter.denyStatus = 403

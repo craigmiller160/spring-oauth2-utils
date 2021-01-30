@@ -99,3 +99,12 @@ After the user first attempts to login, there needs to be a limit on how long th
 oauth2:
     auth-code-wait-mins: 10
 ``` 
+
+## Disabling CSRF
+
+Some apps won't need CSRF protection, such as if the only requests being served come from other server-side applications. To disable csrf, use the following property:
+
+```
+oauth2:
+    disable-csrf: true
+```
