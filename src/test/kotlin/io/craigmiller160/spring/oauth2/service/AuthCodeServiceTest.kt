@@ -21,7 +21,7 @@ package io.craigmiller160.spring.oauth2.service
 import com.nhaarman.mockito_kotlin.isA
 import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.dto.TokenResponseDto
-import io.craigmiller160.spring.oauth2.config.OAuthConfig
+import io.craigmiller160.spring.oauth2.config.OAuthConfigImpl
 import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeRequestException
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeStateException
@@ -63,7 +63,7 @@ class AuthCodeServiceTest {
     private val origin = "TheOrigin"
 
     @Mock
-    private lateinit var oAuthConfig: OAuthConfig
+    private lateinit var oAuthConfig: OAuthConfigImpl
 
     @Mock
     private lateinit var authServerClient: AuthServerClient

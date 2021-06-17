@@ -19,7 +19,7 @@
 package io.craigmiller160.spring.oauth2.client
 
 import io.craigmiller160.oauth2.dto.TokenResponseDto
-import io.craigmiller160.spring.oauth2.config.OAuthConfig
+import io.craigmiller160.spring.oauth2.config.OAuthConfigImpl
 import io.craigmiller160.spring.oauth2.exception.InvalidResponseBodyException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -56,7 +56,7 @@ class AuthServerClientImplTest {
     private lateinit var restTemplate: RestTemplate
 
     @Mock
-    private lateinit var oAuthConfig: OAuthConfig
+    private lateinit var oAuthConfig: OAuthConfigImpl
 
     @InjectMocks
     private lateinit var authServerClient: io.craigmiller160.spring.oauth2.client.AuthServerClientImpl

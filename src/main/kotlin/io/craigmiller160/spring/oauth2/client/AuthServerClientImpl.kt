@@ -20,7 +20,7 @@ package io.craigmiller160.spring.oauth2.client
 
 import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.dto.TokenResponseDto
-import io.craigmiller160.spring.oauth2.config.OAuthConfig
+import io.craigmiller160.spring.oauth2.config.OAuthConfigImpl
 import io.craigmiller160.spring.oauth2.exception.BadAuthenticationException
 import io.craigmiller160.spring.oauth2.exception.InvalidResponseBodyException
 import org.springframework.http.HttpEntity
@@ -33,7 +33,7 @@ import org.springframework.web.client.RestTemplate
 
 class AuthServerClientImpl (
         private val restTemplate: RestTemplate,
-        private val oAuthConfig: OAuthConfig
+        private val oAuthConfig: OAuthConfigImpl
 ) : AuthServerClient {
 
     override fun authenticateAuthCode(origin: String, code: String): TokenResponseDto {

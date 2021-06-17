@@ -18,7 +18,7 @@
 
 package io.craigmiller160.spring.oauth2.security
 
-import io.craigmiller160.spring.oauth2.config.OAuthConfig
+import io.craigmiller160.spring.oauth2.config.OAuthConfigImpl
 import io.craigmiller160.spring.oauth2.service.TokenRefreshService
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class JwtValidationFilterConfigurer (
-        private val oAuthConfig: OAuthConfig,
+        private val oAuthConfig: OAuthConfigImpl,
         private val tokenRefreshService: TokenRefreshService
 ) : SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
 
