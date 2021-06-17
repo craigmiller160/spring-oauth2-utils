@@ -18,8 +18,9 @@
 
 package io.craigmiller160.spring.oauth2.service
 
+import io.craigmiller160.oauth2.dto.AuthUserDto
 import io.craigmiller160.spring.oauth2.config.OAuthConfig
-import io.craigmiller160.spring.oauth2.dto.AuthUserDto
+import io.craigmiller160.spring.oauth2.dto.authenticatedUserToAuthUserDto
 import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
 import io.craigmiller160.spring.oauth2.security.AuthenticatedUser
 import io.craigmiller160.spring.oauth2.util.CookieCreator
@@ -41,7 +42,7 @@ class OAuthService (
 
     fun getAuthenticatedUser(): AuthUserDto {
         val authUser = SecurityContextHolder.getContext().authentication.principal as AuthenticatedUser
-        return AuthUserDto.fromAuthenticatedUser(authUser)
+        return authenticatedUserToAuthUserDto(authUser)
     }
 
 }
