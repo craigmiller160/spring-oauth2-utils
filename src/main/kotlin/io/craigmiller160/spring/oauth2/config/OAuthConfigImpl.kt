@@ -60,6 +60,8 @@ class OAuthConfigImpl : OAuth2Config {
 
     lateinit var jwkSet: JWKSet
 
+    // TODO migrate a lot of these methods into the library
+
     fun getOrDefaultCookiePath(): String {
         if (cookiePath.isNotBlank()) {
             return cookiePath
