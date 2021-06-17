@@ -2,6 +2,8 @@
 
 This is a collection of utility code to support Spring Boot applications that need to interact with my OAuth2 Auth Server. The goal is to be able to add this library to a project and with minimal code and a few configuration properties have the application fully integrated with the auth server.
 
+# TODO review all docs and update package paths
+
 ## Basic Concept
 
 An application that uses this library will do the following:
