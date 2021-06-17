@@ -19,10 +19,10 @@
 package io.craigmiller160.spring.oauth2.security
 
 import com.nimbusds.jose.jwk.JWKSet
-import io.craigmiller160.oauth2.config.OAuthConfig
-import io.craigmiller160.oauth2.dto.TokenResponse
-import io.craigmiller160.oauth2.service.TokenRefreshService
-import io.craigmiller160.oauth2.testutils.JwtUtils
+import io.craigmiller160.spring.oauth2.config.OAuthConfig
+import io.craigmiller160.spring.oauth2.dto.TokenResponse
+import io.craigmiller160.spring.oauth2.service.TokenRefreshService
+import io.craigmiller160.spring.oauth2.testutils.JwtUtils
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsInAnyOrder

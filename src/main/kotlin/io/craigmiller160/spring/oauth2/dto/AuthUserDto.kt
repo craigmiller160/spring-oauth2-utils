@@ -18,7 +18,7 @@
 
 package io.craigmiller160.spring.oauth2.dto
 
-import io.craigmiller160.oauth2.security.AuthenticatedUser
+import io.craigmiller160.spring.oauth2.security.AuthenticatedUser
 
 data class AuthUserDto (
         val username: String,

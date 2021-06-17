@@ -27,10 +27,10 @@ import com.nimbusds.jose.proc.SecurityContext
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier
 import com.nimbusds.jwt.proc.DefaultJWTProcessor
-import io.craigmiller160.oauth2.config.OAuthConfig
-import io.craigmiller160.oauth2.exception.InvalidTokenException
-import io.craigmiller160.oauth2.service.TokenRefreshService
-import io.craigmiller160.oauth2.util.CookieCreator
+import io.craigmiller160.spring.oauth2.config.OAuthConfig
+import io.craigmiller160.spring.oauth2.exception.InvalidTokenException
+import io.craigmiller160.spring.oauth2.service.TokenRefreshService
+import io.craigmiller160.spring.oauth2.util.CookieCreator
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken

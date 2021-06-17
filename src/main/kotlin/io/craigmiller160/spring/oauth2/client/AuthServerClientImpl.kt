@@ -18,10 +18,10 @@
 
 package io.craigmiller160.spring.oauth2.client
 
-import io.craigmiller160.oauth2.config.OAuthConfig
-import io.craigmiller160.oauth2.dto.TokenResponse
-import io.craigmiller160.oauth2.exception.BadAuthenticationException
-import io.craigmiller160.oauth2.exception.InvalidResponseBodyException
+import io.craigmiller160.spring.oauth2.config.OAuthConfig
+import io.craigmiller160.spring.oauth2.dto.TokenResponse
+import io.craigmiller160.spring.oauth2.exception.BadAuthenticationException
+import io.craigmiller160.spring.oauth2.exception.InvalidResponseBodyException
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod

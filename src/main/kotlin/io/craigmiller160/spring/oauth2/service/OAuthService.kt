@@ -18,11 +18,11 @@
 
 package io.craigmiller160.spring.oauth2.service
 
-import io.craigmiller160.oauth2.config.OAuthConfig
-import io.craigmiller160.oauth2.dto.AuthUserDto
-import io.craigmiller160.oauth2.repository.AppRefreshTokenRepository
-import io.craigmiller160.oauth2.security.AuthenticatedUser
-import io.craigmiller160.oauth2.util.CookieCreator
+import io.craigmiller160.spring.oauth2.config.OAuthConfig
+import io.craigmiller160.spring.oauth2.dto.AuthUserDto
+import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
+import io.craigmiller160.spring.oauth2.security.AuthenticatedUser
+import io.craigmiller160.spring.oauth2.util.CookieCreator
 import org.springframework.http.ResponseCookie
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service

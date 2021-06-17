@@ -18,7 +18,7 @@
 
 package io.craigmiller160.spring.oauth2.repository
 
-import io.craigmiller160.oauth2.entity.AppRefreshToken
+import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals

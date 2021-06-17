@@ -20,13 +20,13 @@ package io.craigmiller160.spring.oauth2.service
 
 import com.nhaarman.mockito_kotlin.isA
 import io.craigmiller160.spring.oauth2.client.AuthServerClient
-import io.craigmiller160.oauth2.config.OAuthConfig
-import io.craigmiller160.oauth2.dto.TokenResponse
-import io.craigmiller160.oauth2.entity.AppRefreshToken
-import io.craigmiller160.oauth2.exception.BadAuthCodeRequestException
-import io.craigmiller160.oauth2.exception.BadAuthCodeStateException
-import io.craigmiller160.oauth2.repository.AppRefreshTokenRepository
-import io.craigmiller160.oauth2.testutils.JwtUtils
+import io.craigmiller160.spring.oauth2.config.OAuthConfig
+import io.craigmiller160.spring.oauth2.dto.TokenResponse
+import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
+import io.craigmiller160.spring.oauth2.exception.BadAuthCodeRequestException
+import io.craigmiller160.spring.oauth2.exception.BadAuthCodeStateException
+import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
+import io.craigmiller160.spring.oauth2.testutils.JwtUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals

@@ -18,7 +18,7 @@
 
 package io.craigmiller160.spring.oauth2.repository
 
-import io.craigmiller160.oauth2.entity.AppRefreshToken
+import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository

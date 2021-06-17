@@ -26,7 +26,7 @@ import com.nimbusds.jose.jwk.KeyUse
 import com.nimbusds.jose.jwk.RSAKey
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
-import io.craigmiller160.oauth2.security.AuthenticatedUser
+import io.craigmiller160.spring.oauth2.security.AuthenticatedUser
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import java.security.KeyPair
 import java.security.KeyPairGenerator

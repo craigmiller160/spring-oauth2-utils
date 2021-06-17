@@ -18,7 +18,7 @@
 
 package io.craigmiller160.spring.oauth2.client
 
-import io.craigmiller160.oauth2.config.OAuthConfig
+import io.craigmiller160.spring.oauth2.config.OAuthConfig
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.boot.web.client.RestTemplateCustomizer
 import org.springframework.context.annotation.Bean

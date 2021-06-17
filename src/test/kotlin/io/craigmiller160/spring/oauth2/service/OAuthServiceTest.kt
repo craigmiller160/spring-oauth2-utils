@@ -19,10 +19,10 @@
 package io.craigmiller160.spring.oauth2.service
 
 import com.nhaarman.mockito_kotlin.mock
-import io.craigmiller160.oauth2.config.OAuthConfig
-import io.craigmiller160.oauth2.repository.AppRefreshTokenRepository
-import io.craigmiller160.oauth2.security.AuthenticatedUser
-import io.craigmiller160.oauth2.testutils.JwtUtils
+import io.craigmiller160.spring.oauth2.config.OAuthConfig
+import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
+import io.craigmiller160.spring.oauth2.security.AuthenticatedUser
+import io.craigmiller160.spring.oauth2.testutils.JwtUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals

@@ -20,9 +20,9 @@ package io.craigmiller160.spring.oauth2.service
 
 import com.nimbusds.jwt.SignedJWT
 import io.craigmiller160.spring.oauth2.client.AuthServerClient
-import io.craigmiller160.oauth2.dto.TokenResponse
-import io.craigmiller160.oauth2.entity.AppRefreshToken
-import io.craigmiller160.oauth2.repository.AppRefreshTokenRepository
+import io.craigmiller160.spring.oauth2.dto.TokenResponse
+import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
+import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
