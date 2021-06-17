@@ -77,12 +77,11 @@ class JwtValidationFilterTest {
     fun setup() {
         keyPair = JwtUtils.createKeyPair()
         jwkSet = JwtUtils.createJwkSet(keyPair)
-        oAuthConfig = OAuthConfigImpl().apply {
-            clientKey = JwtUtils.CLIENT_KEY
-            clientName = JwtUtils.CLIENT_NAME
-            cookieName = cookieName
-            insecurePaths = "/other/path"
-        }
+        oAuthConfig = OAuthConfigImpl()
+        oAuthConfig.clientKey = JwtUtils.CLIENT_KEY
+        oAuthConfig.clientName = JwtUtils.CLIENT_NAME
+        oAuthConfig.cookieName = cookieName
+        oAuthConfig.insecurePaths = "/other/path"
         oAuthConfig.jwkSet = jwkSet
 
         val jwt = JwtUtils.createJwt()
