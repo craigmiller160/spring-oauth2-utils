@@ -18,6 +18,7 @@
 
 package io.craigmiller160.spring.oauth2.client
 
+import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.dto.TokenResponse
 import io.craigmiller160.spring.oauth2.config.OAuthConfig
 import io.craigmiller160.spring.oauth2.exception.BadAuthenticationException
@@ -33,7 +34,7 @@ import org.springframework.web.client.RestTemplate
 class AuthServerClientImpl (
         private val restTemplate: RestTemplate,
         private val oAuthConfig: OAuthConfig
-) : io.craigmiller160.spring.oauth2.client.AuthServerClient {
+) : AuthServerClient {
 
     override fun authenticateAuthCode(origin: String, code: String): TokenResponse {
         val clientKey = oAuthConfig.clientKey

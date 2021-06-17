@@ -19,6 +19,7 @@
 package io.craigmiller160.spring.oauth2.service
 
 import com.nimbusds.jwt.SignedJWT
+import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.dto.TokenResponse
 import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
 import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
@@ -30,7 +31,7 @@ import javax.transaction.Transactional
 @Service
 class TokenRefreshService (
         private val appRefreshTokenRepo: AppRefreshTokenRepository,
-        private val authServerClient: io.craigmiller160.spring.oauth2.client.AuthServerClient
+        private val authServerClient: AuthServerClient
 ) {
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)

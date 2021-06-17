@@ -19,6 +19,7 @@
 package io.craigmiller160.spring.oauth2.service
 
 import com.nhaarman.mockito_kotlin.isA
+import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.dto.TokenResponse
 import io.craigmiller160.spring.oauth2.config.OAuthConfig
 import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
@@ -65,7 +66,7 @@ class AuthCodeServiceTest {
     private lateinit var oAuthConfig: OAuthConfig
 
     @Mock
-    private lateinit var authServerClient: io.craigmiller160.spring.oauth2.client.AuthServerClient
+    private lateinit var authServerClient: AuthServerClient
 
     @Mock
     private lateinit var appRefreshTokenRepo: AppRefreshTokenRepository
