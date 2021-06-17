@@ -20,7 +20,7 @@ package io.craigmiller160.spring.oauth2.service
 
 import com.nimbusds.jwt.SignedJWT
 import io.craigmiller160.oauth2.client.AuthServerClient
-import io.craigmiller160.oauth2.dto.TokenResponse
+import io.craigmiller160.oauth2.dto.TokenResponseDto
 import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
 import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
 import org.slf4j.Logger
@@ -37,7 +37,7 @@ class TokenRefreshService (
     private val log: Logger = LoggerFactory.getLogger(javaClass)
 
     @Transactional
-    fun refreshToken(accessToken: String): TokenResponse? {
+    fun refreshToken(accessToken: String): TokenResponseDto? {
         val jwt = SignedJWT.parse(accessToken)
         val claims = jwt.jwtClaimsSet
         return appRefreshTokenRepo.findByTokenId(claims.jwtid)

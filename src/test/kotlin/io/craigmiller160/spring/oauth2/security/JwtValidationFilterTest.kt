@@ -19,7 +19,7 @@
 package io.craigmiller160.spring.oauth2.security
 
 import com.nimbusds.jose.jwk.JWKSet
-import io.craigmiller160.oauth2.dto.TokenResponse
+import io.craigmiller160.oauth2.dto.TokenResponseDto
 import io.craigmiller160.spring.oauth2.config.OAuthConfig
 import io.craigmiller160.spring.oauth2.service.TokenRefreshService
 import io.craigmiller160.spring.oauth2.testutils.JwtUtils
@@ -258,7 +258,7 @@ class JwtValidationFilterTest {
         val newTokenId = "id2"
 
         Mockito.`when`(tokenRefreshService.refreshToken(token))
-                .thenReturn(TokenResponse(this.token, newRefreshToken, newTokenId))
+                .thenReturn(TokenResponseDto(this.token, newRefreshToken, newTokenId))
 
         jwtValidationFilter.doFilter(req, res, chain)
         val authentication = SecurityContextHolder.getContext().authentication

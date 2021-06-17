@@ -19,7 +19,7 @@
 package io.craigmiller160.spring.oauth2.service
 
 import io.craigmiller160.oauth2.client.AuthServerClient
-import io.craigmiller160.oauth2.dto.TokenResponse
+import io.craigmiller160.oauth2.dto.TokenResponseDto
 import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
 import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -48,7 +48,7 @@ class TokenRefreshServiceTest {
     private val refreshToken = AppRefreshToken(
             1, "JWTID", "ABCDEFG"
     )
-    private val tokenResponse = TokenResponse(
+    private val tokenResponse = TokenResponseDto(
             accessToken = "DEFG",
             refreshToken = "ABCD",
             tokenId = "ID2"

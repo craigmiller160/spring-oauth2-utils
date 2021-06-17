@@ -18,7 +18,7 @@
 
 package io.craigmiller160.spring.oauth2.client
 
-import io.craigmiller160.oauth2.dto.TokenResponse
+import io.craigmiller160.oauth2.dto.TokenResponseDto
 import io.craigmiller160.spring.oauth2.config.OAuthConfig
 import io.craigmiller160.spring.oauth2.exception.InvalidResponseBodyException
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -50,7 +50,7 @@ class AuthServerClientImplTest {
     private val secret = "secret"
     private val redirectUri = "redirectUri"
     private val authHeader = "Basic a2V5OnNlY3JldA=="
-    private val response = TokenResponse("access", "refresh", "id")
+    private val response = TokenResponseDto("access", "refresh", "id")
 
     @Mock
     private lateinit var restTemplate: RestTemplate
@@ -85,7 +85,7 @@ class AuthServerClientImplTest {
                 eq("$host$path"),
                 eq(HttpMethod.POST),
                 entityCaptor.capture(),
-                eq(TokenResponse::class.java)
+                eq(TokenResponseDto::class.java)
         ))
                 .thenReturn(ResponseEntity.ok(response))
 
@@ -115,7 +115,7 @@ class AuthServerClientImplTest {
                 eq("$host$path"),
                 eq(HttpMethod.POST),
                 isA(HttpEntity::class.java),
-                eq(TokenResponse::class.java)
+                eq(TokenResponseDto::class.java)
         ))
                 .thenReturn(ResponseEntity.noContent().build())
 
@@ -132,7 +132,7 @@ class AuthServerClientImplTest {
                 eq("$host$path"),
                 eq(HttpMethod.POST),
                 entityCaptor.capture(),
-                eq(TokenResponse::class.java)
+                eq(TokenResponseDto::class.java)
         ))
                 .thenReturn(ResponseEntity.ok(response))
 

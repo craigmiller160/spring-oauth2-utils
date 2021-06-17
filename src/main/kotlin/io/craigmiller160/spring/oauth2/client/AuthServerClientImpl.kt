@@ -19,7 +19,7 @@
 package io.craigmiller160.spring.oauth2.client
 
 import io.craigmiller160.oauth2.client.AuthServerClient
-import io.craigmiller160.oauth2.dto.TokenResponse
+import io.craigmiller160.oauth2.dto.TokenResponseDto
 import io.craigmiller160.spring.oauth2.config.OAuthConfig
 import io.craigmiller160.spring.oauth2.exception.BadAuthenticationException
 import io.craigmiller160.spring.oauth2.exception.InvalidResponseBodyException
@@ -36,7 +36,7 @@ class AuthServerClientImpl (
         private val oAuthConfig: OAuthConfig
 ) : AuthServerClient {
 
-    override fun authenticateAuthCode(origin: String, code: String): TokenResponse {
+    override fun authenticateAuthCode(origin: String, code: String): TokenResponseDto {
         val clientKey = oAuthConfig.clientKey
         val redirectUri = "$origin${oAuthConfig.authCodeRedirectUri}"
 
@@ -49,7 +49,7 @@ class AuthServerClientImpl (
         return tokenRequest(request)
     }
 
-    override fun authenticateRefreshToken(refreshToken: String): TokenResponse {
+    override fun authenticateRefreshToken(refreshToken: String): TokenResponseDto {
         val request = LinkedMultiValueMap<String,String>()
         request.add("grant_type", "refresh_token")
         request.add("refresh_token", refreshToken)
@@ -57,7 +57,7 @@ class AuthServerClientImpl (
         return tokenRequest(request)
     }
 
-    private fun tokenRequest(body: MultiValueMap<String, String>): TokenResponse {
+    private fun tokenRequest(body: MultiValueMap<String, String>): TokenResponseDto {
         val host = oAuthConfig.authServerHost
         val path = oAuthConfig.tokenPath
         val clientKey = oAuthConfig.clientKey
@@ -70,7 +70,7 @@ class AuthServerClientImpl (
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
 
         try {
-            val response = restTemplate.exchange(url, HttpMethod.POST, HttpEntity<MultiValueMap<String,String>>(body, headers), TokenResponse::class.java)
+            val response = restTemplate.exchange(url, HttpMethod.POST, HttpEntity<MultiValueMap<String,String>>(body, headers), TokenResponseDto::class.java)
             return response.body ?: throw InvalidResponseBodyException()
         } catch (ex: Exception) {
             when(ex) {
