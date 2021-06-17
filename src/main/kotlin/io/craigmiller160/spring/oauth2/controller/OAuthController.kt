@@ -18,7 +18,7 @@
 
 package io.craigmiller160.spring.oauth2.controller
 
-import io.craigmiller160.spring.oauth2.dto.AuthCodeLoginDto
+import io.craigmiller160.oauth2.dto.AuthCodeLoginDto
 import io.craigmiller160.spring.oauth2.dto.AuthUserDto
 import io.craigmiller160.spring.oauth2.service.AuthCodeService
 import io.craigmiller160.spring.oauth2.service.OAuthService

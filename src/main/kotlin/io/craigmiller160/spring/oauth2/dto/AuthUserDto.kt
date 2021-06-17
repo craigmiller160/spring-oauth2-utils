@@ -20,6 +20,7 @@ package io.craigmiller160.spring.oauth2.dto
 
 import io.craigmiller160.spring.oauth2.security.AuthenticatedUser
 
+// TODO replace this
 data class AuthUserDto (
         val username: String,
         val roles: List<String>,

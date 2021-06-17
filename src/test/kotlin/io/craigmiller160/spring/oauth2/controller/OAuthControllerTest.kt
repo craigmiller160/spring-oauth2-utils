@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.nhaarman.mockito_kotlin.eq
 import com.nhaarman.mockito_kotlin.isA
 import io.craigmiller160.apitestprocessor.ApiTestProcessor
-import io.craigmiller160.spring.oauth2.dto.AuthCodeLoginDto
+import io.craigmiller160.oauth2.dto.AuthCodeLoginDto
 import io.craigmiller160.spring.oauth2.dto.AuthUserDto
 import io.craigmiller160.spring.oauth2.service.AuthCodeService
 import io.craigmiller160.spring.oauth2.service.OAuthService

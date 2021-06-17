@@ -18,7 +18,7 @@
 
 package io.craigmiller160.spring.oauth2.client
 
-import io.craigmiller160.spring.oauth2.dto.TokenResponse
+import io.craigmiller160.oauth2.dto.TokenResponse
 
 interface AuthServerClient {
     fun authenticateAuthCode(origin: String, code: String): TokenResponse
