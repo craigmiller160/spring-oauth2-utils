@@ -14,6 +14,7 @@
     <version>1.9.0-SNAPSHOT</version>
 
     <properties>
+        <oauth2.utils.version>1.0.0-SNAPSHOT</oauth2.utils.version>
         <api.test.processor.version>1.2.2</api.test.processor.version>
         <java.version>11</java.version>
         <kotlin.version>1.4.21</kotlin.version>
@@ -35,6 +36,11 @@
     </distributionManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>io.craigmiller160</groupId>
+            <artifactId>oauth2-utils</artifactId>
+            <version>${oauth2.utils.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
