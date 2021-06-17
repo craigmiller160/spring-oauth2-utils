@@ -20,7 +20,7 @@ package io.craigmiller160.spring.oauth2.security
 
 import com.nimbusds.jose.jwk.JWKSet
 import io.craigmiller160.oauth2.dto.TokenResponseDto
-import io.craigmiller160.spring.oauth2.config.OAuthConfigImpl
+import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
 import io.craigmiller160.spring.oauth2.service.TokenRefreshService
 import io.craigmiller160.spring.oauth2.testutils.JwtUtils
 import org.hamcrest.MatcherAssert.assertThat
@@ -56,7 +56,7 @@ import javax.servlet.http.HttpServletResponse
 @MockitoSettings(strictness = Strictness.LENIENT)
 class JwtValidationFilterTest {
 
-    private lateinit var oAuthConfig: OAuthConfigImpl
+    private lateinit var oAuthConfig: OAuth2ConfigImpl
     private lateinit var jwkSet: JWKSet
     private lateinit var jwtValidationFilter: JwtValidationFilter
     private lateinit var keyPair: KeyPair
@@ -77,7 +77,7 @@ class JwtValidationFilterTest {
     fun setup() {
         keyPair = JwtUtils.createKeyPair()
         jwkSet = JwtUtils.createJwkSet(keyPair)
-        oAuthConfig = OAuthConfigImpl()
+        oAuthConfig = OAuth2ConfigImpl()
         oAuthConfig.clientKey = JwtUtils.CLIENT_KEY
         oAuthConfig.clientName = JwtUtils.CLIENT_NAME
         oAuthConfig.cookieName = cookieName

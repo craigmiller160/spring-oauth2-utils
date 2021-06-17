@@ -28,9 +28,9 @@ import org.mockito.Mockito.doReturn
 import org.mockito.Mockito.doThrow
 import org.mockito.Mockito.spy
 
-class OAuthConfigImplTest {
+class OAuth2ConfigImplTest {
 
-    private val oAuthConfig = OAuthConfigImpl()
+    private val oAuthConfig = OAuth2ConfigImpl()
 
     @Test
     fun test_loadJWKSet_firstTrySuccess() {

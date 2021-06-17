@@ -33,7 +33,7 @@ import javax.validation.constraints.NotBlank
 @Configuration
 @Validated
 @ConfigurationProperties(prefix = "oauth2")
-class OAuthConfigImpl : OAuth2Config {
+class OAuth2ConfigImpl : OAuth2Config {
 
     @field:NotBlank(message = "Missing Property: oauth2.auth-server-host")
     override var authServerHost: String = ""

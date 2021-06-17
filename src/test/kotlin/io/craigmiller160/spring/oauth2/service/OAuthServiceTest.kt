@@ -19,7 +19,7 @@
 package io.craigmiller160.spring.oauth2.service
 
 import com.nhaarman.mockito_kotlin.mock
-import io.craigmiller160.spring.oauth2.config.OAuthConfigImpl
+import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
 import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
 import io.craigmiller160.spring.oauth2.security.AuthenticatedUser
 import io.craigmiller160.spring.oauth2.testutils.JwtUtils
@@ -47,7 +47,7 @@ class OAuthServiceTest {
     private val cookiePath = "/path"
 
     @Mock
-    private lateinit var oAuthConfig: OAuthConfigImpl
+    private lateinit var oAuthConfig: OAuth2ConfigImpl
 
     @Mock
     private lateinit var appRefreshTokenRepo: AppRefreshTokenRepository

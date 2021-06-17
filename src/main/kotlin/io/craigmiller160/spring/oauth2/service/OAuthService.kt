@@ -19,7 +19,7 @@
 package io.craigmiller160.spring.oauth2.service
 
 import io.craigmiller160.oauth2.dto.AuthUserDto
-import io.craigmiller160.spring.oauth2.config.OAuthConfigImpl
+import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
 import io.craigmiller160.spring.oauth2.dto.authenticatedUserToAuthUserDto
 import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
 import io.craigmiller160.spring.oauth2.security.AuthenticatedUser
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service
 @Service
 class OAuthService (
         private val appRefreshTokenRepo: AppRefreshTokenRepository,
-        private val oAuthConfig: OAuthConfigImpl
+        private val oAuthConfig: OAuth2ConfigImpl
 ) {
 
     fun logout(): ResponseCookie {
