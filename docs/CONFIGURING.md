@@ -4,7 +4,7 @@ To flexibly support various applications, this library is very configuration dri
 
 ## Property Location
 
-All properties should be found in a regular Spring application properties/yaml file.
+All properties should be found in a regular Spring application properties/yaml file. Also, environment variables with the same keys will override the properties file.
 
 ## Standard OAuth2 Properties
 
