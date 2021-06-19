@@ -25,7 +25,8 @@ The Spring beans in this library need to be scanned and managed by the Spring co
 ```
 @Configuration
 @ComponentScan(basePackages = [
-    "io.craigmiller160.spring.oauth2"
+    "io.craigmiller160.spring.oauth2",
+    "io.craigmiller160.oauth2"
 ])
 class OauthUtilsConfig
 ```

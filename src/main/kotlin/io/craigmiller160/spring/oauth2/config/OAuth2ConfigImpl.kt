@@ -22,7 +22,6 @@ import io.craigmiller160.oauth2.config.OAuth2Config
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.validation.annotation.Validated
-import javax.annotation.PostConstruct
 import javax.validation.constraints.NotBlank
 
 @Configuration
@@ -46,10 +45,5 @@ class OAuth2ConfigImpl : OAuth2Config() {
     override var authLoginBaseUri: String = ""
     override var insecurePaths: String = ""
     override var authCodeWaitMins: Long = 10
-
-    @PostConstruct
-    fun setup() {
-        tryToLoadJWKSet()
-    }
 
 }
