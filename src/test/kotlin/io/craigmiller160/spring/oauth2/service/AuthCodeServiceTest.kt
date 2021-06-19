@@ -91,8 +91,6 @@ class AuthCodeServiceTest {
                 .thenReturn(session)
         `when`(req.getHeader("Origin"))
                 .thenReturn(origin)
-        `when`(oAuthConfig.authCodeLoginPath)
-                .thenReturn(path)
         `when`(oAuthConfig.authCodeRedirectUri)
                 .thenReturn(redirectUri)
         `when`(oAuthConfig.clientKey)

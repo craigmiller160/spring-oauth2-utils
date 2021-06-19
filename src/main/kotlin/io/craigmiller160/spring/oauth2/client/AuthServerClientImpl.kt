@@ -19,6 +19,7 @@
 package io.craigmiller160.spring.oauth2.client
 
 import io.craigmiller160.oauth2.client.AuthServerClient
+import io.craigmiller160.oauth2.config.OAuth2Config
 import io.craigmiller160.oauth2.dto.TokenResponseDto
 import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
 import io.craigmiller160.spring.oauth2.exception.BadAuthenticationException
@@ -59,7 +60,7 @@ class AuthServerClientImpl (
 
     private fun tokenRequest(body: MultiValueMap<String, String>): TokenResponseDto {
         val host = oAuthConfig.authServerHost
-        val path = oAuthConfig.tokenPath
+        val path = OAuth2Config.TOKEN_PATH
         val clientKey = oAuthConfig.clientKey
         val clientSecret = oAuthConfig.clientSecret
 

@@ -18,6 +18,7 @@
 
 package io.craigmiller160.spring.oauth2.config
 
+import io.craigmiller160.oauth2.config.AbstractOAuth2Config
 import io.craigmiller160.oauth2.config.OAuth2Config
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
@@ -27,7 +28,7 @@ import javax.validation.constraints.NotBlank
 @Configuration
 @Validated
 @ConfigurationProperties(prefix = "oauth2")
-class OAuth2ConfigImpl : OAuth2Config() {
+class OAuth2ConfigImpl : AbstractOAuth2Config() {
 
     @field:NotBlank(message = "Missing Property: oauth2.auth-server-host")
     override var authServerHost: String = ""

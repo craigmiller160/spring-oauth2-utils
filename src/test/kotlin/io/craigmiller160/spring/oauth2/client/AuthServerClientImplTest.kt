@@ -65,8 +65,6 @@ class AuthServerClientImplTest {
     fun setup() {
         `when`(oAuthConfig.authServerHost)
                 .thenReturn(host)
-        `when`(oAuthConfig.tokenPath)
-                .thenReturn(path)
         `when`(oAuthConfig.clientKey)
                 .thenReturn(key)
         `when`(oAuthConfig.clientSecret)

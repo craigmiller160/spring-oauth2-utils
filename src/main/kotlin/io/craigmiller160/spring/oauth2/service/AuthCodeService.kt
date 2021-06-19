@@ -19,6 +19,7 @@
 package io.craigmiller160.spring.oauth2.service
 
 import io.craigmiller160.oauth2.client.AuthServerClient
+import io.craigmiller160.oauth2.config.OAuth2Config
 import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
 import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeRequestException
@@ -63,7 +64,7 @@ class AuthCodeService (
         req.session.setAttribute(STATE_EXP_ATTR, ZonedDateTime.now(ZoneId.of("UTC")).plusMinutes(oAuthConfig.authCodeWaitMins))
         req.session.setAttribute(ORIGIN, origin)
 
-        val loginPath = oAuthConfig.authCodeLoginPath
+        val loginPath = OAuth2Config.AUTH_CODE_LOGIN_PATH
         val clientKey = URLEncoder.encode(oAuthConfig.clientKey, StandardCharsets.UTF_8)
         val encodedState = URLEncoder.encode(state, StandardCharsets.UTF_8)
 
