@@ -42,10 +42,12 @@ Then, create a special configuration class for JPA configuration. By default, JP
 ```
 @Configuration
 @EnableJpaRepositories(basePackages = [
-    "io.craigmiller160.spring.oauth2.repository"
+    "io.craigmiller160.spring.oauth2.repository",
+    "io.craigmiller160.oauth2.repository"
 ])
 @EntityScan(basePackages = [
-    "io.craigmiller160.spring.oauth2.entity"
+    "io.craigmiller160.spring.oauth2.entity",
+    "io.craigmiller160.oauth2.entity"
 ])
 class JpaConfig
 ```
