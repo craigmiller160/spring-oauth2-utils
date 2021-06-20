@@ -8,7 +8,7 @@ All properties should be found in a regular Spring application properties/yaml f
 
 ## Standard OAuth2 Properties
 
-This project supports all the properties from `oauth2-utils`. Please see that project for details about its properties.
+This project supports all the properties from `oauth2-utils-core`. Please see that project for details about its properties.
 
 ## Logging
 
