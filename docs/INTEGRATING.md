@@ -13,7 +13,7 @@ This library should be installed locally (unless it gets published to a repo at 
 ```
 <dependency>
     <groupId>io.craigmiller160</groupId>
-    <artifactId>oauth2-utils</artifactId>
+    <artifactId>spring-oauth2-utils</artifactId>
     <version>${oauth2.utils.version}</version>
 </dependency>
 ```
@@ -25,6 +25,7 @@ The Spring beans in this library need to be scanned and managed by the Spring co
 ```
 @Configuration
 @ComponentScan(basePackages = [
+    "io.craigmiller160.spring.oauth2",
     "io.craigmiller160.oauth2"
 ])
 class OauthUtilsConfig
@@ -41,9 +42,11 @@ Then, create a special configuration class for JPA configuration. By default, JP
 ```
 @Configuration
 @EnableJpaRepositories(basePackages = [
+    "io.craigmiller160.spring.oauth2.repository",
     "io.craigmiller160.oauth2.repository"
 ])
 @EntityScan(basePackages = [
+    "io.craigmiller160.spring.oauth2.entity",
     "io.craigmiller160.oauth2.entity"
 ])
 class JpaConfig
