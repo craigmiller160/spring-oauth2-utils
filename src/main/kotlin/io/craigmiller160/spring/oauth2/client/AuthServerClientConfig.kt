@@ -19,6 +19,7 @@
 package io.craigmiller160.spring.oauth2.client
 
 import io.craigmiller160.oauth2.client.AuthServerClient
+import io.craigmiller160.oauth2.client.AuthServerClientImpl
 import io.craigmiller160.oauth2.config.OAuth2Config
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.boot.web.client.RestTemplateCustomizer
@@ -41,7 +42,7 @@ class AuthServerClientConfig (
     @Bean
     @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     fun authServerClient(restTemplateBuilder: RestTemplateBuilder): AuthServerClient {
-        return AuthServerClientImpl(restTemplateBuilder.build(), oAuthConfig)
+        return AuthServerClientImpl(oAuthConfig, buildExecuteRequest(restTemplateBuilder.build()))
     }
 
 }
