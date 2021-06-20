@@ -18,6 +18,7 @@
 
 package io.craigmiller160.spring.oauth2.client
 
+import io.craigmiller160.oauth2.client.AuthServerClientImpl
 import io.craigmiller160.oauth2.config.OAuth2Config
 import io.craigmiller160.oauth2.dto.TokenResponseDto
 import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
@@ -59,8 +60,7 @@ class AuthServerClientImplTest {
     @Mock
     private lateinit var oAuthConfig: OAuth2ConfigImpl
 
-    @InjectMocks
-    private lateinit var authServerClient: io.craigmiller160.spring.oauth2.client.AuthServerClientImpl
+    private lateinit var authServerClient: AuthServerClientImpl
 
     @BeforeEach
     fun setup() {
@@ -70,6 +70,7 @@ class AuthServerClientImplTest {
                 .thenReturn(key)
         `when`(oAuthConfig.clientSecret)
                 .thenReturn(secret)
+        authServerClient = AuthServerClientImpl(oAuthConfig, buildExecuteRequest(restTemplate))
     }
 
     @Test
