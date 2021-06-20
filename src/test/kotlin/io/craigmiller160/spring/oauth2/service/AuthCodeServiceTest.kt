@@ -20,6 +20,7 @@ package io.craigmiller160.spring.oauth2.service
 
 import com.nhaarman.mockito_kotlin.isA
 import io.craigmiller160.oauth2.client.AuthServerClient
+import io.craigmiller160.oauth2.config.OAuth2Config
 import io.craigmiller160.oauth2.dto.TokenResponseDto
 import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
 import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
@@ -54,7 +55,7 @@ import javax.servlet.http.HttpSession
 class AuthCodeServiceTest {
 
     private val host = "host"
-    private val path = "/path"
+    private val path = "path"
     private val redirectUri = "redirectUri"
     private val clientKey = "clientKey"
     private val cookieExpSecs = 30L
@@ -112,7 +113,7 @@ class AuthCodeServiceTest {
         assertNotNull(captor.value)
         val state = captor.value
 
-        val expected = "$origin$path?response_type=code&client_id=$clientKey&redirect_uri=$origin$redirectUri&state=$state"
+        val expected = "$origin${OAuth2Config.AUTH_CODE_LOGIN_PATH}?response_type=code&client_id=$clientKey&redirect_uri=$origin$redirectUri&state=$state"
         assertEquals(expected, result)
     }
 
