@@ -18,6 +18,7 @@
 
 package io.craigmiller160.spring.oauth2.client
 
+import io.craigmiller160.oauth2.config.OAuth2Config
 import io.craigmiller160.oauth2.dto.TokenResponseDto
 import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
 import io.craigmiller160.spring.oauth2.exception.InvalidResponseBodyException
@@ -80,7 +81,7 @@ class AuthServerClientImplTest {
         val entityCaptor = ArgumentCaptor.forClass(HttpEntity::class.java)
 
         `when`(restTemplate.exchange(
-                eq("$host$path"),
+                eq("$host${OAuth2Config.TOKEN_PATH}"),
                 eq(HttpMethod.POST),
                 entityCaptor.capture(),
                 eq(TokenResponseDto::class.java)
@@ -110,7 +111,7 @@ class AuthServerClientImplTest {
         val refreshToken = "ABCDEFG"
 
         `when`(restTemplate.exchange(
-                eq("$host$path"),
+                eq("$host${OAuth2Config.TOKEN_PATH}"),
                 eq(HttpMethod.POST),
                 isA(HttpEntity::class.java),
                 eq(TokenResponseDto::class.java)
@@ -127,7 +128,7 @@ class AuthServerClientImplTest {
         val entityCaptor = ArgumentCaptor.forClass(HttpEntity::class.java)
 
         `when`(restTemplate.exchange(
-                eq("$host$path"),
+                eq("$host${OAuth2Config.TOKEN_PATH}"),
                 eq(HttpMethod.POST),
                 entityCaptor.capture(),
                 eq(TokenResponseDto::class.java)
