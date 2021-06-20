@@ -31,6 +31,7 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestTemplate
 
+// TODO delete this
 class AuthServerClientImpl (
         private val restTemplate: RestTemplate,
         private val oAuthConfig: OAuth2Config
