@@ -34,6 +34,6 @@ More explicit details will be shown in the configuration guide.
 
 ## Documentation
 
-1. [How to Integrate This Library](./docs/INTEGRATING.md)
-1. [How to Configure This Library](./docs/CONFIGURING.md)
-1. [How to Use Authentication](./docs/USING.md)
+### 1. [How to Integrate This Library](./docs/INTEGRATING.md)
+### 2. [How to Configure This Library](./docs/CONFIGURING.md)
+### 3. [How to Use Authentication](./docs/USING.md)
