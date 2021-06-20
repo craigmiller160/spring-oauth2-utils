@@ -20,7 +20,6 @@ package io.craigmiller160.spring.oauth2.service
 
 import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.config.OAuth2Config
-import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
 import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeRequestException
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeStateException
@@ -38,7 +37,7 @@ import javax.servlet.http.HttpServletRequest
 
 @Service
 class AuthCodeService (
-        private val oAuthConfig: OAuth2ConfigImpl,
+        private val oAuthConfig: OAuth2Config,
         private val authServerClient: AuthServerClient,
         private val appRefreshTokenRepo: AppRefreshTokenRepository
 ) {
