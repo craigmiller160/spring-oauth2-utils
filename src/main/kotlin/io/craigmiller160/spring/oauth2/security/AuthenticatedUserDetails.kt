@@ -18,19 +18,23 @@
 
 package io.craigmiller160.spring.oauth2.security
 
+import io.craigmiller160.oauth2.security.AuthenticatedUser
 import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 data class AuthenticatedUserDetails (
-        private val userName: String,
-        private val grantedAuthorities: List<GrantedAuthority>,
-        val firstName: String,
-        val lastName: String,
-        val tokenId: String
-): UserDetails {
+        override val userName: String,
+        override val roles: List<String>,
+        override val firstName: String,
+        override val lastName: String,
+        override val tokenId: String
+): AuthenticatedUser, UserDetails {
 
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return this.grantedAuthorities.toMutableList()
+    private val grantedAuthorities = roles.map { SimpleGrantedAuthority(it) }
+
+    override fun getAuthorities(): Collection<GrantedAuthority> {
+        return this.grantedAuthorities
     }
 
     override fun getUsername(): String {
