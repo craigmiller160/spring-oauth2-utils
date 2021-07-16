@@ -31,7 +31,7 @@ interface AppRefreshTokenRepository: JpaRepository<JpaAppRefreshToken,Long> {
     fun findByTokenId(tokenId: String): JpaAppRefreshToken?
 
     @Transactional
-    @Modifying
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
     fun removeByTokenId(tokenId: String): Int
 
 }
