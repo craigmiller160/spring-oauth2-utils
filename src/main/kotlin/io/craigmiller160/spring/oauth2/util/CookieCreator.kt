@@ -20,6 +20,7 @@ package io.craigmiller160.spring.oauth2.util
 
 import org.springframework.http.ResponseCookie
 
+// TODO delete this
 object CookieCreator {
 
     fun create(name: String, path: String, token: String, maxAge: Long): ResponseCookie {
