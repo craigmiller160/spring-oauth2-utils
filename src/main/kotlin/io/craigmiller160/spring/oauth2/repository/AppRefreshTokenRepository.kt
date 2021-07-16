@@ -18,16 +18,17 @@
 
 package io.craigmiller160.spring.oauth2.repository
 
-import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
+import io.craigmiller160.spring.oauth2.entity.JpaAppRefreshToken
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
 import javax.transaction.Transactional
 
+// TODO rename this after new interface creation
 @Repository
-interface AppRefreshTokenRepository: JpaRepository<AppRefreshToken,Long> {
+interface AppRefreshTokenRepository: JpaRepository<JpaAppRefreshToken,Long> {
 
-    fun findByTokenId(tokenId: String): AppRefreshToken?
+    fun findByTokenId(tokenId: String): JpaAppRefreshToken?
 
     @Transactional
     @Modifying

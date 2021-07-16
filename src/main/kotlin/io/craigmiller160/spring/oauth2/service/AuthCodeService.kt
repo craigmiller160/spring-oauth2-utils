@@ -20,7 +20,7 @@ package io.craigmiller160.spring.oauth2.service
 
 import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.config.OAuth2Config
-import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
+import io.craigmiller160.spring.oauth2.entity.JpaAppRefreshToken
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeRequestException
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeStateException
 import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
@@ -91,7 +91,7 @@ class AuthCodeService (
         req.session.removeAttribute(ORIGIN)
 
         val tokens = authServerClient.authenticateAuthCode(origin, code)
-        val manageRefreshToken = AppRefreshToken(0, tokens.tokenId, tokens.refreshToken)
+        val manageRefreshToken = JpaAppRefreshToken(0, tokens.tokenId, tokens.refreshToken)
         appRefreshTokenRepo.removeByTokenId(tokens.tokenId)
         appRefreshTokenRepo.save(manageRefreshToken)
         val cookie = CookieCreator.create(oAuthConfig.cookieName, oAuthConfig.getOrDefaultCookiePath(), tokens.accessToken, oAuthConfig.cookieMaxAgeSecs)

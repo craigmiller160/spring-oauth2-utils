@@ -18,6 +18,7 @@
 
 package io.craigmiller160.spring.oauth2.entity
 
+import io.craigmiller160.oauth2.domain.entity.AppRefreshToken
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -26,10 +27,10 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "app_refresh_tokens")
-data class AppRefreshToken (
+data class JpaAppRefreshToken (
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long,
-        val tokenId: String,
-        val refreshToken: String
-)
+        override val id: Long,
+        override val tokenId: String,
+        override val refreshToken: String
+) : AppRefreshToken

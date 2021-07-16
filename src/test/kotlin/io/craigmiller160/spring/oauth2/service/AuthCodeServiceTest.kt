@@ -23,7 +23,7 @@ import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.config.OAuth2Config
 import io.craigmiller160.oauth2.dto.TokenResponseDto
 import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
-import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
+import io.craigmiller160.spring.oauth2.entity.JpaAppRefreshToken
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeRequestException
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeStateException
 import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
@@ -147,7 +147,7 @@ class AuthCodeServiceTest {
         assertEquals(postAuthRedirect, redirect)
         validateCookie(cookie, response.accessToken, cookieExpSecs)
 
-        val manageRefreshToken = AppRefreshToken(0, response.tokenId, response.refreshToken)
+        val manageRefreshToken = JpaAppRefreshToken(0, response.tokenId, response.refreshToken)
         verify(appRefreshTokenRepo, Mockito.times(1))
                 .save(manageRefreshToken)
 

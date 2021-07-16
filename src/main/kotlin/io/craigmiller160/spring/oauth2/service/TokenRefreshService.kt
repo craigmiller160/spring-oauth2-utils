@@ -21,7 +21,7 @@ package io.craigmiller160.spring.oauth2.service
 import com.nimbusds.jwt.SignedJWT
 import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.dto.TokenResponseDto
-import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
+import io.craigmiller160.spring.oauth2.entity.JpaAppRefreshToken
 import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -45,7 +45,7 @@ class TokenRefreshService (
                     try {
                         val tokenResponse = authServerClient.authenticateRefreshToken(refreshToken.refreshToken)
                         appRefreshTokenRepo.deleteById(refreshToken.id)
-                        appRefreshTokenRepo.save(AppRefreshToken(0, tokenResponse.tokenId, tokenResponse.refreshToken))
+                        appRefreshTokenRepo.save(JpaAppRefreshToken(0, tokenResponse.tokenId, tokenResponse.refreshToken))
                         tokenResponse
                     } catch (ex: Exception) {
                         log.debug("Error refreshing token", ex)
