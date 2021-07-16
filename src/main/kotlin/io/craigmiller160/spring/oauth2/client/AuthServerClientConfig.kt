@@ -28,10 +28,10 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class AuthServerClientConfig (
-        @Suppress("SpringJavaInjectionPointsAutowiringInspection")
         private val oAuthConfig: OAuth2Config
 ) {
 
+    // TODO do I need this?
     @Bean
     fun formRestTemplateCustomizer(): RestTemplateCustomizer {
         return RestTemplateCustomizer { template ->
@@ -41,8 +41,8 @@ class AuthServerClientConfig (
 
     @Bean
     @Suppress("SpringJavaInjectionPointsAutowiringInspection")
-    fun authServerClient(restTemplateBuilder: RestTemplateBuilder): AuthServerClient {
-        return AuthServerClientImpl(oAuthConfig, buildExecuteRequest(restTemplateBuilder.build()))
+    fun authServerClient(): AuthServerClient {
+        return AuthServerClientImpl(oAuthConfig)
     }
 
 }
