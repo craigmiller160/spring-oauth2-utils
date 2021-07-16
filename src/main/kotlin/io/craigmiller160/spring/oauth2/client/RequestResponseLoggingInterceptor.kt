@@ -27,6 +27,7 @@ import org.springframework.http.client.ClientHttpResponse
 import org.springframework.util.StreamUtils
 import java.nio.charset.StandardCharsets
 
+// TODO do I need this?
 class RequestResponseLoggingInterceptor : ClientHttpRequestInterceptor {
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
