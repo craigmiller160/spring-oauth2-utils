@@ -25,7 +25,6 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
 import javax.transaction.Transactional
 
-// TODO rename this after new interface creation
 @Repository
 interface JpaAppRefreshTokenRepository: AppRefreshTokenRepository, JpaRepository<JpaAppRefreshToken,Long> {
 
