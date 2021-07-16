@@ -30,6 +30,6 @@ interface JpaAppRefreshTokenRepository: AppRefreshTokenRepository, JpaRepository
 
     @Transactional
     @Modifying(flushAutomatically = true, clearAutomatically = true)
-    override fun removeByTokenId(tokenId: String): Int
+    override fun removeByTokenId(tokenId: String)
 
 }

@@ -62,11 +62,10 @@ class JpaAppRefreshTokenRepositoryTest {
 
     @Test
     fun test_removeByTokenId() {
-        val result = appRefreshTokenRepo.removeByTokenId("1")
-        Assertions.assertEquals(1, result)
+        appRefreshTokenRepo.removeByTokenId("1")
 
         val results = appRefreshTokenRepo.findAll()
-        Assertions.assertEquals(1, results.size)
+        assertEquals(1, results.size)
         assertEquals(refreshToken2, results[0])
     }
 
