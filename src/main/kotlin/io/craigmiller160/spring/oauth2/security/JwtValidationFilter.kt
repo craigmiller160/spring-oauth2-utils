@@ -136,11 +136,10 @@ class JwtValidationFilter (
     }
 
     private fun createAuthentication(claims: JWTClaimsSet): Authentication {
-        val authorities = claims.getStringListClaim("roles")
-                .map { SimpleGrantedAuthority(it) }
+        val roles = claims.getStringListClaim("roles")
         val authUser = AuthenticatedUserDetails(
                 userName = claims.subject,
-                grantedAuthorities = authorities,
+                roles = roles,
                 firstName = claims.getStringClaim("firstName"),
                 lastName = claims.getStringClaim("lastName"),
                 tokenId = claims.jwtid

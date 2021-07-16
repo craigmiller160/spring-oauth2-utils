@@ -85,7 +85,7 @@ class OAuthServiceTest {
     fun test_getAuthenticatedUser() {
         val authUser = AuthenticatedUserDetails(
                 userName = "User",
-                grantedAuthorities = listOf(SimpleGrantedAuthority("Something")),
+                roles = listOf("Something"),
                 firstName = "First",
                 lastName = "Last",
                 tokenId = "ID"

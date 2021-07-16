@@ -64,7 +64,7 @@ object JwtUtils {
     fun createAuthUser(): AuthenticatedUserDetails {
         return AuthenticatedUserDetails(
                 userName = USERNAME,
-                grantedAuthorities = listOf(SimpleGrantedAuthority(ROLE_1), SimpleGrantedAuthority(ROLE_2)),
+                roles = listOf(ROLE_1, ROLE_2),
                 firstName = FIRST_NAME,
                 lastName = LAST_NAME,
                 tokenId = TOKEN_ID
