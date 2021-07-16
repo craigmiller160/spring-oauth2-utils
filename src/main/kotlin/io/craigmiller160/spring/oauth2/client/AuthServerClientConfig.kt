@@ -21,8 +21,6 @@ package io.craigmiller160.spring.oauth2.client
 import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.client.AuthServerClientImpl
 import io.craigmiller160.oauth2.config.OAuth2Config
-import org.springframework.boot.web.client.RestTemplateBuilder
-import org.springframework.boot.web.client.RestTemplateCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -30,14 +28,6 @@ import org.springframework.context.annotation.Configuration
 class AuthServerClientConfig (
         private val oAuthConfig: OAuth2Config
 ) {
-
-    // TODO do I need this?
-    @Bean
-    fun formRestTemplateCustomizer(): RestTemplateCustomizer {
-        return RestTemplateCustomizer { template ->
-            template.interceptors.add(RequestResponseLoggingInterceptor())
-        }
-    }
 
     @Bean
     @Suppress("SpringJavaInjectionPointsAutowiringInspection")
