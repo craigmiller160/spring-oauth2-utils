@@ -21,7 +21,7 @@ package io.craigmiller160.spring.oauth2.service
 import com.nhaarman.mockito_kotlin.mock
 import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
 import io.craigmiller160.spring.oauth2.repository.JpaAppRefreshTokenRepository
-import io.craigmiller160.spring.oauth2.security.AuthenticatedUser
+import io.craigmiller160.spring.oauth2.security.AuthenticatedUserDetails
 import io.craigmiller160.spring.oauth2.testutils.JwtUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
@@ -83,7 +83,7 @@ class OAuthServiceTest {
 
     @Test
     fun test_getAuthenticatedUser() {
-        val authUser = AuthenticatedUser(
+        val authUser = AuthenticatedUserDetails(
                 userName = "User",
                 grantedAuthorities = listOf(SimpleGrantedAuthority("Something")),
                 firstName = "First",

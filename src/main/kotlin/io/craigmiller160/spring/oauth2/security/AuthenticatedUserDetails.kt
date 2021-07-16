@@ -21,7 +21,7 @@ package io.craigmiller160.spring.oauth2.security
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
-data class AuthenticatedUser (
+data class AuthenticatedUserDetails (
         private val userName: String,
         private val grantedAuthorities: List<GrantedAuthority>,
         val firstName: String,

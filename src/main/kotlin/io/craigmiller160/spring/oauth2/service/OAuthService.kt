@@ -22,7 +22,7 @@ import io.craigmiller160.oauth2.config.OAuth2Config
 import io.craigmiller160.oauth2.dto.AuthUserDto
 import io.craigmiller160.spring.oauth2.dto.authenticatedUserToAuthUserDto
 import io.craigmiller160.spring.oauth2.repository.JpaAppRefreshTokenRepository
-import io.craigmiller160.spring.oauth2.security.AuthenticatedUser
+import io.craigmiller160.spring.oauth2.security.AuthenticatedUserDetails
 import io.craigmiller160.spring.oauth2.util.CookieCreator
 import org.springframework.http.ResponseCookie
 import org.springframework.security.core.context.SecurityContextHolder
@@ -35,13 +35,13 @@ class OAuthService (
 ) {
 
     fun logout(): ResponseCookie {
-        val authUser = SecurityContextHolder.getContext().authentication.principal as AuthenticatedUser
+        val authUser = SecurityContextHolder.getContext().authentication.principal as AuthenticatedUserDetails
         appRefreshTokenRepo.removeByTokenId(authUser.tokenId)
         return CookieCreator.create(oAuthConfig.cookieName, oAuthConfig.getOrDefaultCookiePath(), "", 0)
     }
 
     fun getAuthenticatedUser(): AuthUserDto {
-        val authUser = SecurityContextHolder.getContext().authentication.principal as AuthenticatedUser
+        val authUser = SecurityContextHolder.getContext().authentication.principal as AuthenticatedUserDetails
         return authenticatedUserToAuthUserDto(authUser)
     }
 
