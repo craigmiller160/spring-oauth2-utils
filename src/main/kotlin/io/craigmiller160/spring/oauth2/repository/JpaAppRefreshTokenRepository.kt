@@ -27,9 +27,7 @@ import javax.transaction.Transactional
 
 // TODO rename this after new interface creation
 @Repository
-interface JpaAppRefreshTokenRepository: AppRefreshTokenRepository<JpaAppRefreshToken>, JpaRepository<JpaAppRefreshToken,Long> {
-
-//    override fun findByTokenId(tokenId: String): JpaAppRefreshToken?
+interface JpaAppRefreshTokenRepository: AppRefreshTokenRepository, JpaRepository<JpaAppRefreshToken,Long> {
 
     @Transactional
     @Modifying(flushAutomatically = true, clearAutomatically = true)
