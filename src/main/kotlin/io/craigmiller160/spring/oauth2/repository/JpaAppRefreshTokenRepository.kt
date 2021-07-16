@@ -18,19 +18,18 @@
 
 package io.craigmiller160.spring.oauth2.repository
 
-import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
+import io.craigmiller160.oauth2.domain.repository.AppRefreshTokenRepository
+import io.craigmiller160.spring.oauth2.entity.JpaAppRefreshToken
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Repository
 import javax.transaction.Transactional
 
 @Repository
-interface AppRefreshTokenRepository: JpaRepository<AppRefreshToken,Long> {
-
-    fun findByTokenId(tokenId: String): AppRefreshToken?
+interface JpaAppRefreshTokenRepository: AppRefreshTokenRepository, JpaRepository<JpaAppRefreshToken,Long> {
 
     @Transactional
-    @Modifying
-    fun removeByTokenId(tokenId: String): Int
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    override fun removeByTokenId(tokenId: String)
 
 }

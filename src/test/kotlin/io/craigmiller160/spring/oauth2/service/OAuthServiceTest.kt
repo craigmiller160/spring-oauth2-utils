@@ -20,7 +20,7 @@ package io.craigmiller160.spring.oauth2.service
 
 import com.nhaarman.mockito_kotlin.mock
 import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
-import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
+import io.craigmiller160.spring.oauth2.repository.JpaAppRefreshTokenRepository
 import io.craigmiller160.spring.oauth2.security.AuthenticatedUser
 import io.craigmiller160.spring.oauth2.testutils.JwtUtils
 import org.junit.jupiter.api.AfterEach
@@ -50,7 +50,7 @@ class OAuthServiceTest {
     private lateinit var oAuthConfig: OAuth2ConfigImpl
 
     @Mock
-    private lateinit var appRefreshTokenRepo: AppRefreshTokenRepository
+    private lateinit var appRefreshTokenRepo: JpaAppRefreshTokenRepository
 
     @InjectMocks
     private lateinit var oAuthService: OAuthService

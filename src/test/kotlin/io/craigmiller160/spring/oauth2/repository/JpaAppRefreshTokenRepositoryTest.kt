@@ -18,7 +18,7 @@
 
 package io.craigmiller160.spring.oauth2.repository
 
-import io.craigmiller160.spring.oauth2.entity.AppRefreshToken
+import io.craigmiller160.spring.oauth2.entity.JpaAppRefreshToken
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -28,22 +28,22 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 
 @DataJpaTest
-class AppRefreshTokenRepositoryTest {
+class JpaAppRefreshTokenRepositoryTest {
 
     @Autowired
-    private lateinit var appRefreshTokenRepo: AppRefreshTokenRepository
+    private lateinit var appRefreshTokenRepo: JpaAppRefreshTokenRepository
 
-    private lateinit var refreshToken1: AppRefreshToken
-    private lateinit var refreshToken2: AppRefreshToken
+    private lateinit var refreshToken1: JpaAppRefreshToken
+    private lateinit var refreshToken2: JpaAppRefreshToken
 
     @BeforeEach
     fun setup() {
-        refreshToken1 = AppRefreshToken(
+        refreshToken1 = JpaAppRefreshToken(
                 0, "1", "token1"
         )
         refreshToken1 = appRefreshTokenRepo.save(refreshToken1)
 
-        refreshToken2 = AppRefreshToken(
+        refreshToken2 = JpaAppRefreshToken(
                 0, "2", "token2"
         )
         refreshToken2 = appRefreshTokenRepo.save(refreshToken2)
@@ -62,11 +62,10 @@ class AppRefreshTokenRepositoryTest {
 
     @Test
     fun test_removeByTokenId() {
-        val result = appRefreshTokenRepo.removeByTokenId("1")
-        Assertions.assertEquals(1, result)
+        appRefreshTokenRepo.removeByTokenId("1")
 
         val results = appRefreshTokenRepo.findAll()
-        Assertions.assertEquals(1, results.size)
+        assertEquals(1, results.size)
         assertEquals(refreshToken2, results[0])
     }
 
