@@ -22,7 +22,7 @@ import com.nimbusds.jwt.SignedJWT
 import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.dto.TokenResponseDto
 import io.craigmiller160.spring.oauth2.entity.JpaAppRefreshToken
-import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
+import io.craigmiller160.spring.oauth2.repository.JpaAppRefreshTokenRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -30,7 +30,7 @@ import javax.transaction.Transactional
 
 @Service
 class TokenRefreshService (
-        private val appRefreshTokenRepo: AppRefreshTokenRepository,
+        private val appRefreshTokenRepo: JpaAppRefreshTokenRepository,
         private val authServerClient: AuthServerClient
 ) {
 

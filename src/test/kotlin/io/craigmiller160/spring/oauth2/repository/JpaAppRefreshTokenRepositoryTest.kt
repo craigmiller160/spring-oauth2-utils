@@ -28,10 +28,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 
 @DataJpaTest
-class AppRefreshTokenRepositoryTest {
+class JpaAppRefreshTokenRepositoryTest {
 
     @Autowired
-    private lateinit var appRefreshTokenRepo: AppRefreshTokenRepository
+    private lateinit var appRefreshTokenRepo: JpaAppRefreshTokenRepository
 
     private lateinit var refreshToken1: JpaAppRefreshToken
     private lateinit var refreshToken2: JpaAppRefreshToken

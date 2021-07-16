@@ -26,7 +26,7 @@ import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
 import io.craigmiller160.spring.oauth2.entity.JpaAppRefreshToken
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeRequestException
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeStateException
-import io.craigmiller160.spring.oauth2.repository.AppRefreshTokenRepository
+import io.craigmiller160.spring.oauth2.repository.JpaAppRefreshTokenRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -70,7 +70,7 @@ class AuthCodeServiceTest {
     private lateinit var authServerClient: AuthServerClient
 
     @Mock
-    private lateinit var appRefreshTokenRepo: AppRefreshTokenRepository
+    private lateinit var appRefreshTokenRepo: JpaAppRefreshTokenRepository
 
     @Mock
     private lateinit var req: HttpServletRequest
