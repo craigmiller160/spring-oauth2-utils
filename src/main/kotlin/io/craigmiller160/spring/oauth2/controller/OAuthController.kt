@@ -48,13 +48,13 @@ class OAuthController (
         val (cookie, postAuthRedirect) = authCodeService.code(req, code, state)
         res.status = 302
         res.addHeader("Location", postAuthRedirect)
-        res.addHeader("Set-Cookie", cookie.toString())
+        res.addHeader("Set-Cookie", cookie)
     }
 
     @GetMapping("/logout")
     fun logout(res: HttpServletResponse) {
         val cookie = oAuthService.logout()
-        res.addHeader("Set-Cookie", cookie.toString())
+        res.addHeader("Set-Cookie", cookie)
     }
 
     @GetMapping("/user")

@@ -147,10 +147,12 @@ class AuthCodeServiceTest {
         `when`(authServerClient.authenticateAuthCode(origin, authCode))
                 .thenReturn(response)
 
+        `when`(cookieCreator.createTokenCookie(cookieName, oAuthConfig.getOrDefaultCookiePath(), "access", oAuthConfig.cookieMaxAgeSecs))
+                .thenReturn("Cookie")
+
         val (cookie, redirect) = authCodeService.code(req, authCode, state)
         assertEquals(postAuthRedirect, redirect)
-//        validateCookie(cookie, response.accessToken, cookieExpSecs)
-        TODO("Fix this")
+        assertEquals("Cookie", cookie)
 
         val manageRefreshToken = JpaAppRefreshToken(0, response.tokenId, response.refreshToken)
         verify(appRefreshTokenRepo, Mockito.times(1))
@@ -164,16 +166,6 @@ class AuthCodeServiceTest {
                 .removeAttribute(AuthCodeService.ORIGIN)
         verify(appRefreshTokenRepo, Mockito.times(1))
                 .removeByTokenId(response.tokenId)
-    }
-
-    private fun validateCookie(cookie: ResponseCookie, token: String, exp: Long) {
-        assertEquals(cookieName, cookie.name)
-        assertEquals(path, cookie.path)
-        assertTrue(cookie.isSecure)
-        assertTrue(cookie.isHttpOnly)
-        assertEquals("strict", cookie.sameSite)
-        assertEquals(token, cookie.value)
-        assertEquals(Duration.ofSeconds(exp), cookie.maxAge)
     }
 
     @Test
