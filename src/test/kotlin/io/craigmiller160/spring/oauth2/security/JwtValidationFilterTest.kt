@@ -34,12 +34,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.junit.jupiter.MockitoSettings
 import org.mockito.quality.Strictness
@@ -262,6 +260,9 @@ class JwtValidationFilterTest {
         Mockito.`when`(tokenRefreshService.refreshToken(token))
                 .thenReturn(TokenResponseDto(this.token, newRefreshToken, newTokenId))
 
+        `when`(cookieCreator.createTokenCookie(cookieName, oAuthConfig.getOrDefaultCookiePath(), this.token, oAuthConfig.cookieMaxAgeSecs))
+                .thenReturn("Cookie")
+
         jwtValidationFilter.doFilter(req, res, chain)
         val authentication = SecurityContextHolder.getContext().authentication
         Assertions.assertNotNull(authentication)
@@ -273,7 +274,7 @@ class JwtValidationFilterTest {
         Mockito.verify(chain, Mockito.times(1))
                 .doFilter(req, res)
         Mockito.verify(res, Mockito.times(1))
-                .addHeader(Mockito.eq("Set-Cookie"), Mockito.anyString())
+                .addHeader(Mockito.eq("Set-Cookie"), ArgumentMatchers.eq("Cookie"))
     }
 
 }
