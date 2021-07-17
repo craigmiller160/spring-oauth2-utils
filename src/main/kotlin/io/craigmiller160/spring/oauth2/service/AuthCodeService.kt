@@ -20,11 +20,11 @@ package io.craigmiller160.spring.oauth2.service
 
 import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.config.OAuth2Config
+import io.craigmiller160.oauth2.security.CookieCreator
 import io.craigmiller160.spring.oauth2.entity.JpaAppRefreshToken
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeRequestException
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeStateException
 import io.craigmiller160.spring.oauth2.repository.JpaAppRefreshTokenRepository
-import io.craigmiller160.spring.oauth2.util.CookieCreator
 import org.springframework.http.ResponseCookie
 import org.springframework.stereotype.Service
 import java.math.BigInteger
@@ -39,7 +39,8 @@ import javax.servlet.http.HttpServletRequest
 class AuthCodeService (
         private val oAuthConfig: OAuth2Config,
         private val authServerClient: AuthServerClient,
-        private val appRefreshTokenRepo: JpaAppRefreshTokenRepository
+        private val appRefreshTokenRepo: JpaAppRefreshTokenRepository,
+        private val cookieCreator: CookieCreator
 ) {
 
     companion object {
@@ -73,7 +74,7 @@ class AuthCodeService (
         return "$host$loginPath?response_type=code&client_id=$clientKey&redirect_uri=$redirectUri&state=$encodedState"
     }
 
-    fun code(req: HttpServletRequest, code: String, state: String): Pair<ResponseCookie,String> {
+    fun code(req: HttpServletRequest, code: String, state: String): Pair<String,String> {
         val expectedState = req.session.getAttribute(STATE_ATTR) as String?
         val stateExp = req.session.getAttribute(STATE_EXP_ATTR) as ZonedDateTime?
         if (expectedState != state) {
@@ -94,7 +95,7 @@ class AuthCodeService (
         val manageRefreshToken = JpaAppRefreshToken(0, tokens.tokenId, tokens.refreshToken)
         appRefreshTokenRepo.removeByTokenId(tokens.tokenId)
         appRefreshTokenRepo.save(manageRefreshToken)
-        val cookie = CookieCreator.create(oAuthConfig.cookieName, oAuthConfig.getOrDefaultCookiePath(), tokens.accessToken, oAuthConfig.cookieMaxAgeSecs)
+        val cookie = cookieCreator.createTokenCookie(oAuthConfig.cookieName, oAuthConfig.getOrDefaultCookiePath(), tokens.accessToken, oAuthConfig.cookieMaxAgeSecs)
         return Pair(cookie, oAuthConfig.postAuthRedirect)
     }
 

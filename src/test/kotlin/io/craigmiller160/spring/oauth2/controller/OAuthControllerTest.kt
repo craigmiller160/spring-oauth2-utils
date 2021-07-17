@@ -24,8 +24,8 @@ import com.nhaarman.mockito_kotlin.isA
 import io.craigmiller160.apitestprocessor.ApiTestProcessor
 import io.craigmiller160.oauth2.dto.AuthCodeLoginDto
 import io.craigmiller160.oauth2.dto.AuthUserDto
+import io.craigmiller160.oauth2.service.OAuth2Service
 import io.craigmiller160.spring.oauth2.service.AuthCodeService
-import io.craigmiller160.spring.oauth2.service.OAuthService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -48,7 +48,7 @@ class OAuthControllerTest {
     private lateinit var authCodeService: AuthCodeService
 
     @MockBean
-    private lateinit var oAuthService: OAuthService
+    private lateinit var oAuthService: OAuth2Service
 
     @Autowired
     private lateinit var provMockMvc: MockMvc

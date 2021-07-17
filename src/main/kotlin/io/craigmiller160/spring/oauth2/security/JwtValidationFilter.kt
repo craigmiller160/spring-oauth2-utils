@@ -28,9 +28,9 @@ import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier
 import com.nimbusds.jwt.proc.DefaultJWTProcessor
 import io.craigmiller160.oauth2.config.OAuth2Config
+import io.craigmiller160.oauth2.security.CookieCreator
 import io.craigmiller160.spring.oauth2.exception.InvalidTokenException
 import io.craigmiller160.spring.oauth2.service.TokenRefreshService
-import io.craigmiller160.spring.oauth2.util.CookieCreator
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -46,7 +46,8 @@ import javax.servlet.http.HttpServletResponse
 
 class JwtValidationFilter (
         private val oAuthConfig: OAuth2Config,
-        private val tokenRefreshService: TokenRefreshService
+        private val tokenRefreshService: TokenRefreshService,
+        private val cookieCreator: CookieCreator
 ) : OncePerRequestFilter() {
 
     companion object {
@@ -116,7 +117,7 @@ class JwtValidationFilter (
                         return tokenRefreshService.refreshToken(token)
                                 ?.let { tokenResponse ->
                                     val claims = validateToken(tokenResponse.accessToken, res, true)
-                                    res.addHeader("Set-Cookie", CookieCreator.create(oAuthConfig.cookieName, oAuthConfig.getOrDefaultCookiePath(), tokenResponse.accessToken, oAuthConfig.cookieMaxAgeSecs).toString())
+                                    res.addHeader("Set-Cookie", cookieCreator.createTokenCookie(oAuthConfig.cookieName, oAuthConfig.getOrDefaultCookiePath(), tokenResponse.accessToken, oAuthConfig.cookieMaxAgeSecs))
                                     claims
                                 }
                                 ?: throw InvalidTokenException("Token validation failed: ${ex.message}", ex)
