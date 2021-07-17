@@ -91,6 +91,7 @@ class OAuthControllerTest {
         val cookie = ResponseCookie
                 .from("name", "value")
                 .build()
+                .toString()
 
         `when`(authCodeService.code(isA(), eq(code), eq(state)))
                 .thenReturn(Pair(cookie, postAuthRedirect))
@@ -108,7 +109,7 @@ class OAuthControllerTest {
         assertEquals(postAuthRedirect, locationValue)
 
         val cookieValue = result.response.getHeaderValue("Set-Cookie")
-        assertEquals(cookie.toString(), cookieValue)
+        assertEquals(cookie, cookieValue)
     }
 
     @Test
@@ -116,6 +117,7 @@ class OAuthControllerTest {
         val cookie = ResponseCookie
                 .from("name", "value")
                 .build()
+                .toString()
         `when`(oAuthService.logout())
                 .thenReturn(cookie)
 
@@ -126,7 +128,7 @@ class OAuthControllerTest {
         }
 
         val cookieValue = result.response.getHeaderValue("Set-Cookie")
-        assertEquals(cookie.toString(), cookieValue)
+        assertEquals(cookie, cookieValue)
     }
 
     @Test

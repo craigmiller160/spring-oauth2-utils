@@ -20,6 +20,7 @@ package io.craigmiller160.spring.oauth2.security
 
 import com.nimbusds.jose.jwk.JWKSet
 import io.craigmiller160.oauth2.dto.TokenResponseDto
+import io.craigmiller160.oauth2.security.CookieCreator
 import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
 import io.craigmiller160.spring.oauth2.service.TokenRefreshService
 import io.craigmiller160.spring.oauth2.testutils.JwtUtils
@@ -71,6 +72,8 @@ class JwtValidationFilterTest {
     @Mock
     private lateinit var res: HttpServletResponse
     @Mock
+    private lateinit var cookieCreator: CookieCreator
+    @Mock
     private lateinit var chain: FilterChain
 
     @BeforeEach
@@ -87,7 +90,7 @@ class JwtValidationFilterTest {
         val jwt = JwtUtils.createJwt()
         token = JwtUtils.signAndSerializeJwt(jwt, keyPair.private)
 
-        jwtValidationFilter = JwtValidationFilter(oAuthConfig, tokenRefreshService)
+        jwtValidationFilter = JwtValidationFilter(oAuthConfig, tokenRefreshService, cookieCreator)
         `when`(req.requestURI)
                 .thenReturn("/something")
     }

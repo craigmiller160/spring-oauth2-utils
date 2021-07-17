@@ -145,7 +145,8 @@ class AuthCodeServiceTest {
 
         val (cookie, redirect) = authCodeService.code(req, authCode, state)
         assertEquals(postAuthRedirect, redirect)
-        validateCookie(cookie, response.accessToken, cookieExpSecs)
+//        validateCookie(cookie, response.accessToken, cookieExpSecs)
+        TODO("Fix this")
 
         val manageRefreshToken = JpaAppRefreshToken(0, response.tokenId, response.refreshToken)
         verify(appRefreshTokenRepo, Mockito.times(1))
