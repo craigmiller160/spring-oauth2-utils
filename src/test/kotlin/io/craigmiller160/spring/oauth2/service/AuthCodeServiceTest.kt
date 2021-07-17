@@ -22,6 +22,7 @@ import com.nhaarman.mockito_kotlin.isA
 import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.config.OAuth2Config
 import io.craigmiller160.oauth2.dto.TokenResponseDto
+import io.craigmiller160.oauth2.security.CookieCreator
 import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
 import io.craigmiller160.spring.oauth2.entity.JpaAppRefreshToken
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeRequestException
@@ -77,6 +78,9 @@ class AuthCodeServiceTest {
 
     @Mock
     private lateinit var session: HttpSession
+
+    @Mock
+    private lateinit var cookieCreator: CookieCreator
 
     @InjectMocks
     private lateinit var authCodeService: AuthCodeService
