@@ -22,6 +22,7 @@ import com.nhaarman.mockito_kotlin.isA
 import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.config.OAuth2Config
 import io.craigmiller160.oauth2.dto.TokenResponseDto
+import io.craigmiller160.oauth2.security.CookieCreator
 import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
 import io.craigmiller160.spring.oauth2.entity.JpaAppRefreshToken
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeRequestException
@@ -77,6 +78,9 @@ class AuthCodeServiceTest {
 
     @Mock
     private lateinit var session: HttpSession
+
+    @Mock
+    private lateinit var cookieCreator: CookieCreator
 
     @InjectMocks
     private lateinit var authCodeService: AuthCodeService
@@ -143,9 +147,12 @@ class AuthCodeServiceTest {
         `when`(authServerClient.authenticateAuthCode(origin, authCode))
                 .thenReturn(response)
 
+        `when`(cookieCreator.createTokenCookie(cookieName, oAuthConfig.getOrDefaultCookiePath(), "access", oAuthConfig.cookieMaxAgeSecs))
+                .thenReturn("Cookie")
+
         val (cookie, redirect) = authCodeService.code(req, authCode, state)
         assertEquals(postAuthRedirect, redirect)
-        validateCookie(cookie, response.accessToken, cookieExpSecs)
+        assertEquals("Cookie", cookie)
 
         val manageRefreshToken = JpaAppRefreshToken(0, response.tokenId, response.refreshToken)
         verify(appRefreshTokenRepo, Mockito.times(1))
@@ -159,16 +166,6 @@ class AuthCodeServiceTest {
                 .removeAttribute(AuthCodeService.ORIGIN)
         verify(appRefreshTokenRepo, Mockito.times(1))
                 .removeByTokenId(response.tokenId)
-    }
-
-    private fun validateCookie(cookie: ResponseCookie, token: String, exp: Long) {
-        assertEquals(cookieName, cookie.name)
-        assertEquals(path, cookie.path)
-        assertTrue(cookie.isSecure)
-        assertTrue(cookie.isHttpOnly)
-        assertEquals("strict", cookie.sameSite)
-        assertEquals(token, cookie.value)
-        assertEquals(Duration.ofSeconds(exp), cookie.maxAge)
     }
 
     @Test

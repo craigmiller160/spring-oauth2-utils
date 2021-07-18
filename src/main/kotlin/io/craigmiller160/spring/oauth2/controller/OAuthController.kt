@@ -20,8 +20,8 @@ package io.craigmiller160.spring.oauth2.controller
 
 import io.craigmiller160.oauth2.dto.AuthCodeLoginDto
 import io.craigmiller160.oauth2.dto.AuthUserDto
+import io.craigmiller160.oauth2.service.OAuth2Service
 import io.craigmiller160.spring.oauth2.service.AuthCodeService
-import io.craigmiller160.spring.oauth2.service.OAuthService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse
 @RequestMapping("/oauth")
 class OAuthController (
         private val authCodeService: AuthCodeService,
-        private val oAuthService: OAuthService
+        private val oAuthService: OAuth2Service
 ) {
 
     @PostMapping("/authcode/login")
@@ -48,13 +48,13 @@ class OAuthController (
         val (cookie, postAuthRedirect) = authCodeService.code(req, code, state)
         res.status = 302
         res.addHeader("Location", postAuthRedirect)
-        res.addHeader("Set-Cookie", cookie.toString())
+        res.addHeader("Set-Cookie", cookie)
     }
 
     @GetMapping("/logout")
     fun logout(res: HttpServletResponse) {
         val cookie = oAuthService.logout()
-        res.addHeader("Set-Cookie", cookie.toString())
+        res.addHeader("Set-Cookie", cookie)
     }
 
     @GetMapping("/user")

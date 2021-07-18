@@ -20,6 +20,7 @@ package io.craigmiller160.spring.oauth2.security
 
 import com.nimbusds.jose.jwk.JWKSet
 import io.craigmiller160.oauth2.dto.TokenResponseDto
+import io.craigmiller160.oauth2.security.CookieCreator
 import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
 import io.craigmiller160.spring.oauth2.service.TokenRefreshService
 import io.craigmiller160.spring.oauth2.testutils.JwtUtils
@@ -33,12 +34,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.junit.jupiter.MockitoSettings
 import org.mockito.quality.Strictness
@@ -71,6 +70,8 @@ class JwtValidationFilterTest {
     @Mock
     private lateinit var res: HttpServletResponse
     @Mock
+    private lateinit var cookieCreator: CookieCreator
+    @Mock
     private lateinit var chain: FilterChain
 
     @BeforeEach
@@ -87,7 +88,7 @@ class JwtValidationFilterTest {
         val jwt = JwtUtils.createJwt()
         token = JwtUtils.signAndSerializeJwt(jwt, keyPair.private)
 
-        jwtValidationFilter = JwtValidationFilter(oAuthConfig, tokenRefreshService)
+        jwtValidationFilter = JwtValidationFilter(oAuthConfig, tokenRefreshService, cookieCreator)
         `when`(req.requestURI)
                 .thenReturn("/something")
     }
@@ -259,6 +260,9 @@ class JwtValidationFilterTest {
         Mockito.`when`(tokenRefreshService.refreshToken(token))
                 .thenReturn(TokenResponseDto(this.token, newRefreshToken, newTokenId))
 
+        `when`(cookieCreator.createTokenCookie(cookieName, oAuthConfig.getOrDefaultCookiePath(), this.token, oAuthConfig.cookieMaxAgeSecs))
+                .thenReturn("Cookie")
+
         jwtValidationFilter.doFilter(req, res, chain)
         val authentication = SecurityContextHolder.getContext().authentication
         Assertions.assertNotNull(authentication)
@@ -270,7 +274,7 @@ class JwtValidationFilterTest {
         Mockito.verify(chain, Mockito.times(1))
                 .doFilter(req, res)
         Mockito.verify(res, Mockito.times(1))
-                .addHeader(Mockito.eq("Set-Cookie"), Mockito.anyString())
+                .addHeader(Mockito.eq("Set-Cookie"), ArgumentMatchers.eq("Cookie"))
     }
 
 }

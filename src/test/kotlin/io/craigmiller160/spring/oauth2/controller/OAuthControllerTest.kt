@@ -24,8 +24,8 @@ import com.nhaarman.mockito_kotlin.isA
 import io.craigmiller160.apitestprocessor.ApiTestProcessor
 import io.craigmiller160.oauth2.dto.AuthCodeLoginDto
 import io.craigmiller160.oauth2.dto.AuthUserDto
+import io.craigmiller160.oauth2.service.OAuth2Service
 import io.craigmiller160.spring.oauth2.service.AuthCodeService
-import io.craigmiller160.spring.oauth2.service.OAuthService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -48,7 +48,7 @@ class OAuthControllerTest {
     private lateinit var authCodeService: AuthCodeService
 
     @MockBean
-    private lateinit var oAuthService: OAuthService
+    private lateinit var oAuthService: OAuth2Service
 
     @Autowired
     private lateinit var provMockMvc: MockMvc
@@ -91,6 +91,7 @@ class OAuthControllerTest {
         val cookie = ResponseCookie
                 .from("name", "value")
                 .build()
+                .toString()
 
         `when`(authCodeService.code(isA(), eq(code), eq(state)))
                 .thenReturn(Pair(cookie, postAuthRedirect))
@@ -108,7 +109,7 @@ class OAuthControllerTest {
         assertEquals(postAuthRedirect, locationValue)
 
         val cookieValue = result.response.getHeaderValue("Set-Cookie")
-        assertEquals(cookie.toString(), cookieValue)
+        assertEquals(cookie, cookieValue)
     }
 
     @Test
@@ -116,6 +117,7 @@ class OAuthControllerTest {
         val cookie = ResponseCookie
                 .from("name", "value")
                 .build()
+                .toString()
         `when`(oAuthService.logout())
                 .thenReturn(cookie)
 
@@ -126,7 +128,7 @@ class OAuthControllerTest {
         }
 
         val cookieValue = result.response.getHeaderValue("Set-Cookie")
-        assertEquals(cookie.toString(), cookieValue)
+        assertEquals(cookie, cookieValue)
     }
 
     @Test

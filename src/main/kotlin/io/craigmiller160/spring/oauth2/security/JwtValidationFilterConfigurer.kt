@@ -19,6 +19,7 @@
 package io.craigmiller160.spring.oauth2.security
 
 import io.craigmiller160.oauth2.config.OAuth2Config
+import io.craigmiller160.oauth2.security.CookieCreator
 import io.craigmiller160.spring.oauth2.service.TokenRefreshService
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -28,11 +29,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class JwtValidationFilterConfigurer (
-        private val oAuthConfig: OAuth2Config,
-        private val tokenRefreshService: TokenRefreshService
+        oAuthConfig: OAuth2Config,
+        tokenRefreshService: TokenRefreshService,
+        cookieCreator: CookieCreator
 ) : SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
 
-    private val filter = JwtValidationFilter(oAuthConfig, tokenRefreshService)
+    private val filter = JwtValidationFilter(oAuthConfig, tokenRefreshService, cookieCreator)
 
     fun getInsecurePathPatterns(): Array<String> {
         return filter.getInsecurePathPatterns().toTypedArray()
