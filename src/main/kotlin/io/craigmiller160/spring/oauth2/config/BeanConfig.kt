@@ -18,8 +18,8 @@ class BeanConfig {
     fun cookieCreator(): CookieCreator = CookieCreator()
 
     @Bean
-    fun appRefreshTokenRepository(dataSource: DataSource): AppRefreshTokenRepository {
-        return AppRefreshTokenRepositoryImpl { dataSource.connection }
+    fun appRefreshTokenRepository(oAuth2Config: OAuth2Config, dataSource: DataSource): AppRefreshTokenRepository {
+        return AppRefreshTokenRepositoryImpl(oAuth2Config) { dataSource.connection }
     }
 
     @Bean
