@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
+// TODO delete this
 @Service
 class TokenRefreshService (
         private val appRefreshTokenRepo: AppRefreshTokenRepository,
