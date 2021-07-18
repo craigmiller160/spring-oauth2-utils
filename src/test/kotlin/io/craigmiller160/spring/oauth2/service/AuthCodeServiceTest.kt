@@ -21,17 +21,16 @@ package io.craigmiller160.spring.oauth2.service
 import com.nhaarman.mockito_kotlin.isA
 import io.craigmiller160.oauth2.client.AuthServerClient
 import io.craigmiller160.oauth2.config.OAuth2Config
+import io.craigmiller160.oauth2.domain.entity.AppRefreshToken
+import io.craigmiller160.oauth2.domain.repository.AppRefreshTokenRepository
 import io.craigmiller160.oauth2.dto.TokenResponseDto
 import io.craigmiller160.oauth2.security.CookieCreator
 import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
-import io.craigmiller160.spring.oauth2.entity.JpaAppRefreshToken
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeRequestException
 import io.craigmiller160.spring.oauth2.exception.BadAuthCodeStateException
-import io.craigmiller160.spring.oauth2.repository.JpaAppRefreshTokenRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -40,13 +39,9 @@ import org.mockito.ArgumentMatchers.eq
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
-import org.springframework.http.ResponseCookie
 import org.springframework.security.core.context.SecurityContextHolder
-import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import javax.servlet.http.HttpServletRequest
@@ -71,7 +66,7 @@ class AuthCodeServiceTest {
     private lateinit var authServerClient: AuthServerClient
 
     @Mock
-    private lateinit var appRefreshTokenRepo: JpaAppRefreshTokenRepository
+    private lateinit var appRefreshTokenRepo: AppRefreshTokenRepository
 
     @Mock
     private lateinit var req: HttpServletRequest
@@ -154,7 +149,7 @@ class AuthCodeServiceTest {
         assertEquals(postAuthRedirect, redirect)
         assertEquals("Cookie", cookie)
 
-        val manageRefreshToken = JpaAppRefreshToken(0, response.tokenId, response.refreshToken)
+        val manageRefreshToken = AppRefreshToken(0, response.tokenId, response.refreshToken)
         verify(appRefreshTokenRepo, Mockito.times(1))
                 .save(manageRefreshToken)
 

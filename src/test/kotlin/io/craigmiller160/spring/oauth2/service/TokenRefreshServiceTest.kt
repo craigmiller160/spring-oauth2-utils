@@ -19,9 +19,9 @@
 package io.craigmiller160.spring.oauth2.service
 
 import io.craigmiller160.oauth2.client.AuthServerClient
+import io.craigmiller160.oauth2.domain.entity.AppRefreshToken
+import io.craigmiller160.oauth2.domain.repository.AppRefreshTokenRepository
 import io.craigmiller160.oauth2.dto.TokenResponseDto
-import io.craigmiller160.spring.oauth2.entity.JpaAppRefreshToken
-import io.craigmiller160.spring.oauth2.repository.JpaAppRefreshTokenRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
@@ -37,7 +37,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 class TokenRefreshServiceTest {
 
     @Mock
-    private lateinit var appRefreshTokenRepo: JpaAppRefreshTokenRepository
+    private lateinit var appRefreshTokenRepo: AppRefreshTokenRepository
 
     @Mock
     private lateinit var authServerClient: AuthServerClient
@@ -45,7 +45,7 @@ class TokenRefreshServiceTest {
     @InjectMocks
     private lateinit var tokenRefreshService: TokenRefreshService
 
-    private val refreshToken = JpaAppRefreshToken(
+    private val refreshToken = AppRefreshToken(
             1, "JWTID", "ABCDEFG"
     )
     private val tokenResponse = TokenResponseDto(
@@ -68,7 +68,7 @@ class TokenRefreshServiceTest {
         verify(appRefreshTokenRepo, Mockito.times(1))
                 .deleteById(1)
         verify(appRefreshTokenRepo, Mockito.times(1))
-                .save(JpaAppRefreshToken(0, tokenResponse.tokenId, tokenResponse.refreshToken))
+                .save(AppRefreshToken(0, tokenResponse.tokenId, tokenResponse.refreshToken))
     }
 
     @Test

@@ -5,7 +5,7 @@ import io.craigmiller160.oauth2.domain.repository.AppRefreshTokenRepository
 import io.craigmiller160.oauth2.security.AuthenticatedUser
 import io.craigmiller160.oauth2.security.CookieCreator
 import io.craigmiller160.oauth2.service.OAuth2Service
-import io.craigmiller160.oauth2.service.OAuth2ServiceImpl
+import io.craigmiller160.oauth2.service.impl.OAuth2ServiceImpl
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.core.context.SecurityContextHolder
