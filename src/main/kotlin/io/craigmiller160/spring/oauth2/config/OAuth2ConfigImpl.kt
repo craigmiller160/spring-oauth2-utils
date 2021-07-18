@@ -19,7 +19,6 @@
 package io.craigmiller160.spring.oauth2.config
 
 import io.craigmiller160.oauth2.config.AbstractOAuth2Config
-import io.craigmiller160.oauth2.config.OAuth2Config
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.validation.annotation.Validated
@@ -46,5 +45,6 @@ class OAuth2ConfigImpl : AbstractOAuth2Config() {
     override var authLoginBaseUri: String = ""
     override var insecurePaths: String = ""
     override var authCodeWaitMins: Long = 10
+    override var schemaName: String = ""
 
 }
