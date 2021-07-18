@@ -45,6 +45,6 @@ class OAuth2ConfigImpl : AbstractOAuth2Config() {
     override var authLoginBaseUri: String = ""
     override var insecurePaths: String = ""
     override var authCodeWaitMins: Long = 10
-    override var schemaName: String = ""
+    override var refreshTokenSchema: String = ""
 
 }
