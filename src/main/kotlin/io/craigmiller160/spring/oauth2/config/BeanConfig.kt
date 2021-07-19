@@ -22,7 +22,6 @@ class BeanConfig {
     fun cookieCreator(): CookieCreator = CookieCreator()
 
     @Bean
-    @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     fun authServerClient(oAuth2Config: OAuth2Config): AuthServerClient {
         return AuthServerClientImpl(oAuth2Config)
     }
