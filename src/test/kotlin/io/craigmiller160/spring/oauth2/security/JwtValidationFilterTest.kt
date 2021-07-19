@@ -21,8 +21,8 @@ package io.craigmiller160.spring.oauth2.security
 import com.nimbusds.jose.jwk.JWKSet
 import io.craigmiller160.oauth2.dto.TokenResponseDto
 import io.craigmiller160.oauth2.security.CookieCreator
+import io.craigmiller160.oauth2.service.RefreshTokenService
 import io.craigmiller160.spring.oauth2.config.OAuth2ConfigImpl
-import io.craigmiller160.spring.oauth2.service.TokenRefreshService
 import io.craigmiller160.spring.oauth2.testutils.JwtUtils
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
@@ -63,7 +63,7 @@ class JwtValidationFilterTest {
     private val cookieName = "cookie"
 
     @Mock
-    private lateinit var tokenRefreshService: TokenRefreshService
+    private lateinit var tokenRefreshService: RefreshTokenService
 
     @Mock
     private lateinit var req: HttpServletRequest
