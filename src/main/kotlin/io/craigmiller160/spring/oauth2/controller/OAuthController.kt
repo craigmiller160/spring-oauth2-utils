@@ -24,25 +24,17 @@ import io.craigmiller160.oauth2.endpoint.OAuth2Endpoint
 import io.craigmiller160.oauth2.endpoint.PathConstants
 import io.craigmiller160.oauth2.service.AuthCodeService
 import io.craigmiller160.oauth2.service.OAuth2Service
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping(PathConstants.ROOT_PATH)
 class OAuthController (
         private val authCodeService: AuthCodeService,
-        private val oAuthService: OAuth2Service
+        private val oAuthService: OAuth2Service,
+        private val req: HttpServletRequest
 ) : OAuth2Endpoint<ResponseEntity<*>> {
-
-    @Autowired
-    private lateinit var req: HttpServletRequest
 
     @PostMapping(PathConstants.AUTHCODE_LOGIN_PATH)
     override fun login(): ResponseEntity<AuthCodeLoginDto> {
