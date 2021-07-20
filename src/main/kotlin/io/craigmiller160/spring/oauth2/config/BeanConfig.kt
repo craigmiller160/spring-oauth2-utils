@@ -7,8 +7,10 @@ import io.craigmiller160.oauth2.domain.repository.AppRefreshTokenRepository
 import io.craigmiller160.oauth2.domain.repository.impl.AppRefreshTokenRepositoryImpl
 import io.craigmiller160.oauth2.security.AuthenticatedUser
 import io.craigmiller160.oauth2.security.CookieCreator
+import io.craigmiller160.oauth2.service.AuthCodeService
 import io.craigmiller160.oauth2.service.OAuth2Service
 import io.craigmiller160.oauth2.service.RefreshTokenService
+import io.craigmiller160.oauth2.service.impl.AuthCodeServiceImpl
 import io.craigmiller160.oauth2.service.impl.OAuth2ServiceImpl
 import io.craigmiller160.oauth2.service.impl.RefreshTokenServiceImpl
 import org.springframework.context.annotation.Bean
@@ -47,5 +49,13 @@ class BeanConfig {
     @Bean
     fun refreshTokenService(appRefreshTokenRepo: AppRefreshTokenRepository, authServerClient: AuthServerClient): RefreshTokenService {
         return RefreshTokenServiceImpl(appRefreshTokenRepo, authServerClient)
+    }
+
+    @Bean
+    fun authCodeService(oAuth2Config: OAuth2Config,
+                        authServerClient: AuthServerClient,
+                        appRefreshTokenRepo: AppRefreshTokenRepository,
+                        cookieCreator: CookieCreator): AuthCodeService {
+        return AuthCodeServiceImpl(oAuth2Config, authServerClient, appRefreshTokenRepo, cookieCreator)
     }
 }
