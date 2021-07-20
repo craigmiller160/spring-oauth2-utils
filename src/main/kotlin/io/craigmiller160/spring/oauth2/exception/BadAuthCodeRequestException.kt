@@ -22,5 +22,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus
 import java.lang.RuntimeException
 
+// TODO refactor this
 @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "Bad auth code request")
 class BadAuthCodeRequestException(msg: String) : RuntimeException(msg)
