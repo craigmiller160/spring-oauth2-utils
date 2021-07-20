@@ -20,46 +20,49 @@ package io.craigmiller160.spring.oauth2.controller
 
 import io.craigmiller160.oauth2.dto.AuthCodeLoginDto
 import io.craigmiller160.oauth2.dto.AuthUserDto
+import io.craigmiller160.oauth2.endpoint.OAuth2Endpoint
+import io.craigmiller160.oauth2.endpoint.PathConstants
 import io.craigmiller160.oauth2.service.AuthCodeService
 import io.craigmiller160.oauth2.service.OAuth2Service
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 @RestController
-@RequestMapping("/oauth")
+@RequestMapping(PathConstants.ROOT_PATH)
 class OAuthController (
         private val authCodeService: AuthCodeService,
-        private val oAuthService: OAuth2Service
-) {
+        private val oAuthService: OAuth2Service,
+        private val req: HttpServletRequest
+) : OAuth2Endpoint<ResponseEntity<*>> {
 
-    @PostMapping("/authcode/login")
-    fun login(req: HttpServletRequest): AuthCodeLoginDto {
+    @PostMapping(PathConstants.AUTHCODE_LOGIN_PATH)
+    override fun login(): ResponseEntity<AuthCodeLoginDto> {
         val authCodeLoginUrl = authCodeService.prepareAuthCodeLogin(req)
-        return AuthCodeLoginDto(authCodeLoginUrl)
+        return ResponseEntity.ok(AuthCodeLoginDto(authCodeLoginUrl))
     }
 
-    @GetMapping("/authcode/code")
-    fun code(@RequestParam("code") code: String, @RequestParam("state") state: String, req: HttpServletRequest, res: HttpServletResponse) {
+    @GetMapping(PathConstants.AUTHCODE_CODE_PATH)
+    override fun code(@RequestParam("code") code: String, @RequestParam("state") state: String): ResponseEntity<Void> {
         val (cookie, postAuthRedirect) = authCodeService.code(req, code, state)
-        res.status = 302
-        res.addHeader("Location", postAuthRedirect)
-        res.addHeader("Set-Cookie", cookie)
+        return ResponseEntity.status(302)
+                .header("Location", postAuthRedirect)
+                .header("Set-Cookie", cookie)
+                .build()
     }
 
-    @GetMapping("/logout")
-    fun logout(res: HttpServletResponse) {
+    @GetMapping(PathConstants.LOGOUT_PATH)
+    override fun logout(): ResponseEntity<Void> {
         val cookie = oAuthService.logout()
-        res.addHeader("Set-Cookie", cookie)
+        return ResponseEntity.status(200)
+                .header("Set-Cookie", cookie)
+                .build()
     }
 
-    @GetMapping("/user")
-    fun getAuthenticatedUser(): AuthUserDto {
-        return oAuthService.getAuthenticatedUser()
+    @GetMapping(PathConstants.AUTH_USER_PATH)
+    override fun getAuthenticatedUser(): ResponseEntity<AuthUserDto> {
+        val authUser = oAuthService.getAuthenticatedUser()
+        return ResponseEntity.ok(authUser)
     }
 
 }
