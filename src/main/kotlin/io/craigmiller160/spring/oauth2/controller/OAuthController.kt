@@ -20,6 +20,7 @@ package io.craigmiller160.spring.oauth2.controller
 
 import io.craigmiller160.oauth2.dto.AuthCodeLoginDto
 import io.craigmiller160.oauth2.dto.AuthUserDto
+import io.craigmiller160.oauth2.resource.ResourceConstants
 import io.craigmiller160.oauth2.service.AuthCodeService
 import io.craigmiller160.oauth2.service.OAuth2Service
 import org.springframework.web.bind.annotation.GetMapping
@@ -31,19 +32,19 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @RestController
-@RequestMapping("/oauth")
+@RequestMapping(ResourceConstants.ROOT_PATH)
 class OAuthController (
         private val authCodeService: AuthCodeService,
         private val oAuthService: OAuth2Service
 ) {
 
-    @PostMapping("/authcode/login")
+    @PostMapping(ResourceConstants.AUTHCODE_LOGIN_PATH)
     fun login(req: HttpServletRequest): AuthCodeLoginDto {
         val authCodeLoginUrl = authCodeService.prepareAuthCodeLogin(req)
         return AuthCodeLoginDto(authCodeLoginUrl)
     }
 
-    @GetMapping("/authcode/code")
+    @GetMapping(ResourceConstants.AUTHCODE_CODE_PATH)
     fun code(@RequestParam("code") code: String, @RequestParam("state") state: String, req: HttpServletRequest, res: HttpServletResponse) {
         val (cookie, postAuthRedirect) = authCodeService.code(req, code, state)
         res.status = 302
@@ -51,13 +52,13 @@ class OAuthController (
         res.addHeader("Set-Cookie", cookie)
     }
 
-    @GetMapping("/logout")
+    @GetMapping(ResourceConstants.LOGOUT_PATH)
     fun logout(res: HttpServletResponse) {
         val cookie = oAuthService.logout()
         res.addHeader("Set-Cookie", cookie)
     }
 
-    @GetMapping("/user")
+    @GetMapping(ResourceConstants.AUTH_USER_PATH)
     fun getAuthenticatedUser(): AuthUserDto {
         return oAuthService.getAuthenticatedUser()
     }
