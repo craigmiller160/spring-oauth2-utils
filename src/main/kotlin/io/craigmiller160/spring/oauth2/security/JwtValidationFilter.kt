@@ -29,8 +29,8 @@ import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier
 import com.nimbusds.jwt.proc.DefaultJWTProcessor
 import io.craigmiller160.oauth2.config.OAuth2Config
 import io.craigmiller160.oauth2.security.CookieCreator
+import io.craigmiller160.oauth2.service.RefreshTokenService
 import io.craigmiller160.spring.oauth2.exception.InvalidTokenException
-import io.craigmiller160.spring.oauth2.service.TokenRefreshService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -46,7 +46,7 @@ import javax.servlet.http.HttpServletResponse
 
 class JwtValidationFilter (
         private val oAuthConfig: OAuth2Config,
-        private val tokenRefreshService: TokenRefreshService,
+        private val tokenRefreshService: RefreshTokenService,
         private val cookieCreator: CookieCreator
 ) : OncePerRequestFilter() {
 
