@@ -58,6 +58,7 @@ class JwtValidationFilter (
     private val defaultInsecureUriPatterns = listOf("/oauth/authcode/**")
     private val insecurePathPatterns = oAuthConfig.getInsecurePathList()
 
+    // TODO what to do about this method?
     fun getInsecurePathPatterns(): List<String> {
         return defaultInsecureUriPatterns + insecurePathPatterns
     }

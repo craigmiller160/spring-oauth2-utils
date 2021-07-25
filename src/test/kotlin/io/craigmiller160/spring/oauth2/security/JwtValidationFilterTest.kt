@@ -98,6 +98,7 @@ class JwtValidationFilterTest {
         SecurityContextHolder.clearContext()
     }
 
+    // TODO what to do about this test?
     @Test
     fun test_getInsecurePathPatterns() {
         val insecure = "/other/path"
