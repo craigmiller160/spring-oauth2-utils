@@ -63,7 +63,7 @@ class JwtValidationFilter (
     }
 
     override fun doFilterInternal(req: HttpServletRequest, res: HttpServletResponse, chain: FilterChain) {
-        if (isUriSecured(req.requestURI)) {
+        if (isUriSecured(req.requestURI)) { // TODO need to preserve this too
             log.debug("Authenticating access for secured URI: ${req.requestURI}")
             try {
                 val token = getToken(req)
