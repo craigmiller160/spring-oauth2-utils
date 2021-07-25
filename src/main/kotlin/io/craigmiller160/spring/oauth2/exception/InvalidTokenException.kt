@@ -22,5 +22,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus
 import java.lang.RuntimeException
 
+// TODO refactor to work with ExceptionHandler
 @ResponseStatus(code = HttpStatus.UNAUTHORIZED, reason = "Unauthorized")
 class InvalidTokenException (msg: String, ex: Throwable? = null) : RuntimeException(msg, ex)
