@@ -38,6 +38,7 @@ class JwtValidationFilter (
     private val log: Logger = LoggerFactory.getLogger(javaClass)
 
     override fun doFilterInternal(req: HttpServletRequest, res: HttpServletResponse, chain: FilterChain) {
+        // TODO see if it's possible to make a DSL here
         authenticationFilterService.authenticateRequest(RequestWrapper(
                 requestUri = req.requestURI,
                 getCookieValue = { cookieName ->
