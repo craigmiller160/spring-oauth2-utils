@@ -55,7 +55,6 @@ class JwtValidationFilter (
                     log.debug("", ex)
                     SecurityContextHolder.clearContext()
                 }
-                .getOrThrow()
         chain.doFilter(req, res)
     }
 
