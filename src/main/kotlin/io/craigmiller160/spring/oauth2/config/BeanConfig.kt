@@ -6,7 +6,9 @@ import io.craigmiller160.oauth2.config.OAuth2Config
 import io.craigmiller160.oauth2.domain.repository.AppRefreshTokenRepository
 import io.craigmiller160.oauth2.domain.repository.impl.AppRefreshTokenRepositoryImpl
 import io.craigmiller160.oauth2.security.AuthenticatedUser
+import io.craigmiller160.oauth2.security.AuthenticationFilterService
 import io.craigmiller160.oauth2.security.CookieCreator
+import io.craigmiller160.oauth2.security.impl.AuthenticationFilterServiceImpl
 import io.craigmiller160.oauth2.service.AuthCodeService
 import io.craigmiller160.oauth2.service.OAuth2Service
 import io.craigmiller160.oauth2.service.RefreshTokenService
@@ -57,5 +59,12 @@ class BeanConfig {
                         appRefreshTokenRepo: AppRefreshTokenRepository,
                         cookieCreator: CookieCreator): AuthCodeService {
         return AuthCodeServiceImpl(oAuth2Config, authServerClient, appRefreshTokenRepo, cookieCreator)
+    }
+
+    @Bean
+    fun authenticationFilterService(oAuth2Config: OAuth2Config,
+                                    refreshTokenService: RefreshTokenService,
+                                    cookieCreator: CookieCreator): AuthenticationFilterService {
+        return AuthenticationFilterServiceImpl(oAuth2Config, refreshTokenService, cookieCreator)
     }
 }
