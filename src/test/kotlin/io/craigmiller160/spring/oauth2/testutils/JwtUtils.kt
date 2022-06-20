@@ -63,6 +63,7 @@ object JwtUtils {
 
     fun createAuthUser(): AuthenticatedUserDetails {
         return AuthenticatedUserDetails(
+                userId = 1,
                 userName = USERNAME,
                 roles = listOf(ROLE_1, ROLE_2),
                 firstName = FIRST_NAME,
