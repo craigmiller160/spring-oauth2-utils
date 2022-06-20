@@ -135,6 +135,7 @@ class OAuthControllerTest {
     @Test
     fun test_getAuthenticatedUser() {
         val authUser = AuthUserDto(
+                userId = 1,
                 username = "User",
                 firstName = "First",
                 lastName = "Last",

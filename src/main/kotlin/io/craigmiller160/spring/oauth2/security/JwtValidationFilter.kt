@@ -60,6 +60,7 @@ class JwtValidationFilter (
     private fun createAuthentication(claims: JWTClaimsSet): Authentication {
         val roles = claims.getStringListClaim("roles")
         val authUser = AuthenticatedUserDetails(
+                userId = claims.getLongClaim("userId"),
                 userName = claims.subject,
                 roles = roles,
                 firstName = claims.getStringClaim("firstName"),

@@ -24,6 +24,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 data class AuthenticatedUserDetails (
+        override val userId: Long,
         override val userName: String,
         override val roles: List<String>,
         override val firstName: String,
