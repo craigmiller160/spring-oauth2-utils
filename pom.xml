@@ -26,7 +26,7 @@
     </dependencyManagement>
 
     <properties>
-        <oauth2.utils.version>1.0.0</oauth2.utils.version>
+        <oauth2.utils.version>1.1.0-SNAPSHOT</oauth2.utils.version>
         <api.test.processor.version>1.2.2</api.test.processor.version>
         <java.version>15</java.version>
         <kotlin.version>1.6.10</kotlin.version>
