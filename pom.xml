@@ -11,7 +11,7 @@
     </parent>
     <groupId>io.craigmiller160</groupId>
     <artifactId>spring-oauth2-utils</artifactId>
-    <version>1.9.0</version>
+    <version>1.9.1</version>
 
     <dependencyManagement>
         <dependencies>
@@ -26,8 +26,8 @@
     </dependencyManagement>
 
     <properties>
-        <oauth2.utils.version>1.0.0</oauth2.utils.version>
-        <api.test.processor.version>1.2.2</api.test.processor.version>
+        <oauth2.utils.version>1.0.4</oauth2.utils.version>
+        <api.test.processor.version>1.2.3</api.test.processor.version>
         <java.version>15</java.version>
         <kotlin.version>1.6.10</kotlin.version>
         <nimbus.jose.version>9.15.2</nimbus.jose.version>
@@ -38,12 +38,12 @@
         <repository>
             <id>nexus</id>
             <name>Releases</name>
-            <url>https://craigmiller160.ddns.net:30003/repository/maven-releases</url>
+            <url>https://nexus-craigmiller160.ddns.net/repository/maven-releases</url>
         </repository>
         <snapshotRepository>
             <id>nexus</id>
             <name>Snapshot</name>
-            <url>https://craigmiller160.ddns.net:30003/repository/maven-snapshots</url>
+            <url>https://nexus-craigmiller160.ddns.net/repository/maven-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
