@@ -19,6 +19,7 @@
 package io.craigmiller160.spring.oauth2.config
 
 import io.craigmiller160.oauth2.config.AbstractOAuth2Config
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.validation.annotation.Validated
@@ -27,6 +28,7 @@ import javax.validation.constraints.NotBlank
 @Configuration
 @Validated
 @ConfigurationProperties(prefix = "oauth2")
+@ConditionalOnProperty(name = ["oauth2.suppress-config"], havingValue = "false", matchIfMissing = true)
 class OAuth2ConfigImpl : AbstractOAuth2Config() {
 
     @field:NotBlank(message = "Missing Property: oauth2.auth-server-host")
