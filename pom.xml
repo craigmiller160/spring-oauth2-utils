@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.1</version>
+        <version>2.7.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>io.craigmiller160</groupId>
@@ -27,7 +27,7 @@
 
     <properties>
         <oauth2.utils.version>1.1.0-SNAPSHOT</oauth2.utils.version>
-        <api.test.processor.version>1.2.2</api.test.processor.version>
+        <api.test.processor.version>1.2.3</api.test.processor.version>
         <java.version>15</java.version>
         <kotlin.version>1.6.10</kotlin.version>
         <nimbus.jose.version>9.15.2</nimbus.jose.version>
@@ -38,12 +38,12 @@
         <repository>
             <id>nexus</id>
             <name>Releases</name>
-            <url>https://craigmiller160.ddns.net:30003/repository/maven-releases</url>
+            <url>https://nexus-craigmiller160.ddns.net/repository/maven-releases</url>
         </repository>
         <snapshotRepository>
             <id>nexus</id>
             <name>Snapshot</name>
-            <url>https://craigmiller160.ddns.net:30003/repository/maven-snapshots</url>
+            <url>https://nexus-craigmiller160.ddns.net/repository/maven-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
