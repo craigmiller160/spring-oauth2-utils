@@ -24,6 +24,7 @@ import io.craigmiller160.oauth2.endpoint.OAuth2Endpoint
 import io.craigmiller160.oauth2.endpoint.PathConstants
 import io.craigmiller160.oauth2.service.AuthCodeService
 import io.craigmiller160.oauth2.service.OAuth2Service
+import io.craigmiller160.spring.oauth2.config.AirplaneModeConfig
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
@@ -33,7 +34,8 @@ import javax.servlet.http.HttpServletRequest
 class OAuthController (
         private val authCodeService: AuthCodeService,
         private val oAuthService: OAuth2Service,
-        private val req: HttpServletRequest
+        private val req: HttpServletRequest,
+        private val airplaneModeConfig: AirplaneModeConfig
 ) : OAuth2Endpoint<ResponseEntity<*>> {
 
     @PostMapping(PathConstants.AUTHCODE_LOGIN_PATH)
@@ -61,6 +63,9 @@ class OAuthController (
 
     @GetMapping(PathConstants.AUTH_USER_PATH)
     override fun getAuthenticatedUser(): ResponseEntity<AuthUserDto> {
+        if (airplaneModeConfig.isAirplaneMode()) {
+            return ResponseEntity.ok(AirplaneModeConfig.AIRPLANE_MODE_AUTH_USER)
+        }
         val authUser = oAuthService.getAuthenticatedUser()
         return ResponseEntity.ok(authUser)
     }
