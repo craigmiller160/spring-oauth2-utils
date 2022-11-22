@@ -18,7 +18,11 @@
 
 package io.craigmiller160.spring.oauth2.config
 
+import com.nimbusds.jose.jwk.JWKSet
 import io.craigmiller160.oauth2.config.AbstractOAuth2Config
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -30,6 +34,7 @@ import javax.validation.constraints.NotBlank
 @Validated
 @ConfigurationProperties(prefix = "oauth2")
 class OAuth2ConfigImpl : AbstractOAuth2Config() {
+    private val log = LoggerFactory.getLogger(javaClass)
 
     @field:NotBlank(message = "Missing Property: oauth2.auth-server-host")
     override var authServerHost: String = ""
@@ -48,5 +53,17 @@ class OAuth2ConfigImpl : AbstractOAuth2Config() {
     override var insecurePaths: String = ""
     override var authCodeWaitMins: Long = 10
     override var refreshTokenSchema: String = ""
+
+    @Autowired
+    private lateinit var airplaneModeConfig: AirplaneModeConfig
+
+    override fun loadJWKSet(): JWKSet {
+        return if (!airplaneModeConfig.isAirplaneMode()) {
+            super.loadJWKSet()
+        } else {
+            log.debug("Using empty JWKSet for airplane mode")
+            JWKSet()
+        }
+    }
 
 }
