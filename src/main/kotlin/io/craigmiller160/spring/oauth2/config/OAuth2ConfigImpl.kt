@@ -57,7 +57,7 @@ class OAuth2ConfigImpl : AbstractOAuth2Config() {
     private lateinit var activeProfiles: String
 
     override fun loadJWKSet(): JWKSet {
-        return if (!activeProfiles.contains("airplaine")) {
+        return if (!activeProfiles.contains("airplane")) {
             super.loadJWKSet()
         } else {
             log.debug("Using empty JWKSet for airplane mode")
