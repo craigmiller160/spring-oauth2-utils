@@ -19,6 +19,7 @@
 package io.craigmiller160.spring.oauth2.security
 
 import io.craigmiller160.oauth2.security.AuthenticationFilterService
+import io.craigmiller160.spring.oauth2.config.AirplaneModeConfig
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.web.DefaultSecurityFilterChain
@@ -27,17 +28,23 @@ import org.springframework.stereotype.Component
 
 @Component
 class JwtValidationFilterConfigurer (
-        private val authenticationFilterService: AuthenticationFilterService
+        private val authenticationFilterService: AuthenticationFilterService,
+        private val airplaneModeConfig: AirplaneModeConfig
 ) : SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity>() {
 
-    private val filter = JwtValidationFilter(authenticationFilterService)
+    private val jwtFilter = JwtValidationFilter(authenticationFilterService)
+    private val airplaneModeFilter = AirplaneModeFilter()
 
     fun getInsecurePathPatterns(): Array<String> {
         return authenticationFilterService.getInsecurePathPatterns().toTypedArray()
     }
 
-    override fun configure(http: HttpSecurity?) {
-        http?.addFilterBefore(filter, UsernamePasswordAuthenticationFilter::class.java)
+    override fun configure(http: HttpSecurity) {
+        if (airplaneModeConfig.isAirplaneMode()) {
+            http.addFilterBefore(airplaneModeFilter, UsernamePasswordAuthenticationFilter::class.java)
+        } else {
+            http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)
+        }
     }
 
 }
