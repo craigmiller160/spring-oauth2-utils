@@ -13,11 +13,11 @@ class AirplaneModeConfig(
     private val activeProfiles: String
 ) {
     companion object {
-        const val USER_ID = 1L
-        const val USERNAME = "default@gmail.com"
-        const val FIRST_NAME = "Default"
-        const val LAST_NAME = "User"
-        val ROLES = listOf<String>()
+        private const val USER_ID = 1L
+        private const val USERNAME = "default@gmail.com"
+        private const val FIRST_NAME = "Default"
+        private const val LAST_NAME = "User"
+        private val ROLES = listOf<String>()
 
         val AUTH_USER = AuthUserDto(
             userId = USER_ID,

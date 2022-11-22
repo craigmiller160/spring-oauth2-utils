@@ -137,7 +137,16 @@ class OAuthControllerTest {
 
     @Test
     fun test_getAuthenticatedUser_airplaneMode() {
-        TODO()
+        `when`(airplaneModeConfig.isAirplaneMode())
+            .thenReturn(true)
+
+        val result = apiProcessor.call {
+            request {
+                path = "/oauth/user"
+            }
+        }.convert(AuthUserDto::class.java)
+
+        assertEquals(AirplaneModeConfig.AUTH_USER, result)
     }
 
     @Test
