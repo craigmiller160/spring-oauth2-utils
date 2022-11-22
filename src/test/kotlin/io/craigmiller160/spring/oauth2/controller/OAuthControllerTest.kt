@@ -27,6 +27,7 @@ import io.craigmiller160.oauth2.dto.AuthCodeSuccessDto
 import io.craigmiller160.oauth2.dto.AuthUserDto
 import io.craigmiller160.oauth2.service.AuthCodeService
 import io.craigmiller160.oauth2.service.OAuth2Service
+import io.craigmiller160.spring.oauth2.config.AirplaneModeConfig
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -50,6 +51,8 @@ class OAuthControllerTest {
 
     @MockBean
     private lateinit var oAuthService: OAuth2Service
+    @MockBean
+    private lateinit var airplaneModeConfig: AirplaneModeConfig
 
     @Autowired
     private lateinit var provMockMvc: MockMvc
@@ -133,7 +136,14 @@ class OAuthControllerTest {
     }
 
     @Test
+    fun test_getAuthenticatedUser_airplaneMode() {
+        TODO()
+    }
+
+    @Test
     fun test_getAuthenticatedUser() {
+        `when`(airplaneModeConfig.isAirplaneMode())
+            .thenReturn(false)
         val authUser = AuthUserDto(
                 userId = 1,
                 username = "User",
