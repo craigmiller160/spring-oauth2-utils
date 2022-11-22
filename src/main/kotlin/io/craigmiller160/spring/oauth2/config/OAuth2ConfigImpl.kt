@@ -50,7 +50,7 @@ class OAuth2ConfigImpl : AbstractOAuth2Config() {
     override var authCodeWaitMins: Long = 10
     override var refreshTokenSchema: String = ""
 
-    @Value("\${spring.proflies.active}")
+    @Value("\${spring.profiles.active}")
     private lateinit var activeProfiles: String
 
     override fun tryToLoadJWKSet() {
