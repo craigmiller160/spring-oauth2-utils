@@ -64,7 +64,7 @@ class OAuthController (
     @GetMapping(PathConstants.AUTH_USER_PATH)
     override fun getAuthenticatedUser(): ResponseEntity<AuthUserDto> {
         if (airplaneModeConfig.isAirplaneMode()) {
-            return ResponseEntity.ok(AirplaneModeConfig.AIRPLANE_MODE_AUTH_USER)
+            return ResponseEntity.ok(AirplaneModeConfig.AUTH_USER)
         }
         val authUser = oAuthService.getAuthenticatedUser()
         return ResponseEntity.ok(authUser)
