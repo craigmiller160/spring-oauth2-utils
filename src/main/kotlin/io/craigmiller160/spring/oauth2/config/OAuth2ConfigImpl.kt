@@ -19,6 +19,7 @@
 package io.craigmiller160.spring.oauth2.config
 
 import io.craigmiller160.oauth2.config.AbstractOAuth2Config
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -48,5 +49,14 @@ class OAuth2ConfigImpl : AbstractOAuth2Config() {
     override var insecurePaths: String = ""
     override var authCodeWaitMins: Long = 10
     override var refreshTokenSchema: String = ""
+
+    @Value("\${spring.proflies.active}")
+    private lateinit var activeProfiles: String
+
+    override fun tryToLoadJWKSet() {
+        if (!activeProfiles.contains("airplaine")) {
+            super.tryToLoadJWKSet()
+        }
+    }
 
 }
