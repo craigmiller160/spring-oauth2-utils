@@ -32,6 +32,10 @@ Since nginx will handle proxying the request to the auth server, the only hostna
 
 More explicit details will be shown in the configuration guide.
 
+## PSA: Airplane Mode
+
+When on a plane, local development becomes challenging. One of these challenges is due to depending on a separate authorization server. If a Spring Profile called `airplane` is set, this library will switch into a barebones default mode. It will make no calls to the auth server, will treat all requests as authenticated, and provide a default authenticated user with the User ID of 1.
+
 ## Documentation
 
 ### 1. [How to Integrate This Library](./docs/INTEGRATING.md)
