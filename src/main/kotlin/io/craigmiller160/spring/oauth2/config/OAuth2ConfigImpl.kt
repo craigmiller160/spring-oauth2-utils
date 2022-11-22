@@ -21,6 +21,7 @@ package io.craigmiller160.spring.oauth2.config
 import com.nimbusds.jose.jwk.JWKSet
 import io.craigmiller160.oauth2.config.AbstractOAuth2Config
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
@@ -53,11 +54,11 @@ class OAuth2ConfigImpl : AbstractOAuth2Config() {
     override var authCodeWaitMins: Long = 10
     override var refreshTokenSchema: String = ""
 
-    @Value("\${spring.profiles.active}")
-    private lateinit var activeProfiles: String
+    @Autowired
+    private lateinit var airplaneModeConfig: AirplaneModeConfig
 
     override fun loadJWKSet(): JWKSet {
-        return if (!activeProfiles.contains("airplane")) {
+        return if (!airplaneModeConfig.isAirplaneMode()) {
             super.loadJWKSet()
         } else {
             log.debug("Using empty JWKSet for airplane mode")
