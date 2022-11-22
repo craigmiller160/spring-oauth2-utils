@@ -17,5 +17,6 @@ class AirplaneModeFilter : OncePerRequestFilter() {
         SecurityContextHolder.getContext().authentication =
             UsernamePasswordAuthenticationToken(AirplaneModeConfig.AUTHENTICATION,
                 "", AirplaneModeConfig.AUTHENTICATION.authorities)
+        filterChain.doFilter(request, response)
     }
 }
