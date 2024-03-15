@@ -30,7 +30,7 @@
         <api.test.processor.version>1.2.3</api.test.processor.version>
         <java.version>15</java.version>
         <kotlin.version>1.6.10</kotlin.version>
-        <nimbus.jose.version>9.15.2</nimbus.jose.version>
+        <nimbus.jose.version>9.37.2</nimbus.jose.version>
         <mockito.kotlin.version>1.6.0</mockito.kotlin.version>
     </properties>
 
